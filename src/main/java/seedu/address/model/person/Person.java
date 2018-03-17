@@ -4,7 +4,9 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Objects;
 
-
+/**
+ * Represents a person in the car servicing manager
+ */
 public class Person {
     protected final Name name;
     protected final Phone phone;

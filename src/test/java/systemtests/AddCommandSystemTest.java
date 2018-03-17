@@ -60,8 +60,8 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
 
         /* ------------------------ Perform add operations on the shown unfiltered list ----------------------------- */
 
-        /* Case: add a employee without tags to a non-empty address book, command with leading spaces and trailing spaces
-         * -> added
+        /* Case: add a employee without tags to a non-empty address book, command with leading spaces and
+         * trailing spaces -> added
          */
         Employee toAdd = AMY;
         String command = "   " + AddCommand.COMMAND_WORD + "  " + NAME_DESC_AMY + "  " + PHONE_DESC_AMY + " "
@@ -120,19 +120,19 @@ public class AddCommandSystemTest extends AddressBookSystemTest {
         /* Case: add a employee, missing tags -> added */
         assertCommandSuccess(HOON);
 
-        /* -------------------------- Perform add operation on the shown filtered list ------------------------------ */
+        /* ------------------------ Perform add operation on the shown filtered list ---------------------------- */
 
         /* Case: filters the employee list before adding -> added */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         assertCommandSuccess(IDA);
 
-        /* ------------------------ Perform add operation while a employee card is selected --------------------------- */
+        /* ----------------------- Perform add operation while a employee card is selected ------------------------- */
 
         /* Case: selects first card in the employee list, add a employee -> added, card selection remains unchanged */
         selectPerson(Index.fromOneBased(1));
         assertCommandSuccess(CARL);
 
-        /* ----------------------------------- Perform invalid add operations --------------------------------------- */
+        /* --------------------------------- Perform invalid add operations ------------------------------------- */
 
         /* Case: add a duplicate employee -> rejected */
         command = PersonUtil.getAddCommand(HOON);

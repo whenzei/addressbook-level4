@@ -14,7 +14,7 @@ import seedu.address.model.tag.UniqueTagList;
  *
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
-public class Employee extends Person{
+public class Employee extends Person {
     private final UniqueTagList tags;
 
     /**

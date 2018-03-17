@@ -28,8 +28,10 @@ public class XmlUtilTest {
     private static final File EMPTY_FILE = new File(TEST_DATA_FOLDER + "empty.xml");
     private static final File MISSING_FILE = new File(TEST_DATA_FOLDER + "missing.xml");
     private static final File VALID_FILE = new File(TEST_DATA_FOLDER + "validAddressBook.xml");
-    private static final File MISSING_EMPLOYEE_FIELD_FILE = new File(TEST_DATA_FOLDER + "missingPersonField.xml");
-    private static final File INVALID_EMPLOYEE_FIELD_FILE = new File(TEST_DATA_FOLDER + "invalidPersonField.xml");
+    private static final File MISSING_EMPLOYEE_FIELD_FILE =
+            new File(TEST_DATA_FOLDER + "missingPersonField.xml");
+    private static final File INVALID_EMPLOYEE_FIELD_FILE =
+            new File(TEST_DATA_FOLDER + "invalidPersonField.xml");
     private static final File VALID_EMPLOYEE_FILE = new File(TEST_DATA_FOLDER + "validPerson.xml");
     private static final File TEMP_FILE = new File(TestUtil.getFilePathInSandboxFolder("tempAddressBook.xml"));
 
@@ -39,7 +41,8 @@ public class XmlUtilTest {
     private static final String VALID_PHONE = "9482424";
     private static final String VALID_EMAIL = "hans@example";
     private static final String VALID_ADDRESS = "4th street";
-    private static final List<XmlAdaptedTag> VALID_TAGS = Collections.singletonList(new XmlAdaptedTag("friends"));
+    private static final List<XmlAdaptedTag> VALID_TAGS =
+            Collections.singletonList(new XmlAdaptedTag("friends"));
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -138,7 +141,8 @@ public class XmlUtilTest {
     }
 
     /**
-     * Test class annotated with {@code XmlRootElement} to allow unmarshalling of .xml data to {@code XmlAdaptedEmployee}
+     * Test class annotated with {@code XmlRootElement} to allow unmarshalling of .xml data
+     * to {@code XmlAdaptedEmployee}
      * objects.
      */
     @XmlRootElement(name = "employee")

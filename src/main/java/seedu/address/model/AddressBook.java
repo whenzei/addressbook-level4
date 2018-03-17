@@ -117,8 +117,8 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     /**
      *  Updates the master tag list to include tags in {@code employee} that are not in the list.
-     *  @return a copy of this {@code employee} such that every tag in this employee points to a Tag object in the master
-     *  list.
+     *  @return a copy of this {@code employee} such that every tag in this employee points
+     *  to a Tag object in the master list.
      */
     private Employee syncWithMasterTagList(Employee employee) {
         final UniqueTagList employeeTags = new UniqueTagList(employee.getTags());
@@ -132,8 +132,8 @@ public class AddressBook implements ReadOnlyAddressBook {
         // Rebuild the list of employee tags to point to the relevant tags in the master tag list.
         final Set<Tag> correctTagReferences = new HashSet<>();
         employeeTags.forEach(tag -> correctTagReferences.add(masterTagObjects.get(tag)));
-        return new Employee(
-                employee.getName(), employee.getPhone(), employee.getEmail(), employee.getAddress(), correctTagReferences);
+        return new Employee(employee.getName(), employee.getPhone(), employee.getEmail(),
+                employee.getAddress(), correctTagReferences);
     }
 
     /**

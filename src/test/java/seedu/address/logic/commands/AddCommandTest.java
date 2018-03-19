@@ -21,6 +21,8 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.job.Job;
+import seedu.address.model.job.exceptions.JobNotFoundException;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
 import seedu.address.model.person.exceptions.EmployeeNotFoundException;
@@ -131,6 +133,16 @@ public class AddCommandTest {
         public ReadOnlyAddressBook getAddressBook() {
             fail("This method should not be called.");
             return null;
+        }
+
+        @Override
+        public void addJob(Job job) {
+            fail("This method should not be called.");
+        }
+
+        @Override
+        public void closeJob(Job target) throws JobNotFoundException {
+            fail("This method should not be called.");
         }
 
         @Override

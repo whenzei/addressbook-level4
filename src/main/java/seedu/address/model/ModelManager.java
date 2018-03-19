@@ -13,6 +13,8 @@ import seedu.address.commons.core.ComponentManager;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.logic.commands.CommandWords;
+import seedu.address.model.job.Job;
+import seedu.address.model.job.exceptions.JobNotFoundException;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
 import seedu.address.model.person.exceptions.EmployeeNotFoundException;
@@ -74,6 +76,14 @@ public class ModelManager extends ComponentManager implements Model {
     /** Raises an event to indicate the model has changed */
     private void indicateAddressBookChanged() {
         raise(new AddressBookChangedEvent(addressBook));
+    }
+
+    @Override
+    public synchronized void addJob(Job job) {
+    }
+
+    @Override
+    public synchronized void closeJob(Job target) throws JobNotFoundException {
     }
 
     @Override

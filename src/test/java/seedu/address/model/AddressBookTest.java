@@ -16,6 +16,7 @@ import org.junit.rules.ExpectedException;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.model.job.Job;
 import seedu.address.model.person.Employee;
 import seedu.address.model.tag.Tag;
 
@@ -74,6 +75,7 @@ public class AddressBookTest {
     private static class AddressBookStub implements ReadOnlyAddressBook {
         private final ObservableList<Employee> employees = FXCollections.observableArrayList();
         private final ObservableList<Tag> tags = FXCollections.observableArrayList();
+        private final ObservableList<Job> jobs = FXCollections.observableArrayList();
 
         AddressBookStub(Collection<Employee> employees, Collection<? extends Tag> tags) {
             this.employees.setAll(employees);
@@ -83,6 +85,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Employee> getEmployeeList() {
             return employees;
+        }
+
+        @Override
+        public ObservableList<Job> getJobList() {
+            return jobs;
         }
 
         @Override

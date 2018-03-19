@@ -25,6 +25,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.job.JobNumber;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.AddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
@@ -73,6 +74,9 @@ public class MainApp extends Application {
         ui = new UiManager(logic, config, userPrefs);
 
         initEventsCenter();
+
+        //Initialize the job number
+        JobNumber.initialize("0");
     }
 
     private String getApplicationParameter(String parameterName) {

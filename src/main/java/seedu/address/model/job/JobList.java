@@ -1,13 +1,16 @@
 package seedu.address.model.job;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Iterator;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import seedu.address.model.job.exceptions.JobNotFoundException;
 
+//@@author whenzei
 /**
  * A list of jobs that does not allow nulls
  */
@@ -21,6 +24,19 @@ public class JobList implements Iterable<Job> {
     public boolean contains(Job toCheck) {
         requireNonNull(toCheck);
         return internalList.contains(toCheck);
+    }
+
+    public void setJobs(JobList replacement) {
+        this.internalList.setAll(replacement.internalList);
+    }
+
+    public void setJobs(List<Job> jobs) {
+        requireAllNonNull(jobs);
+        final JobList replacement = new JobList();
+        for (final Job job : jobs) {
+            replacement.add(job);
+        }
+        setJobs(replacement);
     }
 
     /**
@@ -41,6 +57,13 @@ public class JobList implements Iterable<Job> {
         requireNonNull(toRemove);
         final boolean jobFoundAndDeleted = internalList.remove(toRemove);
         return jobFoundAndDeleted;
+    }
+
+    /**
+     * Returns the backing list as an unmodifiable {@code ObservableList}.
+     */
+    public ObservableList<Job> asObservableList() {
+        return FXCollections.unmodifiableObservableList(internalList);
     }
 
     @Override

@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
+import seedu.address.model.job.Job;
+import seedu.address.model.job.JobList;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.UniqueEmployeeList;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
@@ -27,6 +29,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniqueEmployeeList employees;
     private final UniqueTagList tags;
+    private final JobList jobs;
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -38,6 +41,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     {
         employees = new UniqueEmployeeList();
         tags = new UniqueTagList();
+        jobs = new JobList();
     }
 
     public AddressBook() {}
@@ -54,6 +58,10 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     public void setEmployees(List<Employee> employees) throws DuplicateEmployeeException {
         this.employees.setEmployees(employees);
+    }
+
+    public void setJobs(List<Job> jobs) {
+        this.jobs.setJobs(jobs);
     }
 
     public void setTags(Set<Tag> tags) {
@@ -75,6 +83,16 @@ public class AddressBook implements ReadOnlyAddressBook {
         } catch (DuplicateEmployeeException e) {
             throw new AssertionError("AddressBooks should not have duplicate employees");
         }
+    }
+
+    //// job-level operations
+
+    //@@author whenzei
+    /**
+     * Adds a job to CarviciM.*
+     */
+    public void addJob(Job job) {
+        jobs.add(job);
     }
 
     //// employee-level operations
@@ -178,6 +196,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Employee> getEmployeeList() {
         return employees.asObservableList();
+    }
+
+    @Override
+    public ObservableList<Job> getJobList() {
+        return jobs.asObservableList();
     }
 
     @Override

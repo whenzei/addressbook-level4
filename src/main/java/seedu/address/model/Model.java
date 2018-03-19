@@ -4,6 +4,8 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.logic.commands.CommandWords;
+import seedu.address.model.job.Job;
+import seedu.address.model.job.exceptions.JobNotFoundException;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
 import seedu.address.model.person.exceptions.EmployeeNotFoundException;
@@ -27,6 +29,12 @@ public interface Model {
 
     /** Returns the AddressBook */
     ReadOnlyAddressBook getAddressBook();
+
+    /** Adds the given job */
+    void addJob(Job job);
+
+    /** Closes the given job */
+    void closeJob(Job target) throws JobNotFoundException;
 
     /** Deletes the given employee. */
     void deletePerson(Employee target) throws EmployeeNotFoundException;

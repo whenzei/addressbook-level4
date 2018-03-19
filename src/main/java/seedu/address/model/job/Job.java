@@ -17,7 +17,7 @@ import seedu.address.model.remark.RemarkList;
  * Represents a Job in the car servicing manager
  */
 public class Job {
-    private final Person customer;
+    private final Person client;
     private final VehicleNumber vehicleNumber;
     private final JobNumber jobNumber;
     private final Date date;
@@ -26,11 +26,11 @@ public class Job {
     private final UniqueEmployeeList assignedEmployees;
     private final RemarkList remarks;
 
-    public Job(Person customer, VehicleNumber vehicleNumber, JobNumber jobNumber,
+    public Job(Person client, VehicleNumber vehicleNumber, JobNumber jobNumber,
                Date date, UniqueEmployeeList assignedEmployees, Status status, RemarkList remarks) {
 
-        requireAllNonNull(customer, vehicleNumber, jobNumber, date, assignedEmployees, status);
-        this.customer = customer;
+        requireAllNonNull(client, vehicleNumber, jobNumber, date, assignedEmployees, status);
+        this.client = client;
         this.vehicleNumber = vehicleNumber;
         this.jobNumber = jobNumber;
         this.date = date;
@@ -47,8 +47,8 @@ public class Job {
         return vehicleNumber;
     }
 
-    public Person getCustomer() {
-        return customer;
+    public Person getClient() {
+        return client;
     }
 
     public Date getDate() {
@@ -88,7 +88,7 @@ public class Job {
         }
 
         Job otherJob = (Job) other;
-        return otherJob.getCustomer().equals(this.getCustomer())
+        return otherJob.getClient().equals(this.getClient())
                 && otherJob.getVehicleNumber().equals(this.getVehicleNumber())
                 && otherJob.getJobNumber().equals(this.getJobNumber())
                 && otherJob.getDate().equals(this.getDate())
@@ -99,7 +99,7 @@ public class Job {
 
     @Override
     public int hashCode() {
-        return Objects.hash(customer, vehicleNumber, jobNumber, date,
+        return Objects.hash(client, vehicleNumber, jobNumber, date,
                 assignedEmployees, status, remarks);
     }
 
@@ -114,8 +114,8 @@ public class Job {
                 .append(getDate())
                 .append(" Vehicle ID: ")
                 .append(getVehicleNumber())
-                .append(" Customer: ")
-                .append(getCustomer())
+                .append(" Client: ")
+                .append(getClient())
                 .append(" Remarks: ");
         getRemarks().forEach(builder::append);
         builder.append(" Assigned Employees: ");

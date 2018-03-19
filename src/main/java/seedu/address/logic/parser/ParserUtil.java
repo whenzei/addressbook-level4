@@ -10,8 +10,10 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.model.job.VehicleNumber;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Employee;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -183,5 +185,32 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+
+    /**
+     * Parses a {@code String vehicleNumber} into a {@code VehicleNumber}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code vehicleNumber} is invalid.
+     */
+    public static VehicleNumber parseVehicleNumber(String vehicleNumber) throws IllegalValueException {
+        requireNonNull(vehicleNumber);
+        String trimmedVehicleNumber = vehicleNumber.trim();
+        if (!VehicleNumber.isValidVehicleNumber(trimmedVehicleNumber)) {
+            throw new IllegalValueException(VehicleNumber.MESSAGE_VEHICLE_ID_CONSTRAINTS);
+        }
+        return new VehicleNumber(vehicleNumber);
+    }
+
+    /**
+     * Parses a {@code Optional<String> vehicleNumber} into an {@code Optional<VehicleNumber>}
+     * if {@code vehicleNumber} is present.
+     *
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<VehicleNumber> parseVehicleNumber(Optional<String> vehicleNumber) throws IllegalValueException {
+        requireNonNull(vehicleNumber);
+        return vehicleNumber.isPresent() ? Optional.of(parseVehicleNumber(vehicleNumber.get())) : Optional.empty();
     }
 }

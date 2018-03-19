@@ -1,5 +1,6 @@
 package seedu.address.model.job;
 
+//@@author whenzei
 /**
  * Represents the status of a car servicing job
  */

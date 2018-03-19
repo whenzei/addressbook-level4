@@ -9,6 +9,7 @@ import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+//@@author whenzei
 /**
  * Represents a list of remarks that enforces no nulls
  */

@@ -1,6 +1,6 @@
 package seedu.address.model.job;
 
-//@author owzhenwei
+//@@author whenzei
 /**
  * Represent a job number in the servicing manager
  */

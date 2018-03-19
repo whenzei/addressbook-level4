@@ -12,7 +12,7 @@ import seedu.address.model.person.UniqueEmployeeList;
 import seedu.address.model.remark.Remark;
 import seedu.address.model.remark.RemarkList;
 
-//@author owzhenwei
+//@@author whenzei
 /**
  * Represents a Job in the car servicing manager
  */

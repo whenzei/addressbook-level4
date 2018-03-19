@@ -3,6 +3,7 @@ package seedu.address.model.job;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+//@@author whenzei
 /**
  * Represent the date of job creation in the servicing manager
  */

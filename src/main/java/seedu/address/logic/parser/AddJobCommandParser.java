@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import seedu.address.logic.commands.AddJobCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
-//author owzhenwei
+//@@author whenzei
 /**
  * Parses the input arguments and creates a new AddJobCommand object
  */

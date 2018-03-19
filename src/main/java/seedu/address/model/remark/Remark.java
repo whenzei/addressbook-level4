@@ -3,6 +3,7 @@ package seedu.address.model.remark;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+//@@author whenzei
 /**
  * Represents a remark for a job in the car servicing manager
  */

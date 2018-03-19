@@ -22,7 +22,7 @@ public class AddJobCommand extends UndoableCommand {
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_VEHICLE_NUMBER + "VEHICLE_NUMBER "
-            + PREFIX_ASSIGNED_EMPLOYEE + "ASSIGNED_EMPLOYEE+\n"
+            + PREFIX_ASSIGNED_EMPLOYEE + "ASSIGNED_EMPLOYEE_INDEX+\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_PHONE + "98765432 "

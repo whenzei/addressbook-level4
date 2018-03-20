@@ -285,7 +285,7 @@ If there is no `INDEX` present, `theme` command will return an invalid message, 
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         setTheme(event.getSelectedIndex());
     }
----- 
+----
 
 `setTheme` method code snippet in `MainWindow` that checks for file existence before removing current theme and applying the selected theme. Selected theme is then updated in the `UserPref`:
 [source,java]

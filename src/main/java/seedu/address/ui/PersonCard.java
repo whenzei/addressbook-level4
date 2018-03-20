@@ -33,8 +33,6 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label phone;
     @FXML
-    private Label address;
-    @FXML
     private Label email;
     @FXML
     private FlowPane tags;
@@ -45,7 +43,6 @@ public class PersonCard extends UiPart<Region> {
         id.setText(displayedIndex + ". ");
         name.setText(employee.getName().fullName);
         phone.setText(employee.getPhone().value);
-        address.setText(employee.getAddress().value);
         email.setText(employee.getEmail().value);
         employee.getTags().forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }

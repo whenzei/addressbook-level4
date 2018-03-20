@@ -20,9 +20,9 @@ public class Employee extends Person {
     /**
      * Every field must be present and not null.
      */
-    public Employee(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        super(name, phone, email, address);
-        requireAllNonNull(name, phone, email, address, tags);
+    public Employee(Name name, Phone phone, Email email, Set<Tag> tags) {
+        super(name, phone, email);
+        requireAllNonNull(name, phone, email, tags);
         // protect internal tags from changes in the arg list
         this.tags = new UniqueTagList(tags);
     }
@@ -48,14 +48,13 @@ public class Employee extends Person {
         Employee otherEmployee = (Employee) other;
         return otherEmployee.getName().equals(this.getName())
                 && otherEmployee.getPhone().equals(this.getPhone())
-                && otherEmployee.getEmail().equals(this.getEmail())
-                && otherEmployee.getAddress().equals(this.getAddress());
+                && otherEmployee.getEmail().equals(this.getEmail());
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, tags);
     }
 
     @Override
@@ -66,8 +65,6 @@ public class Employee extends Person {
                 .append(getPhone())
                 .append(" Email: ")
                 .append(getEmail())
-                .append(" Address: ")
-                .append(getAddress())
                 .append(" Tags: ");
         getTags().forEach(builder::append);
         return builder.toString();

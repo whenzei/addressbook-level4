@@ -89,7 +89,7 @@ public class AddressBook implements ReadOnlyAddressBook {
 
     //@@author whenzei
     /**
-     * Adds a job to CarviciM.*
+     * Adds a job to CarviciM.
      */
     public void addJob(Job job) {
         jobs.add(job);
@@ -151,7 +151,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         final Set<Tag> correctTagReferences = new HashSet<>();
         employeeTags.forEach(tag -> correctTagReferences.add(masterTagObjects.get(tag)));
         return new Employee(employee.getName(), employee.getPhone(), employee.getEmail(),
-                employee.getAddress(), correctTagReferences);
+                correctTagReferences);
     }
 
     /**

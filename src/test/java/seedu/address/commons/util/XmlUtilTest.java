@@ -40,7 +40,6 @@ public class XmlUtilTest {
     private static final String VALID_NAME = "Hans Muster";
     private static final String VALID_PHONE = "9482424";
     private static final String VALID_EMAIL = "hans@example";
-    private static final String VALID_ADDRESS = "4th street";
     private static final List<XmlAdaptedTag> VALID_TAGS =
             Collections.singletonList(new XmlAdaptedTag("friends"));
 
@@ -83,7 +82,7 @@ public class XmlUtilTest {
         XmlAdaptedEmployee actualEmployee = XmlUtil.getDataFromFile(
                 MISSING_EMPLOYEE_FIELD_FILE, XmlAdaptedEmployeeWithRootElement.class);
         XmlAdaptedEmployee expectedEmployee = new XmlAdaptedEmployee(
-                null, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_TAGS);
+                null, VALID_PHONE, VALID_EMAIL, VALID_TAGS);
         assertEquals(expectedEmployee, actualEmployee);
     }
 
@@ -92,7 +91,7 @@ public class XmlUtilTest {
         XmlAdaptedEmployee actualEmployee = XmlUtil.getDataFromFile(
                 INVALID_EMPLOYEE_FIELD_FILE, XmlAdaptedEmployeeWithRootElement.class);
         XmlAdaptedEmployee expectedEmployee = new XmlAdaptedEmployee(
-                VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_TAGS);
+                VALID_NAME, INVALID_PHONE, VALID_EMAIL, VALID_TAGS);
         assertEquals(expectedEmployee, actualEmployee);
     }
 
@@ -101,7 +100,7 @@ public class XmlUtilTest {
         XmlAdaptedEmployee actualEmployee = XmlUtil.getDataFromFile(
                 VALID_EMPLOYEE_FILE, XmlAdaptedEmployeeWithRootElement.class);
         XmlAdaptedEmployee expectedEmployee = new XmlAdaptedEmployee(
-                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS, VALID_TAGS);
+                VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_TAGS);
         assertEquals(expectedEmployee, actualEmployee);
     }
 

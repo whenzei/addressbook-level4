@@ -19,7 +19,7 @@ public class Remark {
     public final String value;
 
     /**
-     * Constructs an {@code Address}.
+     * Constructs a {@code Remark}.
      *
      * @param remark A valid remark.
      */

@@ -239,6 +239,87 @@ image::blank.png[width="800"]
 ==== Design Considerations
 // end::importexport[]
 
+// tag::theme[]
+=== Theme setting feature
+==== Current Implementation
+
+The theme setting mechanism is facilitated by a `ThemeCommand`. `ThemeCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `INDEX` input of `1` to `2`, and creates the `ThemeCommand` object which selects the application's theme.
+The `UserPref` stores and retrieves the theme preference of the application.
+
+`ThemeCommand` relies on `SetThemeRequestEvent` which is handled by `MainWindow` to call the appropriate method for setting of theme.
+
+[NOTE]
+If there is no `INDEX` present, `theme` command will return an invalid message, which shows the usage information to the user.
+(e.g. theme "").
+
+`ThemeCommand` code snippet to check for valid `INDEX` input and raises the `SetThemeRequestEvent` handler for setting of the desired theme, based on the `INDEX` input:
+[source,java]
+----
+    public CommandResult execute() throws CommandException {
+        if (selectedIndex.getZeroBased() >= NUMBER_OF_THEMES) {
+            throw new CommandException(Messages.MESSAGE_INVALID_THEME_INDEX);
+        }
+        EventsCenter.getInstance().post(new SetThemeRequestEvent(selectedIndex));
+        return new CommandResult(String.format(MESSAGE_THEME_CHANGE_SUCCESS, selectedIndex.getOneBased()));
+    }
+----
+
+`ThemeCommandParser` code snippet to validate `INDEX` input, which returns `ThemeCommand` object if valid, and invalid message otherwise:
+[source,java]
+----
+    public ThemeCommand parse(String args) throws ParseException {
+        try {
+            Index index = ParserUtil.parseIndex(args);
+            return new ThemeCommand(index);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ThemeCommand.MESSAGE_USAGE));
+        }
+    }
+----
+
+`MainWindow` code snippet that handles `SetThemeRequestEvent` to set the theme of the application:
+[source,java]
+----
+    private void handleSetThemeRequestEvent(SetThemeRequestEvent event) throws CommandException {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        setTheme(event.getSelectedIndex());
+    }
+---- 
+
+`setTheme` method code snippet in `MainWindow` that checks for file existence before removing current theme and applying the selected theme. Selected theme is then updated in the `UserPref`:
+[source,java]
+----
+    private void setTheme(Index selectedIndex) throws CommandException {
+        String themeName = themes[selectedIndex.getZeroBased()];
+        if (MainApp.class.getResource(FXML_FILE_FOLDER + themeName + "Theme.css") == null) {
+            throw new CommandException(Messages.MESSAGE_INVALID_FILE_PATH);
+        }
+
+        getRoot().getScene().getStylesheets().clear();
+        getRoot().getScene().getStylesheets().add(FXML_FILE_FOLDER + themeName + "Theme.css");
+        getRoot().getScene().getStylesheets().add(FXML_FILE_FOLDER + "Extensions" + themeName + ".css");
+        prefs.setExtensionName("Extensions" + themeName);
+        prefs.setThemeName(themeName + "Theme");
+
+    }
+----
+
+`setTheme` method code snippet in `MainApp` that initializes the application's last selected theme:
+[source,java]
+----
+    private void setTheme(Stage primaryStage) {
+        primaryStage.getScene().getStylesheets().clear();
+        primaryStage.getScene().getStylesheets().add("/view/" + userPrefs.getThemeName() + ".css");
+        primaryStage.getScene().getStylesheets().add("/view/" + userPrefs.getExtensionName() + ".css");
+    }
+----
+
+==== Design Considerations
+*Aspect:* Implementation of ThemeCommand +
+*Alternative 1 (Current choice):* Utilizing `SetThemRequestEvent` and allow `MainWindow` to handle the raised event to set the theme of the application. Ensuring persistent theme setting by updating `UserPref` to store and retrieve relevant stylesheet used.
+// end::theme[]
+
 // tag::undoredo[]
 === Undo/Redo feature
 ==== Current Implementation

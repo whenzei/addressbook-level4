@@ -72,7 +72,7 @@ public class AddJobCommand extends UndoableCommand {
         List<Employee> lastShownList = model.getFilteredPersonList();
 
         //Check for valid employee indices
-        for(Index targetIndex : targetIndices) {
+        for (Index targetIndex : targetIndices) {
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
             }

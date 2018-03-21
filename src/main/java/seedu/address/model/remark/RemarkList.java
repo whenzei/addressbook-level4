@@ -3,11 +3,13 @@ package seedu.address.model.remark;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.commons.util.CollectionUtil;
 
 //@@author whenzei
 /**
@@ -29,6 +31,15 @@ public class RemarkList implements Iterable<Remark> {
     public RemarkList(Set<Remark> remarks) {
         requireAllNonNull(remarks);
         internalList.addAll(remarks);
+    }
+
+    /**
+     * Returns all remarks in this list as a Set.
+     * This set is mutable and change-insulated against the internal list.
+     */
+    public Set<Remark> toSet() {
+        assert CollectionUtil.elementsAreUnique(internalList);
+        return new HashSet<>(internalList);
     }
 
     /**

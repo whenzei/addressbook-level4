@@ -116,12 +116,12 @@ public class Job {
                 .append(getClient())
                 .append(" \nRemarks: ");
 
-        for(Remark remark : remarks) {
+        for (Remark remark : remarks) {
             builder.append("\n" + remark);
         }
 
         builder.append(" \nAssigned Employees:");
-        for(Employee assignedEmployee : assignedEmployees) {
+        for (Employee assignedEmployee : assignedEmployees) {
             builder.append("\n" + assignedEmployee);
         }
 

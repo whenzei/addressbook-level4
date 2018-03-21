@@ -172,6 +172,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         tags.add(t);
     }
 
+    //@@author richardson0694
     /**
      * Sort all employees' name in list alphabetically.
      */
@@ -185,6 +186,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         return employees;
     }
 
+    //@@author
     //// util methods
 
     @Override

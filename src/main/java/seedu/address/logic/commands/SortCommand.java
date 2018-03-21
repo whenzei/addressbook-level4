@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import seedu.address.model.AddressBook;
 
+//@@author richardson0694
 /**
  * Sorts all persons alphabetically by names in the address book to the user.
  */

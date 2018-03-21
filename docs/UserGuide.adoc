@@ -152,23 +152,143 @@ Deletes the 2nd employee in CarviciM.
 `deletee 1` +
 Deletes the 1st employee in the results of the `findE` command.
 
+// tag::set[]
 === Changing a command word : `set`
 
-Selects the employee identified by the index number used in the last employee listing. +
+You can set an easy to use word in place of a default command word. +
 Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
-****
-* Sets the OLD_COMMAND_WORD to NEW_COMMAND_WORD
-* The OLD_COMMAND_WORD must be in user preferences
+[NOTE]
+====
+* The OLD_COMMAND_WORD can be either a default command word or one which user has set previously.
 * The NEW_COMMAND_WORD must be 1 word, with no spacing.
-****
+* Any default words or words currently set by users are not allowed.
+====
 
 Examples:
 
 * `set add a` +
-Sets `add` command word to `a`
+Sets `add` command word to `a` using default
+* `set add s` +
+Sets `add` command word to `s` using default
+* `set set a` +
+Sets `set` command word to `a` using default
+* `set a s` +
+Invalid command as s is already used by user.
 * `set a add` +
-Sets `a` command word back to `add`
+Invalid command as add is a default command.
+* `set a set` +
+Sets `a` command word back to `set`, its default mapping.
+// end::set[]
+
+// tag::importexport[]
+=== Importing jobs from an excel file #Coming in v2.0#
+==== Importing a new excel file: import
+
+You can load your excel file by filename or filepath.
+Format: `import PATH_TO_FILE`
+
+[NOTE]
+====
+* Filepath: A text representation of the location of the file used by the computer.
+* CarviciM tries to read the file by rows:
+** The first row specifies the type of detail in the column.
+====
+
+Examples:
+
+* `import excel.xls` +
+Imports file excel.xls.
+
+
+==== Accepting and rejecting changes
+
+You can use 4 commands when reviewing changes:
+* accept INDEX
+* reject INDEX
+* acceptAll
+* rejectAll
+
+===== Accepting 1 job: accept
+
+Accepts a job specified at position INDEX in imported list.
+Format: `accept INDEX`
+
+Examples:
+
+* `accept 1` +
+Accepts the first job entry and removes it from imported list.
+
+===== Accepting all remaining imported jobs: acceptAll
+
+Accepts all remaining jobs.
+Format: `acceptAll`
+
+Examples:
+
+* `acceptAll` +
+Accepts all remaining job entries and clears the imported list.
+
+===== Rejecting 1 job: reject
+
+Rejects a job specified at position INDEX in imported list.
+Format: `reject INDEX`
+
+Examples:
+
+* `reject 1` +
+Rejects the first job entry and removes it from imported list.
+
+===== Rejecting all remaining imported jobs: rejectAll
+
+Rejects all remaining jobs.
+Format: `rejectAll`
+
+Examples:
+
+* `rejectAll` +
+Rejects all remaining job entries and clears the imported list.
+
+==== Writing comments to your reviews
+
+While accepting or rejecting changes, you can enter your comments behind the command
+[TIP]
+====
+You can type any alphanumeric sentence as a comment, as long as it is after the command.
+====
+
+Examples:
+
+* `accept 1` good job` +
+Accepts first job and attaches "good job" as a comment to the first job.
+* `acceptAll well done` +
+Accepts all remaining imported jobs and attaches "well done" as a comment to all the remaining imported jobs.
+* `reject 1 Speak to you during tomorrow's meeting.` +
+Rejects first job and attaches "Speak to you during tomorrow's meeting." as a comment to the first job.
+* `rejectAll Please check the customer details.` +
+Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
+
+==== Sharing your feedback with your employees
+
+If you want to share your feedback, you can export it as an excel file, reflecting accept/reject with comments.
+Format: `export PATH_TO_FILE`
+
+[TIP]
+====
+* You can type any filename supported by your computer's storage format
+* If you forgot to export your feedback, you can find it under C:\User\Documents\CarviciM\feedback.xls
+* The feedback file's format is support for future imports.
+====
+[NOTE]
+====
+Filepath: A text representation of the location of the file used by the computer.
+====
+
+Examples:
+
+* `export summary report`
+Exports the feedback to "summary report.xls"
+// end::importexport[]
 
 === Setting a theme : `theme`
 

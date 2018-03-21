@@ -230,6 +230,56 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
+// tag::set[]
+=== Set command feature
+==== Current Implementation
+
+Set command keeps 2 lists of command words, the default command words and the custom user command words, which are both managed by the class `CommandWords`.
+
+The default command words are stored as a class level reference `COMMANDS`, while the custom command words are stored as a field `commands` in the object.
+
+`CommandWords` is in the `Logic` component, under `Commands`, as it is required to parse commands in `AddressBookParser`.
+
+`CommandWords` only deal with commands that have their default command word declared in the class level reference.
+
+image::SetCommandLogicDiagram.png[width="800"]+
+image::SetCommandModelDiagram.png[width="800"]+
+
+As you can see from the diagram, AddressBookParser makes a reference to CommandWords. However, `CommandWords` resides in `UserPrefs` in the `Model` component.
+
+This is to facilitate the saving of data.
+
+==== Design Considerations
+
+===== Aspect: Where to put CommandWords for storage
+
+* **Alternative 1:** Place `CommandWords` in `UserPrefs`
+** Pros: Single Responsibility Principle is maintained as custom command words in `CommandWords` is a user preference.
+** Cons: More coupling is required for the AddressBook to retrieve the custom command words.
+* **Alternative 2:** Place `CommandWords` in `AddressBook`
+** Pros: Direct access to custom words in commands.
+** Cons: Single Responsibility Principle will be violated.
+
+===== Aspect: Access to CommandWords
+
+* **Alternative 1:** `ModelManager` and member variables gets access and provides API to access `CommandWords`.
+** Pros: Write protection.
+** Cons: `CommandWords` is frequently accessed, many more APIs are required.
+* **Alternative 2 (current choice):** Provide direct access to `CommandWords` when more details are needed and keep minimal API on `ModelManager`.
+** Pros: Easy to implement, neat.
+** Cons: Accidental modification can lead to bugs, so need to be careful.
+
+
+===== Aspect: Storing the list of default command words
+
+* **Alternative 1 (current choice):** Store the default list in `CommandWords`.
+** Pros: Easier to maintain the Open-Closed Principle, also follows the Single Responsibility Principle.
+** Cons: Increased coupling.
+* **Alternative 2:** Store the default list in `Commands`.
+** Pros: Reduced coupling.
+** Cons: `Commands` is an abstract class, it is not appropriate to reference class variables.
+// end::set[]
+
 // tag::importexport[]
 === Import/Export feature #Coming in v2.0#
 ==== Current Implementation
@@ -238,6 +288,87 @@ image::blank.png[width="800"]
 
 ==== Design Considerations
 // end::importexport[]
+
+// tag::theme[]
+=== Theme setting feature
+==== Current Implementation
+
+The theme setting mechanism is facilitated by a `ThemeCommand`. `ThemeCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `INDEX` input of `1` to `2`, and creates the `ThemeCommand` object which selects the application's theme.
+The `UserPref` stores and retrieves the theme preference of the application.
+
+`ThemeCommand` relies on `SetThemeRequestEvent` which is handled by `MainWindow` to call the appropriate method for setting of theme.
+
+[NOTE]
+If there is no `INDEX` present, `theme` command will return an invalid message, which shows the usage information to the user.
+(e.g. theme "").
+
+`ThemeCommand` code snippet to check for valid `INDEX` input and raises the `SetThemeRequestEvent` handler for setting of the desired theme, based on the `INDEX` input:
+[source,java]
+----
+    public CommandResult execute() throws CommandException {
+        if (selectedIndex.getZeroBased() >= NUMBER_OF_THEMES) {
+            throw new CommandException(Messages.MESSAGE_INVALID_THEME_INDEX);
+        }
+        EventsCenter.getInstance().post(new SetThemeRequestEvent(selectedIndex));
+        return new CommandResult(String.format(MESSAGE_THEME_CHANGE_SUCCESS, selectedIndex.getOneBased()));
+    }
+----
+
+`ThemeCommandParser` code snippet to validate `INDEX` input, which returns `ThemeCommand` object if valid, and invalid message otherwise:
+[source,java]
+----
+    public ThemeCommand parse(String args) throws ParseException {
+        try {
+            Index index = ParserUtil.parseIndex(args);
+            return new ThemeCommand(index);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ThemeCommand.MESSAGE_USAGE));
+        }
+    }
+----
+
+`MainWindow` code snippet that handles `SetThemeRequestEvent` to set the theme of the application:
+[source,java]
+----
+    private void handleSetThemeRequestEvent(SetThemeRequestEvent event) throws CommandException {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        setTheme(event.getSelectedIndex());
+    }
+----
+
+`setTheme` method code snippet in `MainWindow` that checks for file existence before removing current theme and applying the selected theme. Selected theme is then updated in the `UserPref`:
+[source,java]
+----
+    private void setTheme(Index selectedIndex) throws CommandException {
+        String themeName = themes[selectedIndex.getZeroBased()];
+        if (MainApp.class.getResource(FXML_FILE_FOLDER + themeName + "Theme.css") == null) {
+            throw new CommandException(Messages.MESSAGE_INVALID_FILE_PATH);
+        }
+
+        getRoot().getScene().getStylesheets().clear();
+        getRoot().getScene().getStylesheets().add(FXML_FILE_FOLDER + themeName + "Theme.css");
+        getRoot().getScene().getStylesheets().add(FXML_FILE_FOLDER + "Extensions" + themeName + ".css");
+        prefs.setExtensionName("Extensions" + themeName);
+        prefs.setThemeName(themeName + "Theme");
+
+    }
+----
+
+`setTheme` method code snippet in `MainApp` that initializes the application's last selected theme:
+[source,java]
+----
+    private void setTheme(Stage primaryStage) {
+        primaryStage.getScene().getStylesheets().clear();
+        primaryStage.getScene().getStylesheets().add("/view/" + userPrefs.getThemeName() + ".css");
+        primaryStage.getScene().getStylesheets().add("/view/" + userPrefs.getExtensionName() + ".css");
+    }
+----
+
+==== Design Considerations
+*Aspect:* Implementation of ThemeCommand +
+*Alternative 1 (Current choice):* Utilizing `SetThemRequestEvent` and allow `MainWindow` to handle the raised event to set the theme of the application. Ensuring persistent theme setting by updating `UserPref` to store and retrieve relevant stylesheet used.
+// end::theme[]
 
 // tag::undoredo[]
 === Undo/Redo feature
@@ -366,6 +497,56 @@ image::UndoRedoActivityDiagram.png[width="650"]
 ** Pros: We do not need to maintain a separate stack, and just reuse what is already in the codebase.
 ** Cons: Requires dealing with commands that have already been undone: We must remember to skip these commands. Violates Single Responsibility Principle and Separation of Concerns as `HistoryManager` now needs to do two * different things.
 // end::undoredo[]
+
+// tag::sendemailtoemployee[]
+=== Send Email to Employees about Job
+
+==== Current Implementation
+
+This feature is implemented using Gmail API.
+
+The following dependencies are used:
+* com.google.api-client:google-api-client:1.23.0
+* com.google.oauth-client:google-oauth-client-jetty:1.23.0
+* com.google.apis:google-api-services-gmail:v1-rev82-1.23.0
+
+Suppose that the user typed the first email command.
+
+image::EmailAuthorization.png[width="650"]
+
+`GoogleAuthorizationCodeFlow` is used to build the authorization code flow and trigger user authorization request. It then manages and persists user `Credential`.
+
+`Credential` are then saved into a `File` so that the user need not repeatedly key in his or her authorization information before sending each email.
+
+
+To send an email, firstly, an empty `Properties` list is created, which is used to create an email `Session`. Next, a `MimeMessage`, a class in the `javax.mail.internet` package is created using that `Session`. Attributes `from`, `recipient`, `subject` and `text` of the `MimeMessage` are then set. The `Text` set contains information extracted from the particular `Job`.
+
+Next, `MimeMessage` is encoded using base64url. A `Message` object is instantiated, and the value of the `raw` property of the `Message` is set to the encoded `MimeMessage`.
+
+Lastly, make a call to `messages.send` to send the email.
+
+==== Design Considerations
+
+===== Aspect: Email content
+
+* **Alternative 1 (current choice):** Email content contains job information extracted from the particular Job object only
+** Pros: Easier to implement, and the email will be sent out very quickly, immediately after typing one line of command, making it more convenient for the user.
+** Cons: User has no ability to change or add to the contents of the email if the user wishes to.
+* **Alternative 2:** User gets to edit or add to the email content
+** Pros: Provides flexibility as the user is allowed to change and add details to the email content.
+** Cons: Need to direct user to an editor, thus more difficult to implement. User would also have to go through more steps than necessary if the user does not wish to change or add details to the email content.
+
+
+===== Aspect: Authorization information
+
+* **Alternative 1 (current choice):** Stored in file system so subsequent executions will not prompt for authorization
+** Pros: More convenient for user as the user only needs to key in his or her authorization information once
+** Cons: Unsafe
+* **Alternative 2:** Prompt for authorization for every subsequent executions
+** Pros: Safe
+** Cons: Inconvenient for user as user needs to always key in authorization information before sending each email
+
+// end::sendemailtoemployee[]
 
 // tag::dataencryption[]
 === [Proposed] Data Encryption
@@ -818,13 +999,48 @@ See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-
 * Importing job entries from an excel file (Major)
 +
 [none]
-** User can specify the file path to an excel file containing the job entries in columns, and header fields to indicate the
-** field contents for each row. User then reviews the changes and generates a feedback document.
+** User can import job entries, reviews them and comments on the changes before generating a feedback document.
+** This allows easy collation of data from their employee's progress reports into CarviciM, and providing feedback based on their reports.
 
 * Setting custom command keywords (Minor)
 +
 [none]
-** User can set a custom keyword that is not used on top of the original command word.
+** User can set a custom keyword that is not used on top of the original command word. This allows them to use shorthand
+** or a custom command word that is easy to remember.
+
+*Feature Contributions*:
+
+* Sorting the employee list. (Minor)
++
+[none]
+** The sort command arranges the employee list alphabetically according to their names.
+
+* Archiving and analysing job entries. (Major)
++
+[none]
+** User can archive that may be needed for future reference. Job entries can also be analyse to keep track of the the employees' performance.
+
+*Feature contribution*:
+
+- Importing job entries from an excel file (major enhancement)
+Done by: yuhongherald
+User can specify the file path to an excel file containing the job entries in columns, and header fields to indicate the
+field contents for each row. User then reviews the changes and generates a feedback document.
+
+- Setting custom command keywords (minor enhancement)
+Done by: yuhongherald
+User can set a custom keyword that is not used on top of the original command word.
+
+*Feature contribution*:
+
+- Importing job entries from an excel file (major enhancement)
+Done by: yuhongherald
+User can specify the file path to an excel file containing the job entries in columns, and header fields to indicate the
+field contents for each row. User then reviews the changes and generates a feedback document.
+
+- Setting custom command keywords (minor enhancement)
+Done by: yuhongherald
+User can set a custom keyword that is not used on top of the original command word.
 
 [appendix]
 == User Stories
@@ -883,6 +1099,10 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |`* *` |user |export changes |provide feedback to employees regarding the changes
 
 |`*` |user |export completed jobs to other formats |print out all the completed job entries and view it with a better program
+
+|`**` |user |archive job entries |extract job entries within the selected range for archiving
+
+|`**` |user |analyse job entries |keep track of employees' performance
 |=======================================================================
 
 _{More to be added}_
@@ -1214,6 +1434,26 @@ Use case ends.
 * 1b. The given theme index is invalid.
 [none]
 ** 1b1. CarviciM shows an error message.
++
+Use case ends.
+
+[discrete]
+=== Use case: Sort employee list
+
+*MSS*
+
+1.  User request to sort employee list.
+2.  CarviciM sorts employee list alphabetically according to their names.
++
+Use case ends.
+
+[discrete]
+=== Use case: Archiving of job entries
+
+*MSS*
+
+1.  User specifies the date range for archiving.
+2.  CarviciM extracts the job entries within the selected range and archive them.
 +
 Use case ends.
 

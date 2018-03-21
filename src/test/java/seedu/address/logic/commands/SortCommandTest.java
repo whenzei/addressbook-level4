@@ -13,6 +13,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 
+//@@author richardson0694
 public class SortCommandTest {
     private Model model;
     private Model expectedModel;

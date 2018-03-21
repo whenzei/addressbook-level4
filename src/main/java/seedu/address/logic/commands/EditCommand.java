@@ -85,7 +85,7 @@ public class EditCommand extends UndoableCommand {
         List<Employee> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
         }
 
         employeeToEdit = lastShownList.get(index.getZeroBased());

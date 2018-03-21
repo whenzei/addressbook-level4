@@ -107,8 +107,7 @@ public class Job {
         final StringBuilder builder = new StringBuilder();
         builder.append("\nJob Number: ")
                 .append(getJobNumber())
-                .append(" Status: ")
-                .append(getStatus())
+                .append("[" + getStatus() + "]")
                 .append(" Start Date: ")
                 .append(getDate())
                 .append(" \nVehicle ID: ")
@@ -116,9 +115,16 @@ public class Job {
                 .append(" Client: ")
                 .append(getClient())
                 .append(" \nRemarks: ");
-        getRemarks().forEach(builder::append);
-        builder.append(" \nAssigned Employees: ");
-        getAssignedEmployees().forEach(builder::append);
+
+        for(Remark remark : remarks) {
+            builder.append("\n" + remark);
+        }
+
+        builder.append(" \nAssigned Employees:");
+        for(Employee assignedEmployee : assignedEmployees) {
+            builder.append("\n" + assignedEmployee);
+        }
+
         return builder.toString();
     }
 }

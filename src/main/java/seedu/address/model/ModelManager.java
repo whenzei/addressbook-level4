@@ -82,6 +82,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public synchronized void addJob(Job job) {
+        addressBook.addJob(job);
     }
 
     @Override

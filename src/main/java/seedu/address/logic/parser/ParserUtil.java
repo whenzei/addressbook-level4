@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -60,6 +61,18 @@ public class ParserUtil {
             throw new IllegalValueException(MESSAGE_INVALID_INDEX);
         }
         return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+    }
+
+    /**
+     * Parses {@code Collection<String> indices} into a {@code Set<Index>}.
+     */
+    public static ArrayList<Index> parseIndices(Collection<String> indices) throws IllegalValueException {
+        requireNonNull(indices);
+        final ArrayList<Index> indexList = new ArrayList<>();
+        for (String index : indices) {
+            indexList.add(parseIndex(index));
+        }
+        return indexList;
     }
 
     /**

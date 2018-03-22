@@ -34,7 +34,7 @@ public class JobBuilder {
     private RemarkList remarks;
     private JobNumber jobNumber;
 
-    public JobBuilder(ObservableList<Employee> employees) throws Exception{
+    public JobBuilder(ObservableList<Employee> employees) throws Exception {
         Name name = new Name(DEFAULT_NAME);
         Phone phone = new Phone(DEFAULT_PHONE);
         Email email = new Email(DEFAULT_EMAIL);

@@ -36,10 +36,10 @@ import seedu.address.testutil.JobBuilder;
 
 //@@author whenzei
 public class AddJobCommandTest {
-
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void constructor_nullAddJobFields_throwsNullPointerException() {
@@ -176,6 +176,9 @@ public class AddJobCommandTest {
         }
     }
 
+    /**
+     * Generates an Arraylist of valid assigned employee index
+     */
     private ArrayList<Index> generateValidEmployeeIndices() {
         ArrayList<Index> indices = new ArrayList<Index>();
         indices.add(INDEX_FIRST_PERSON);
@@ -183,6 +186,12 @@ public class AddJobCommandTest {
         return indices;
     }
 
+    /**
+     * Returns a {@code AddJobCommand} with the client, vehicleNumber and indices.
+     * @param client
+     * @param vehicleNumber
+     * @param indices
+     */
     private AddJobCommand prepareCommand(Person client, VehicleNumber vehicleNumber, ArrayList<Index> indices) {
         JobNumber.initialize("0");
         AddJobCommand addJobCommand = new AddJobCommand(client, vehicleNumber, indices);

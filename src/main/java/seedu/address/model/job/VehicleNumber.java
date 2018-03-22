@@ -8,6 +8,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  * Represents a Vehicle ID in the Job
  */
 public class VehicleNumber {
+    public static final String DEFAULT_VEHICLE_NUMBER = "SAS123J";
     public static final String MESSAGE_VEHICLE_ID_CONSTRAINTS =
             "Vehicle ID should only contain alphanumeric characters and should not be blank";
 

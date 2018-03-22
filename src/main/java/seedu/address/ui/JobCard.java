@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import seedu.address.model.job.Job;
 
 //@@author yuhongherald
@@ -47,7 +46,7 @@ public class JobCard extends UiPart<Region> {
         startDate.setText(job.getDate().toString());
         status.setText("[" + job.getStatus().toString() + "]");
         if (job.getStatus().toString().equals("ongoing")) {
-           status.setStyle("-fx-text-fill: green");
+            status.setStyle("-fx-text-fill: green");
         } else {
             status.setStyle("-fx-text-fill: red");
         }

@@ -34,6 +34,7 @@ import seedu.address.model.person.exceptions.EmployeeNotFoundException;
 import seedu.address.testutil.ClientBuilder;
 import seedu.address.testutil.JobBuilder;
 
+//@@author whenzei
 public class AddJobCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());

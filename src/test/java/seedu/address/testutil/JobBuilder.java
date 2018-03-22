@@ -17,6 +17,10 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.person.UniqueEmployeeList;
 import seedu.address.model.remark.RemarkList;
 
+//@@author whenzei
+/**
+ * A utility class to help with building Job objects.
+ */
 public class JobBuilder {
     public static final String DEFAULT_NAME = "Alice Pauline";
     public static final String DEFAULT_PHONE = "85355255";

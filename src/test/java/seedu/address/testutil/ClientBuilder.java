@@ -5,6 +5,10 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 
+//@@author whenzei
+/**
+ * A utility class to help with building Client objects.
+ */
 public class ClientBuilder {
     public static final String DEFAULT_NAME = "Alice Pauline";
     public static final String DEFAULT_PHONE = "85355255";

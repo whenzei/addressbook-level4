@@ -2,9 +2,9 @@ package seedu.address.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import seedu.address.model.job.Job;
 
 //@@author yuhongherald
@@ -28,7 +28,7 @@ public class JobCard extends UiPart<Region> {
     @FXML
     private HBox cardPane;
     @FXML
-    private Label customer;
+    private Label client;
     @FXML
     private Label id;
     @FXML
@@ -36,17 +36,21 @@ public class JobCard extends UiPart<Region> {
     @FXML
     private Label startDate;
     @FXML
-    private FlowPane employees;
+    private Label status;
 
     public JobCard(Job job) {
         super(FXML);
         this.job = job;
-        id.setText(job.getJobNumber().toString() + ". ");
-        customer.setText(job.getClient().getName().toString());
-        job.getAssignedEmployees().forEach(employee -> employees.getChildren().add(
-                new Label(employee.getName().toString())));
+        id.setText(job.getJobNumber().toString());
+        client.setText(job.getClient().getName().toString());
         vehicleNumber.setText(job.getVehicleNumber().toString());
         startDate.setText(job.getDate().toString());
+        status.setText("[" + job.getStatus().toString() + "]");
+        if (job.getStatus().toString().equals("ongoing")) {
+           status.setStyle("-fx-text-fill: green");
+        } else {
+            status.setStyle("-fx-text-fill: red");
+        }
         // remarks are not supported in this version, might want to expand into new window due to space constraints
     }
 

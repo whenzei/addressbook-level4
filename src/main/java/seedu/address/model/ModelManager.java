@@ -83,6 +83,8 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void addJob(Job job) {
         addressBook.addJob(job);
+        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+        indicateAddressBookChanged();
     }
 
     @Override

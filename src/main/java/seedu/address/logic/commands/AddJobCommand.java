@@ -25,6 +25,7 @@ import seedu.address.model.person.UniqueEmployeeList;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
 import seedu.address.model.remark.RemarkList;
 
+//@@author whenzei
 /**
  * Adds a job to CarviciM
  */

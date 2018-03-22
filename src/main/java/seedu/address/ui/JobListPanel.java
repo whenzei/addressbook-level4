@@ -22,7 +22,7 @@ import seedu.address.model.person.Employee;
 
 //@author yuhongherald
 /**
- * Panel containing the list of persons.
+ * Panel containing the list of jobs.
  */
 public class JobListPanel extends UiPart<Region> {
     private static final String FXML = "JobListPanel.fxml";

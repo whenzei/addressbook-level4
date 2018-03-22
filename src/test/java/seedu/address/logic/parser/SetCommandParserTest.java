@@ -9,6 +9,7 @@ import org.junit.Test;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.SetCommand;
 
+//@@author yuhongherald
 public class SetCommandParserTest {
     private SetCommandParser parser = new SetCommandParser();
 

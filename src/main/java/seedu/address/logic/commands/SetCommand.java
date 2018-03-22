@@ -5,7 +5,7 @@ import static java.util.Objects.requireNonNull;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.commands.exceptions.CommandWordException;
 
-//@author yuhongherald
+//@@author yuhongherald
 /**
  * Sets a command word to user preferred command word
  */

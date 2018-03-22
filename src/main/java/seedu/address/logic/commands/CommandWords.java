@@ -9,7 +9,7 @@ import java.util.Map;
 
 import seedu.address.logic.commands.exceptions.CommandWordException;
 
-//@author yuhongherald
+//@@author yuhongherald
 /**
  * A serializable data structure used to contain the mappings of a command to a word
  */

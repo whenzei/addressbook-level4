@@ -17,13 +17,14 @@ public interface ReadOnlyAddressBook {
     ObservableList<Employee> getEmployeeList();
 
     /**
+     * Returns an unmodifiable view of the jobs list.
+     * This list will not contain any duplicate jobs.
+     */
+    ObservableList<Job> getJobList();
+
+    /**
      * Returns an unmodifiable view of the tags list.
      * This list will not contain any duplicate tags.
      */
     ObservableList<Tag> getTagList();
-
-    /**
-     * Returns an unmodifiable view of the jobs list.
-     */
-    ObservableList<Job> getJobList();
 }

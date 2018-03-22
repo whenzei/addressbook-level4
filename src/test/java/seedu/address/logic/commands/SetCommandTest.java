@@ -13,7 +13,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 
-//@author yuhongherald
+//@@author yuhongherald
 public class SetCommandTest {
 
     @Test

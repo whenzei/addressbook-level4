@@ -7,11 +7,15 @@ package seedu.address.model.job;
 public class JobNumber {
     private static int nextJobNumber;
 
-    public final String jobNumber;
+    public final String value;
 
     public JobNumber() {
-        jobNumber = Integer.toString(nextJobNumber);
+        value = Integer.toString(nextJobNumber);
         incrementNextJobNumber();
+    }
+
+    public JobNumber(String jobNumber) {
+        value = jobNumber;
     }
 
     /**
@@ -27,18 +31,18 @@ public class JobNumber {
 
     @Override
     public String toString() {
-        return jobNumber;
+        return value;
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof JobNumber // instanceof handles nulls
-                && this.jobNumber.equals(((JobNumber) other).jobNumber)); // state check
+                && this.value.equals(((JobNumber) other).value)); // state check
     }
 
     @Override
     public int hashCode() {
-        return jobNumber.hashCode();
+        return value.hashCode();
     }
 }

@@ -38,7 +38,6 @@ public class RemarkList implements Iterable<Remark> {
      * This set is mutable and change-insulated against the internal list.
      */
     public Set<Remark> toSet() {
-        assert CollectionUtil.elementsAreUnique(internalList);
         return new HashSet<>(internalList);
     }
 

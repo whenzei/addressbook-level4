@@ -21,12 +21,20 @@ public class JobNumber {
     /**
      * Initialize the next job number of the car servicing manager
      */
-    public static void initialize(String args) {
-        nextJobNumber = Integer.parseInt(args);
+    public static void initialize(String arg) {
+        nextJobNumber = Integer.parseInt(arg);
+    }
+
+    public static void initialize(int arg) {
+        nextJobNumber = arg;
     }
 
     public static void incrementNextJobNumber() {
         nextJobNumber++;
+    }
+
+    public int asInteger() {
+        return Integer.parseInt(value);
     }
 
     @Override

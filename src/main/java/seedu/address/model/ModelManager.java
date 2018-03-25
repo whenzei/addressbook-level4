@@ -14,6 +14,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.logic.commands.CommandWords;
 import seedu.address.model.job.Job;
+import seedu.address.model.job.JobNumber;
 import seedu.address.model.job.exceptions.JobNotFoundException;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
@@ -25,6 +26,7 @@ import seedu.address.model.person.exceptions.EmployeeNotFoundException;
  */
 public class ModelManager extends ComponentManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
+    private static final String ONE_AS_STRING = "1";
 
     private final AddressBook addressBook;
     private final FilteredList<Employee> filteredEmployees;
@@ -48,6 +50,25 @@ public class ModelManager extends ComponentManager implements Model {
 
     public ModelManager() {
         this(new AddressBook(), new UserPrefs());
+    }
+
+    //@@author whenzei
+    /**
+     * Initializes the running job number based on the past job numbers.
+     */
+    @Override
+    public void initJobNumber() {
+        if (filteredJobs.isEmpty()) {
+            JobNumber.initialize(ONE_AS_STRING);
+            return;
+        }
+        int largest = filteredJobs.get(0).getJobNumber().asInteger();
+        for (Job job : filteredJobs) {
+            if( job.getJobNumber().asInteger() > largest) {
+                largest = job.getJobNumber().asInteger();
+            }
+        }
+        JobNumber.initialize(largest + 1);
     }
 
     @Override

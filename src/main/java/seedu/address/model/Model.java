@@ -33,6 +33,9 @@ public interface Model {
     /** Returns the AddressBook */
     ReadOnlyAddressBook getAddressBook();
 
+    /** Initializes the job number based on the list of jobs */
+    void initJobNumber();
+
     /** Adds the given job */
     void addJob(Job job);
 

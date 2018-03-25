@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.xml.bind.annotation.XmlElement;
+
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.job.Date;
 import seedu.address.model.job.Job;
@@ -113,7 +114,8 @@ public class XmlAdaptedJob {
         }
 
         if (this.jobNumber == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, JobNumber.class.getSimpleName()));
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    JobNumber.class.getSimpleName()));
         }
         final JobNumber jobNumber = new JobNumber(this.jobNumber);
 
@@ -143,7 +145,8 @@ public class XmlAdaptedJob {
         final Person client = new Person(name, phone, email);
 
         if (this.vehicleNumber == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, VehicleNumber.class.getSimpleName()));
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    VehicleNumber.class.getSimpleName()));
         }
         if (!VehicleNumber.isValidVehicleNumber(this.vehicleNumber)) {
             throw new IllegalValueException(VehicleNumber.MESSAGE_VEHICLE_ID_CONSTRAINTS);
@@ -155,7 +158,7 @@ public class XmlAdaptedJob {
         }
         final Status status = new Status(this.status);
 
-        if(this.date == null) {
+        if (this.date == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Date.class.getSimpleName()));
         }
         final Date date = new Date(this.date);

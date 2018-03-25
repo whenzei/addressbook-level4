@@ -3,6 +3,7 @@ package seedu.address.storage;
 //@@author whenzei
 
 import javax.xml.bind.annotation.XmlValue;
+
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.remark.Remark;
 

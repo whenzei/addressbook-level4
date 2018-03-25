@@ -9,7 +9,6 @@ import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.address.commons.util.CollectionUtil;
 
 //@@author whenzei
 /**

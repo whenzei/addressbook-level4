@@ -124,6 +124,11 @@ public class AddCommandTest {
             return null;
         }
 
+        @Override
+        public void initJobNumber() {
+            fail("This method should never be called");
+        }
+
         @Override public String appendCommandKeyToMessage(String message) {
             fail("This method should never be called");
             return null;

@@ -21,6 +21,8 @@ public class XmlSerializableAddressBook {
     private List<XmlAdaptedEmployee> employees;
     @XmlElement
     private List<XmlAdaptedTag> tags;
+    @XmlElement
+    private List<XmlAdaptedJob> jobs;
 
     /**
      * Creates an empty XmlSerializableAddressBook.
@@ -29,6 +31,7 @@ public class XmlSerializableAddressBook {
     public XmlSerializableAddressBook() {
         employees = new ArrayList<>();
         tags = new ArrayList<>();
+        jobs = new ArrayList<>();
     }
 
     /**
@@ -38,6 +41,7 @@ public class XmlSerializableAddressBook {
         this();
         employees.addAll(src.getEmployeeList().stream().map(XmlAdaptedEmployee::new).collect(Collectors.toList()));
         tags.addAll(src.getTagList().stream().map(XmlAdaptedTag::new).collect(Collectors.toList()));
+        jobs.addAll(src.getJobList().stream().map(XmlAdaptedJob::new).collect(Collectors.toList()));
     }
 
     /**
@@ -54,6 +58,9 @@ public class XmlSerializableAddressBook {
         for (XmlAdaptedEmployee p : employees) {
             addressBook.addEmployee(p.toModelType());
         }
+        for (XmlAdaptedJob j : jobs) {
+            addressBook.addJob(j.toModelType());
+        }
         return addressBook;
     }
 
@@ -68,6 +75,6 @@ public class XmlSerializableAddressBook {
         }
 
         XmlSerializableAddressBook otherAb = (XmlSerializableAddressBook) other;
-        return employees.equals(otherAb.employees) && tags.equals(otherAb.tags);
+        return employees.equals(otherAb.employees) && tags.equals(otherAb.tags) && jobs.equals(otherAb.jobs);
     }
 }

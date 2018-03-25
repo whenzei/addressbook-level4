@@ -64,7 +64,7 @@ public class ModelManager extends ComponentManager implements Model {
         }
         int largest = filteredJobs.get(0).getJobNumber().asInteger();
         for (Job job : filteredJobs) {
-            if( job.getJobNumber().asInteger() > largest) {
+            if ( job.getJobNumber().asInteger() > largest) {
                 largest = job.getJobNumber().asInteger();
             }
         }

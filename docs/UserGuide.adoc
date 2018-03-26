@@ -497,7 +497,7 @@ e.g. `import excel.xls`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
-* *Email Employee* : `email` +
+* *Email Assigned Employees Of A Job* : `email` +
 e.g. `email 123`
 * *Change Command Word* : `set` +
 e.g. `set add a`

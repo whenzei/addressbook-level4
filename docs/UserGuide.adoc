@@ -13,11 +13,33 @@ ifdef::env-github[]
 endif::[]
 :repoURL: https://github.com/CS2103JAN2018-W09-B1/main
 
-By: `Team SE-EDU`      Since: `Jun 2016`      Licence: `MIT`
+By: `Team W09-B1`      Since: `Feb 2018`      Licence: `MIT`
 
 == Introduction
 
-CarviciM is a desktop application for those who *need to manage a great number of car servicing jobs*. More importantly, CarviciM is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CarviciM can get your management of servicing jobs done faster than traditional GUI apps. Interested? Jump to the <<Quick Start>> to get started. Enjoy!
+CarviciM (Car Servicing Manager) is a desktop application for *managing car servicing jobs*. You can use Carvicim to add jobs, close ongoing jobs, import large number of job entries, manage employees for job assignment and notify employees of jobs through email. CarviciM is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CarviciM can get your management of servicing jobs done faster than traditional GUI apps. Interested? Jump to the <<Quick Start>> to get started. Enjoy!
+
+== About This User Guide
+
+This user guide shows you how to get started using the CarviciM. It shows you how to setup the application, and also how to perform operations in the CarviciM which are lead by examples. 
+
+====
+*Legend*
+
+[NOTE]
+...
+
+* represents something noteworthy
+
+[TIP]
+...
+
+* represents a useful tip
+
+`............`
+
+* represents an input command
+====
 
 == Quick Start
 
@@ -27,9 +49,9 @@ CarviciM is a desktop application for those who *need to manage a great number o
 Having any Java 8 version is not enough. +
 This app will not work with earlier versions of Java 8.
 +
-.  Download the latest `addressbook.jar` link:{repoURL}/releases[here].
+.  You can download the latest `addressbook.jar` link:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your CarviciM.
-.  Double-click the file to start the app. The GUI should appear in a few seconds.
+.  Double-click the file to start the app. You should see the GUI in a few seconds.
 +
 image::Ui.png[width="790"]
 +
@@ -42,13 +64,15 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 * **`deletee`**`3` : deletes the 3rd employee shown in the current list
 * *`exit`* : exits the app
 
-.  Refer to <<Features>> for details of each command.
+.  For details of each command, you can refer to <<Features>>.
 
 [[Features]]
 == Features
 
 ====
 *Command Format*
+
+These are the command format for the user guide:
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `adde n/NAME`, `NAME` is a parameter which can be used as `adde n/John Doe`.
 * Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`.
@@ -59,46 +83,60 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 === Viewing help : `help`
 
+You can use this command to bring up the help menu. +
 Format: `help`
 
 === Adding an job entry: `addj`
 
-Adds a job entry to CarviciM +
+You can use this command to add a job to CarviciM. +
 Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+`
+
+****
+* Adds a job with the given fields and assign employees based on specified `ASSIGNED_EMPLOYEE_INDEX`.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* 1, 2, 3, ...
+****
 
 Examples:
 
-* `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3`
-* `addj n/Betsy Crowe p/93939393 e/betsycrowe@example.com v/ss888 w/2 w/3 w/5`
+* Example 1 +
+. `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
+** You will see "New job added: ... " in the result display. +
+** The job UI panel will be updated to display the newly added job
 
 === Closing a job entry: `closej`
 
-Closes an ongoing job entry in CarviciM based on the specified job number +
+You can use this command to close an ongoing job based on its job number. +
 Format: `closej JOB_NUMBER`
 
 Examples:
 
-* `closej 1232`
-* `closej 3333`
+* Example 1 +
+. `closej 123` +
+** Closes the ongoing job number 123 in CarviciM. +
+** You will see "Job number 123 closed" in the result display. +
+** Job UI panel will no longer show job number 123.
 
 === Adding an employee: `adde`
 
-Adds an employee to CarviciM +
+You can use this command to add an employee to CarviciM. +
 Format: `adde n/NAME p/PHONE_NUMBER e/EMAIL`
 
 Examples:
 
-* `adde n/John Doe p/98765432 e/johnd@example.com`
-* `adde n/Betsy Crowe p/93939393 e/betsycrowe@example.com`
+* Example 1 +
+. `adde n/John Doe p/98765432 e/johnd@example.com` +
+** Add the details of the employee into CarviciM. +
+** You will see "New employee added: ..." followed by details of the employee. +
 
 === Listing all employees : `liste`
 
-Shows a list of all employees in CarviciM . +
+You can use this command to view a list of all employees in CarviciM. +
 Format: `liste`
 
 === Editing a employee : `edite`
 
-Edits an existing employee in CarviciM . +
+You can use this command to edit an existing employee in CarviciM. +
 Format: `edite INDEX [p/PHONE] [e/EMAIL] [t/TAG]...`
 
 ****
@@ -108,13 +146,15 @@ Format: `edite INDEX [p/PHONE] [e/EMAIL] [t/TAG]...`
 ****
 
 Examples:
-
-* `edite 1 p/91234567 e/johndoe@example.com` +
-Edits the phone number and email address of the 1st employee to be `91234567` and `johndoe@example.com` respectively.
+* Example 1 +
+. `edite 1 p/91234567 e/johndoe@example.com` +
+** Edits the phone number and email address of the 1st employee to be `91234567` and `johndoe@example.com` respectively. +
+** You will see "Edited Employee: ... " followed by the new updated details of the employee in the result display. +
+** UI panel will be updated to show the edited employee.
 
 === Locating employees by name: `finde`
 
-Find employees whose names contain any of the given keywords. +
+You can use this command to find employees, whose names contain any of the given keywords. +
 Format: `finde KEYWORD [MORE_KEYWORDS]`
 
 ****
@@ -127,14 +167,17 @@ Format: `finde KEYWORD [MORE_KEYWORDS]`
 
 Examples:
 
-* `finde John` +
-Returns `john` and `John Doe`
-* `finde Betsy Tim John` +
-Returns any employee having names `Betsy`, `Tim`, or `John`
+* Example 1 +
+. `finde John` +
+** You will see all employees with `john` as their name (not case-sensitive), shown in the UI panel.
+
+* Example 2 +
+. `finde Betsy Tim John` +
+** You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the UI panel.
 
 === Deleting an employee : `deletee`
 
-Deletes the specified employee from CarviciM. +
+You can use this command to delete the specified employee from CarviciM. +
 Format: `deletee INDEX`
 
 ****
@@ -145,17 +188,22 @@ Format: `deletee INDEX`
 
 Examples:
 
-* `liste` +
-`deletee 2` +
-Deletes the 2nd employee in CarviciM.
-* `finde Betsy` +
-`deletee 1` +
-Deletes the 1st employee in the results of the `findE` command.
+* Example 1 +
+. `liste` +
+** You will see a list of employees displayed in the UI panel.
+. `deletee 2` +
+** You will see an updated UI panel which has the 2nd employee removed.
+
+* Example 2 +
+. `finde Betsy` +
+** You will see the results of the `finde` command which shows all employees with matching keyword name.
+. `deletee 1` +
+** You will see an updated UI panel which has the 1st employee removed. 
 
 // tag::set[]
 === Changing a command word : `set`
 
-You can set an easy to use word in place of a default command word. +
+You can use this command to set an easy to use word in place of a default command word. +
 Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
 [NOTE]
@@ -167,26 +215,23 @@ Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
 Examples:
 
-* `set add a` +
-Sets `add` command word to `a` using default
-* `set add s` +
-Sets `add` command word to `s` using default
-* `set set a` +
-Sets `set` command word to `a` using default
-* `set a s` +
-Invalid command as s is already used by user.
-* `set a add` +
-Invalid command as add is a default command.
-* `set a set` +
-Sets `a` command word back to `set`, its default mapping.
+* Example 1 +
+. `set add a` +
+** Sets `add` command word to `a` using default. +
+** You will see "add has been replaced with a!" in the result display.
+
+* Example 2 +
+. `set delete d` +
+** Sets `delete` command word to `d` using default. +
+** You will see "delete has been replaced with d!" in the result display.
 // end::set[]
 
 // tag::importexport[]
-=== Importing jobs from an excel file #Coming in v2.0#
-==== Importing a new excel file: import
+=== Importing jobs from an excel file
+==== Importing a new excel file: `import`
 
-You can load your excel file by filename or filepath.
-Format: `import PATH_TO_FILE`
+You can use this command to load your excel file by filename or filepath. +
+Format: `import FILE_PATH`
 
 [NOTE]
 ====
@@ -251,7 +296,8 @@ Rejects all remaining job entries and clears the imported list.
 
 ==== Writing comments to your reviews
 
-While accepting or rejecting changes, you can enter your comments behind the command
+While accepting or rejecting changes, you can enter your comments behind the command.
+
 [TIP]
 ====
 You can type any alphanumeric sentence as a comment, as long as it is after the command.
@@ -271,17 +317,18 @@ Rejects all remaining imported jobs and attaches "Please check the customer deta
 ==== Sharing your feedback with your employees
 
 If you want to share your feedback, you can export it as an excel file, reflecting accept/reject with comments.
-Format: `export PATH_TO_FILE`
+Format: `export FILE_PATH`
 
 [TIP]
 ====
-* You can type any filename supported by your computer's storage format
-* If you forgot to export your feedback, you can find it under C:\User\Documents\CarviciM\feedback.xls
+* You can type any filename supported by your computer's storage format.
+* If you forgot to export your feedback, you can find it under C:\User\Documents\CarviciM\feedback.xls.
 * The feedback file's format is support for future imports.
 ====
+
 [NOTE]
 ====
-Filepath: A text representation of the location of the file used by the computer.
+Filepath: A text representation of the file location in the computer.
 ====
 
 Examples:
@@ -290,9 +337,10 @@ Examples:
 Exports the feedback to "summary report.xls"
 // end::importexport[]
 
+// tag::theme[]
 === Setting a theme : `theme`
 
-Sets the theme of the application. +
+You can use this command to set the theme of the application. +
 Format: `theme INDEX`
 
 ****
@@ -303,9 +351,12 @@ Format: `theme INDEX`
 
 Examples:
 
-* `theme` +
-`theme 1` +
-Sets the first theme shown by the result of `theme` command.
+. `theme` + 
+** You will see the list of valid themes to choose from.
+. `theme 1` +
+** You will see theme of the application set as the one chosen.
+
+// end::theme[]
 
 === Listing entered commands : `history`
 
@@ -320,12 +371,12 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 // tag::undoredo[]
 === Undoing previous command : `undo`
 
-Restores CarviciM to the state before the previous _undoable_ command was executed. +
+You can use this command to restore CarviciM to the state before the previous _undoable_ command was executed. +
 Format: `undo`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify CarviciM's content (`add`, `delete`, `edit` and `clear`).
+Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `add`, `delete`, `edit` and `cleare`).
 ====
 
 Examples:
@@ -340,13 +391,13 @@ Examples:
 The `undo` command fails as there are no undoable commands executed previously.
 
 * `delete 1` +
-`clear` +
-`undo` (reverses the `clear` command) +
+`cleare` +
+`undo` (reverses the `cleare` command) +
 `undo` (reverses the `delete 1` command) +
 
 === Redoing the previously undone command : `redo`
 
-Reverses the most recent `undo` command. +
+You can use this command to reverse the most recent `undo` command. +
 Format: `redo`
 
 Examples:
@@ -360,21 +411,21 @@ Examples:
 The `redo` command fails as there are no `undo` commands executed previously.
 
 * `deletee 1` +
-`clear` +
-`undo` (reverses the `clear` command) +
+`cleare` +
+`undo` (reverses the `cleare` command) +
 `undo` (reverses the `deletee 1` command) +
 `redo` (reapplies the `deletee 1` command) +
-`redo` (reapplies the `clear` command) +
+`redo` (reapplies the `cleare` command) +
 // end::undoredo[]
 
-=== Clearing all entries : `clear`
+=== Clearing all employees : `cleare`
 
-Clears all entries from CarviciM. +
-Format: `clear`
+You can use this command to clear all employees from CarviciM. +
+Format: `cleare`
 
 === Exiting the program : `exit`
 
-Exits the program. +
+You can use this command to exit the program. +
 Format: `exit`
 
 === Saving the data
@@ -384,8 +435,8 @@ There is no need to save manually.
 
 === Email employees : `email`
 
-Sends an email to employee informing them of the job details. +
-Format: `email EMPLOYEE JOB_NUMBER`
+You can use this command to send a notice email to an employee. +
+Format: `email EMPLOYEE_JOB_NUMBER`
 
 // tag::dataencryption[]
 === Encrypting data files `[coming in v2.0]`
@@ -400,23 +451,29 @@ _{explain how the user can enable/disable data encryption}_
 
 == Command Summary
 
-* *Add Job* `adde n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/EMPLOYEE_INDEX` +
+* *Add Job* `adde n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
 e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 * *Close Job* `closej JOB_NUMBER` +
 e.g. `closej 1232`
 * *Add Employee* `adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` +
 e.g. `adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
-* *Clear* : `clear`
+* *Clear Employees* : `cleare`
 * *Delete Employee* : `deletee INDEX` +
 e.g. `deletee 3`
 * *Edit Employee* : `edite INDEX [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]...` +
 e.g. `edite 2 e/jameslee@example.com`
 * *Find Employees* : `finde KEYWORD [MORE_KEYWORDS]` +
 e.g. `finde James Jake`
-* *List Employees* : `liste`
+* *List Employee* : `liste`
+* *Import excel file* : `import` +
+e.g. `import excel.xls`
 * *Help* : `help`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
+* *Email Employee* : `email` +
+e.g. `email john doe 123`
+* *Change Command Word* : `set` +
+e.g. `set add a`
 * *Theme* : `theme INDEX` +
 e.g. `theme 1`

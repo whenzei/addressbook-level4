@@ -101,7 +101,7 @@ Examples:
 
 ** Example 1: +
 . `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
-*** You will see "New job added: ... " in the result display. +
+*** You will see "New job added: ... " in the <<result-display,result display>>. +
 *** The <<jobs-ui-panel ,jobs UI panel>> will be updated to display the newly added job
 
 === Closing a job entry: `closej`
@@ -114,7 +114,7 @@ Examples:
 ** Example 1: +
 . `closej 123` +
 *** Closes the ongoing job of number 123 in CarviciM. +
-*** You will see "Job 123 closed" in the result display. +
+*** You will see "Job 123 closed" in the <<result-display,result display>>. +
 *** You will not see job of number 123 in the <<jobs-ui-panel,jobs UI panel>>.
 
 === Adding an employee: `adde`
@@ -151,7 +151,7 @@ Examples:
 ** Example 1: +
 . `edite 1 p/91234567 e/johndoe@example.com` +
 *** Edits the phone number and email address of the 1st employee to be `91234567` and `johndoe@example.com` respectively. +
-*** You will see "Edited Employee: ... " followed by the new updated details of the employee in the result display. +
+*** You will see "Edited Employee: ... " followed by the new updated details of the employee in the <<result-display,result display>>. +
 *** You will see the edited employee details in the <<employees-ui-panel,employee UI panel>>.
 
 === Locating employees by name: `finde`
@@ -220,7 +220,7 @@ Examples:
 ** Example 1: +
 . `set add a` +
 *** Sets `add` command word to `a` using default. +
-*** You will see "add has been replaced with a!" in the result display.
+*** You will see "add has been replaced with a!" in the <<result-display,result display>>.
 
 ** Example 2: +
 . `set delete d` +
@@ -368,7 +368,7 @@ Examples:
 
 ** Example 1: +
 . `theme` +
-*** You will see the list of valid themes to choose from in the result display.
+*** You will see the list of valid themes to choose from in the <<result-display,result display>>.
 . `theme 1` +
 *** You will see the theme of the application set as the selected one.
 
@@ -514,6 +514,9 @@ A region on the User Interface which displays the list of jobs.
 
 [[employees-ui-panel]] Employees UI Panel::
 A region on the User Interface which displays the list of employees.
+
+[[result-display]] Result Display::
+A region on the User Interface which displays the result of executed commands.
 
 [[command-word]] Command Word::
 A text that the application recognises for performing an operation.

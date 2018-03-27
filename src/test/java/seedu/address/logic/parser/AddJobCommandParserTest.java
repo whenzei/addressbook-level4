@@ -41,12 +41,14 @@ public class AddJobCommandParserTest {
         // one assigned employee
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE,
-                new AddJobCommand(expectedClient, new VehicleNumber(VALID_VEHICLE_NUMBER_A), generateOneValidEmployeeIndex()));
+                new AddJobCommand(expectedClient, new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                        generateOneValidEmployeeIndex()));
 
         // two assigned employees
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                         + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_TWO,
-                new AddJobCommand(expectedClient, new VehicleNumber(VALID_VEHICLE_NUMBER_A), generateTwoValidEmployeeIndices()));
+                new AddJobCommand(expectedClient, new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                        generateTwoValidEmployeeIndices()));
     }
 
     @Test

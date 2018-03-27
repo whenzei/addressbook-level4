@@ -24,6 +24,21 @@ public class ClientBuilder {
         email = new Email(DEFAULT_EMAIL);
     }
 
+    public ClientBuilder withName(String name) {
+        this.name = new Name(name);
+        return this;
+    }
+
+    public ClientBuilder withPhone(String phone) {
+        this.phone = new Phone(phone);
+        return this;
+    }
+
+    public ClientBuilder withEmail(String email) {
+        this.email = new Email(email);
+        return this;
+    }
+
     public Person build() {
         return new Person(name, phone, email);
     }

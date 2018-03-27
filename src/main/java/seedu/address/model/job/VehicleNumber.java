@@ -12,7 +12,7 @@ public class VehicleNumber {
     public static final String MESSAGE_VEHICLE_ID_CONSTRAINTS =
             "Vehicle ID should only contain alphanumeric characters and should not be blank";
 
-    public static final String VEHICLE_ID_VALIDATION_REGEX = "[\\p{Alnum}]*";
+    public static final String VEHICLE_ID_VALIDATION_REGEX = "[a-zA-Z]+[0-9]+[a-zA-Z0-9]*|[0-9]+[a-zA-Z][a-zA-Z0-9]*";
 
     public final String value;
 

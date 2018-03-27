@@ -10,6 +10,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_VEHICLE_NUMBER;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import seedu.address.commons.core.Messages;
 import seedu.address.commons.core.index.Index;
@@ -39,7 +40,7 @@ public class AddJobCommand extends UndoableCommand {
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_VEHICLE_NUMBER + "VEHICLE_NUMBER "
-            + PREFIX_ASSIGNED_EMPLOYEE + "ASSIGNED_EMPLOYEE_INDEX+\n"
+            + PREFIX_ASSIGNED_EMPLOYEE + "ASSIGNED_EMPLOYEE_INDEX+ (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_PHONE + "98765432 "
@@ -103,6 +104,10 @@ public class AddJobCommand extends UndoableCommand {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof AddJobCommand // instanceof handles nulls
-                && toAdd.equals(((AddJobCommand) other).toAdd));
+                && client.equals(((AddJobCommand) other).client)
+                && vehicleNumber.equals(((AddJobCommand) other).vehicleNumber)
+                && targetIndices.equals(((AddJobCommand) other).targetIndices)
+                && assignedEmployees.equals(((AddJobCommand) other).assignedEmployees)
+                && Objects.equals(this.toAdd, ((AddJobCommand) other).toAdd));
     }
 }

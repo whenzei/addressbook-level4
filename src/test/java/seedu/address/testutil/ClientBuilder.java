@@ -23,17 +23,25 @@ public class ClientBuilder {
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
     }
-
+    /**
+     * Sets the {@code Name} of the {@code Person} that we are building.
+     */
     public ClientBuilder withName(String name) {
         this.name = new Name(name);
         return this;
     }
 
+    /**
+     * Sets the {@code Phone} of the {@code Person} that we are building.
+     */
     public ClientBuilder withPhone(String phone) {
         this.phone = new Phone(phone);
         return this;
     }
 
+    /**
+     * Sets the {@code Email} of the {@code Person} that we are building.
+     */
     public ClientBuilder withEmail(String email) {
         this.email = new Email(email);
         return this;

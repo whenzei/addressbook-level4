@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!-- @@author whenzei -->
+
+<StackPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane prefHeight="608.0" prefWidth="647.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="319.0" minWidth="10.0" prefWidth="155.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="10.0" prefWidth="492.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="197.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="395.0" minHeight="0.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="72.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="314.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="TOP_CENTER" text="Job Number:">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="TOP_CENTER" text="Status:" GridPane.rowIndex="1">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="TOP_CENTER" text="Date Added:" GridPane.rowIndex="2">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="TOP_CENTER" text="Vehicle Number:" GridPane.rowIndex="3">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="TOP_CENTER" text="Client Details:" GridPane.rowIndex="4">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <children>
+                  <Label fx:id="name" lineSpacing="2.0" text="\$name" />
+                  <Label fx:id="phone" lineSpacing="2.0" text="\$phone" />
+                  <Label fx:id="email" lineSpacing="2.0" text="\$email" />
+               </children>
+            </VBox>
+            <Label alignment="TOP_CENTER" prefHeight="18.0" prefWidth="151.0" text="Assigned Employees:" GridPane.rowIndex="5">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="TOP_CENTER" text="Remarks:" GridPane.rowIndex="6">
+               <font>
+                  <Font name="MS Outlook" size="16.0" />
+               </font>
+            </Label>
+            <FlowPane fx:id="remarks" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <FlowPane fx:id="assignedEmployees" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="vehicleNumber" text="\$vehicleNumber" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="date" text="\$date" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="status" text="\$status" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="jobNumber" text="\$jobNumber" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+   </children>
+</StackPane>

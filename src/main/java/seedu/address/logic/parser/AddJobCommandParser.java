@@ -54,7 +54,7 @@ public class AddJobCommandParser implements Parser<AddJobCommand> {
             return new AddJobCommand(client, vehicleNumber, assignedEmployeeIndices);
 
         } catch (IllegalValueException ive) {
-            throw new ParseException(ive.getMessage(), ive);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE));
         }
     }
 

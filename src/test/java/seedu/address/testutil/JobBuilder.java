@@ -50,6 +50,7 @@ public class JobBuilder {
         assignedEmployees.add(employees.get(INDEX_FIRST_PERSON.getZeroBased()));
         assignedEmployees.add(employees.get(INDEX_SECOND_PERSON.getZeroBased()));
     }
+
     public Job build() {
         return new Job(client, vehicleNumber, jobNumber, date, assignedEmployees, status, remarks);
     }

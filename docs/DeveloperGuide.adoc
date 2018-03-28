@@ -115,6 +115,7 @@ When you are ready to start coding,
 
 .Architecture Diagram
 image::Architecture.png[width="600"]
+[none]
 
 The *_Architecture Diagram_* (figure 1) given above explains the high-level design of the App. Read this section (section 2) to get a quick overview of each component.
 
@@ -160,6 +161,7 @@ The _Sequence Diagram_ below (figure 3) shows how the components interact for th
 
 .Component interactions for `delete 1` command (part 1)
 image::SDforDeletePerson.png[width="800"]
+[none]
 
 ====
 [NOTE]
@@ -170,6 +172,7 @@ The diagram below (figure 4) shows how the `EventsCenter` reacts to that event, 
 
 .Component interactions for `delete 1` command (part 2)
 image::SDforDeletePersonEventHandling.png[width="800"]
+[none]
 
 ====
 [NOTE]
@@ -274,6 +277,7 @@ This section describes some noteworthy details on how certain features are imple
 .Class Diagram of Model component
 image::ModelClassDiagram.png[width="800"]
 [none]
+
 `Person` represents the client of a job. `JobNumber` represents the number of a job and is responsible for generating a running number for each job. `Status` represents the status of a job which holds value of either `ongoing` or closed` that is used for categorizing jobs. `Date` represents the date of creation for the job. `RemarkList` holds all `Remark` belonging to the job. `UniqueEmployeeList` of the job represents the employees assigned.
 
 The job adding mechanism is facilitated by a `AddJobCommand` which is an `UndoableCommand`. `AddJobCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `NAME`, `PHONE`, `EMAIL`, `VEHICLE_NUMBER` and `ASSIGNED_EMPLOYEE_INDEX` and creates `AddJobCommand` object which prepares the `Job` object.
@@ -286,6 +290,7 @@ The job adding mechanism is facilitated by a `AddJobCommand` which is an `Undoab
 
 .ClassDiagram of CommandWords at runtime
 image::SetCommandObjectDiagram.png[width="800"]
+[none]
 
 `SetCommand` keeps 2 lists of command words:
 * the default command words
@@ -433,6 +438,7 @@ The undo/redo mechanism is facilitated by an `UndoRedoStack`, which resides insi
 
 .Inheritance diagram for commands
 image::LogicCommandClassDiagram.png[width="800"]
+[none]
 
 As you can see from the diagram above, `UndoableCommand` adds an extra layer between the abstract `Command` class and concrete commands that can be undone, such as the `DeleteCommand`. Note that extra tasks need to be done when executing a command in an _undoable_ way, such as saving the state of the address book before execution. `UndoableCommand` contains the high-level algorithm for those extra tasks while the child classes implements the details of how to execute the specific command. Note that this technique of putting the high-level algorithm in the parent class and lower-level steps of the algorithm in child classes is also known as the https://www.tutorialspoint.com/design_pattern/template_pattern.htm[template pattern].
 
@@ -475,11 +481,13 @@ Suppose that the user has just launched the application. The steps below show th
 
 .Step 1: `delete 5` command pushed onto the `undoStack`
 image::UndoRedoStartingStackDiagram.png[width="800"]
+[none]
 
 3. As the user continues to use the program, more commands are added into the `undoStack`. For example, as shown in the figure below, the user may execute `add n/David ...` to add a new employee.
 
 .Step 2: execute `add n/David ...`
 image::UndoRedoNewCommand1StackDiagram.png[width="800"]
+[none]
 
 ====
 [NOTE]
@@ -493,6 +501,7 @@ As shown in the diagram below, we will pop the most recent command out of the `u
 
 .Step 3: `undo` action
 image::UndoRedoExecuteUndoStackDiagram.png[width="800"]
+[none]
 
 ====
 [NOTE]
@@ -503,6 +512,7 @@ The following sequence diagram shows how the undo operation works:
 
 .`undo` sequence diagram
 image::UndoRedoSequenceDiagram.png[width="800"]
+[none]
 
 The `redo` does the exact opposite (pops from `redoStack`, push to `undoStack`, and restores the address book to the state after the command is executed).
 
@@ -515,6 +525,7 @@ The user now decides to execute a new command, `clear`. As before, `clear` will 
 
 .`clear` pushed into `undoStack`
 image::UndoRedoNewCommand2StackDiagram.png[width="800"]
+[none]
 
 Commands that are not undoable are not added into the `undoStack`. For example, `list`, which inherits from `Command` rather than `UndoableCommand`, will not be added after execution:
 

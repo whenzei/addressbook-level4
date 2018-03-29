@@ -278,10 +278,95 @@ This section describes some noteworthy details on how certain features are imple
 image::ModelClassDiagram.png[width="800"]
 [none]
 
-`Person` represents the client of a job. `JobNumber` represents the number of a job and is responsible for generating a running number for each job. `Status` represents the status of a job which holds value of either `ongoing` or closed` that is used for categorizing jobs. `Date` represents the date of creation for the job. `RemarkList` holds all `Remark` belonging to the job. `UniqueEmployeeList` of the job represents the employees assigned.
+`Person` represents the client of a job. `JobNumber` represents the number of a job and is responsible for generating a running number for each job. `Status` represents the status of a job which holds value of either `ongoing` or `closed` that is used for categorizing jobs. `Date` represents the date of creation for the job. `RemarkList` holds all `Remark` belonging to the job. `UniqueEmployeeList` of the job represents the employees assigned.
 
 The job adding mechanism is facilitated by a `AddJobCommand` which is an `UndoableCommand`. `AddJobCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `NAME`, `PHONE`, `EMAIL`, `VEHICLE_NUMBER` and `ASSIGNED_EMPLOYEE_INDEX` and creates `AddJobCommand` object which prepares the `Job` object.
 
+====
+[NOTE]
+If the parameters are invalid, `addj` command will return an invalid message, which shows the usage information to the user.
+(e.g. `addj n/John Doe p/9999999 e/john@example.com v/SHG123 w/-1`).
+
+`AddJobCommandParser` code snippet to validate the parameters, `NAME`, `PHONE`, `EMAIL`, `VEHICLE_NUMBER`, `ASSIGNED_EMPLOYEE_INDEX+`, which returns `AddJobCommand` object if valid, and invalid message otherwise:
+[source,java]
+----
+    public AddJobCommand parse(String args) throws ParseException {
+        ArgumentMultimap argMultimap =
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE,
+                        PREFIX_EMAIL, PREFIX_VEHICLE_NUMBER, PREFIX_ASSIGNED_EMPLOYEE);
+
+        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_PHONE,
+                PREFIX_EMAIL, PREFIX_VEHICLE_NUMBER, PREFIX_ASSIGNED_EMPLOYEE)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE));
+        }
+
+        try {
+            Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME)).get();
+            Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE)).get();
+            Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL)).get();
+            VehicleNumber vehicleNumber =
+                    ParserUtil.parseVehicleNumber(argMultimap.getValue(PREFIX_VEHICLE_NUMBER)).get();
+            ArrayList<Index> assignedEmployeeIndices =
+                    ParserUtil.parseIndices(argMultimap.getAllValues(PREFIX_ASSIGNED_EMPLOYEE));
+
+            Person client = new Person(name, phone, email);
+            return new AddJobCommand(client, vehicleNumber, assignedEmployeeIndices);
+
+        } catch (IllegalValueException ive) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE));
+        }
+    }
+----
+
+`preprocessUndoableCommand` method code snippet in `AddJobCommand` that checks if assigned employee exists for the indices given. It creates `Job` object only if valid, and throws an invalid message otherwise:
+[source,java]
+----
+    protected void preprocessUndoableCommand() throws CommandException {
+        List<Employee> lastShownList = model.getFilteredPersonList();
+
+        //Check for valid employee indices
+        for (Index targetIndex : targetIndices) {
+            if (targetIndex.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
+            }
+        }
+
+        try {
+            for (Index targetIndex : targetIndices) {
+                assignedEmployees.add(lastShownList.get(targetIndex.getZeroBased()));
+            }
+            toAdd = new Job(client, vehicleNumber, new JobNumber(), new Date(), assignedEmployees,
+                    new Status(Status.STATUS_ONGOING), new RemarkList());
+        } catch (DuplicateEmployeeException e) {
+            throw new CommandException("Duplicate employee index");
+        }
+
+    }
+----
+
+The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
+
+==== Design Considerations
+
+===== Aspect: Modelling jobs in CarviciM
+
+* **Current choice:** Adding a list to keep track of all jobs in CarviciM, and adding an attribute for keeping a list of assigned employees in `Job` class.
+** Pros: Finding assigned employees of a job, requires only going through the assigned employee list of the job. Removal of a job is done easily by removing it from the list of jobs. 
+** Cons: Additional list to maintain, other than the list of employees. Changes to an employee needs to be updated for all jobs that contains the respective employee.
+* _Alternative:_ Add a new attribute in `Employee` class to keep a list of jobs.
+** Pros: Only need to maintain a single list of employees. Finding jobs that are assigned to an `Employee` object only requires going through the job list. 
+** Cons: Finding all employees belonging to a job, requires going through the job list of all employees. The removal of a job, requires going through all employees, as a job can be assigned to multiple employees.
+
+===== Aspect: Checking if given employee indices point to valid employees in CarviciM
+
+* **Current choice:** Perform check in the `preprocessUndoableCommand` method of `AddJobCommand`.
+** Pros: Does not introduce more coupling.
+** Cons: `AddJobCommand` will need to store more attributes, as a `Job` object is only created when `preprocessUndoableCommand` method is executed successfully.
+* _Alternative:_ Allow `ParserUtil` to hold employee list.
+** Pros: `AddJobCommandParser` determines if the employee indices point to valid employees, and creates the `Job` object.
+** Cons: Allowing `ParserUtil` to hold the list of employees introduce more coupling among the classes.
+
+====
 // end::addJob[]
 
 // tag::set[]

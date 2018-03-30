@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+import javafx.collections.ObservableList;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniqueEmployeeList;
@@ -68,6 +69,9 @@ public class Job {
         return Collections.unmodifiableSet(assignedEmployees.toSet());
     }
 
+    public ObservableList getAssignedEmployeesAsObservableList() {
+        return assignedEmployees.asObservableList();
+    }
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}

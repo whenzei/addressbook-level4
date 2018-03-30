@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<fx:root minHeight="600" minWidth="1200" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="600" minWidth="1200" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <icons>
     <Image url="@/images/car_spanner.png" />
   </icons>
@@ -59,7 +59,7 @@
             <StackPane fx:id="jobListPanelPlaceholder" VBox.vgrow="ALWAYS" />
            </VBox>
 
-          <StackPane fx:id="browserPlaceholder" prefWidth="340">
+          <StackPane fx:id="jobDisplayPlaceholder" prefWidth="340">
             <padding>
               <Insets bottom="10" left="10" right="10" top="10" />
             </padding>

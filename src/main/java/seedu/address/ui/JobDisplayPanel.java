@@ -1,11 +1,12 @@
 package seedu.address.ui;
 
-import java.awt.*;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -13,6 +14,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.address.model.job.Job;
 
+//@@author whenzei
 /**
  * The Job Display Panel of the App.
  */
@@ -41,7 +43,7 @@ public class JobDisplayPanel extends UiPart<Region> {
     @FXML
     private FlowPane remarks;
     @FXML
-    private FlowPane assignedEmployees;
+    private ListView assignedEmployees;
 
     public JobDisplayPanel() {
         super(FXML);
@@ -50,14 +52,19 @@ public class JobDisplayPanel extends UiPart<Region> {
 
     @Subscribe
     private void handleJobPanelSelectionChangedEvent(JobPanelSelectionChangedEvent event) {
+        assignedEmployees.setVisible(true);
+        assignedEmployees.refresh();
+
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         final Job job = event.getJob();
-        jobNumber.setText(job.getJobNumber().value);
-        status.setText(job.getStatus().value);
-        date.setText(job.getDate().value);
-        vehicleNumber.setText(job.getVehicleNumber().value);
-        name.setText(job.getClient().getName().fullName);
-        phone.setText(job.getClient().getPhone().value);
-        email.setText(job.getClient().getEmail().value);
+        jobNumber.setText(job.getJobNumber().toString());
+        status.setText(job.getStatus().toString());
+        date.setText(job.getDate().toString());
+        vehicleNumber.setText(job.getVehicleNumber().toString());
+        name.setText(job.getClient().getName().toString());
+        phone.setText(job.getClient().getPhone().toString());
+        email.setText(job.getClient().getEmail().toString());
+
+        assignedEmployees.setItems(job.getAssignedEmployeesAsObservableList());
     }
 }

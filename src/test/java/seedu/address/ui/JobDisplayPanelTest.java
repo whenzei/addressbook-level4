@@ -24,7 +24,8 @@ public class JobDisplayPanelTest extends GuiUnitTest {
 
         // associated web page of a employee
         postNow(selectionChangedEventStub);
-        URL expectedPersonUrl = new URL(JobDisplayPanel.SEARCH_PAGE_URL + ALICE.getName().fullName.replaceAll(" ", "%20"));
+        URL expectedPersonUrl = new URL(JobDisplayPanel.SEARCH_PAGE_URL
+                + ALICE.getName().fullName.replaceAll(" ", "%20"));
 
         waitUntilBrowserLoaded(browserPanelHandle);
         assertEquals(expectedPersonUrl, browserPanelHandle.getLoadedUrl());

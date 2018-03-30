@@ -6,14 +6,14 @@
         <name>Alice Pauline</name>
         <phone>85355255</phone>
         <email>alice@example.com</email>
-        <tagged>friends</tagged>
+        <tagged>mechanic</tagged>
     </employees>
     <employees>
         <name>Benson Meier</name>
         <phone>98765432</phone>
         <email>johnd@example.com</email>
-        <tagged>owesMoney</tagged>
-        <tagged>friends</tagged>
+        <tagged>technician</tagged>
+        <tagged>mechanic</tagged>
     </employees>
     <employees>
         <name>Carl Kurz</name>
@@ -40,6 +40,6 @@
         <phone>9482442</phone>
         <email>anna@example.com</email>
     </employees>
-    <tags>friends</tags>
-    <tags>owesMoney</tags>
+    <tags>mechanic</tags>
+    <tags>technician</tags>
 </addressbook>

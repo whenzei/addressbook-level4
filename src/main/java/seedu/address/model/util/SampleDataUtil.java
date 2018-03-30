@@ -19,17 +19,17 @@ public class SampleDataUtil {
     public static Employee[] getSamplePersons() {
         return new Employee[] {
             new Employee(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                getTagSet("friends")),
+                getTagSet("mechanic")),
             new Employee(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                getTagSet("colleagues", "friends")),
+                getTagSet("technician", "mechanic")),
             new Employee(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                getTagSet("neighbours")),
+                getTagSet("technician")),
             new Employee(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
-                getTagSet("family")),
+                getTagSet("technician")),
             new Employee(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
-                getTagSet("classmates")),
+                getTagSet("technician")),
             new Employee(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                getTagSet("colleagues"))
+                getTagSet("technician"))
         };
     }
 

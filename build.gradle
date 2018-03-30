@@ -75,7 +75,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveName = "addressbook.jar"
+    archiveName = "CarviciM.jar"
 
     destinationDir = file("${buildDir}/jar/")
 }

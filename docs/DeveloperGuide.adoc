@@ -351,10 +351,10 @@ The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
 ===== Aspect: Modelling jobs in CarviciM
 
 * **Current choice:** Adding a list to keep track of all jobs in CarviciM, and adding an attribute for keeping a list of assigned employees in `Job` class.
-** Pros: Finding assigned employees of a job, requires only going through the assigned employee list of the job. Removal of a job is done easily by removing it from the list of jobs. 
+** Pros: Finding assigned employees of a job, requires only going through the assigned employee list of the job. Removal of a job is done easily by removing it from the list of jobs.
 ** Cons: Additional list to maintain, other than the list of employees. Changes to an employee needs to be updated for all jobs that contains the respective employee.
 * _Alternative:_ Add a new attribute in `Employee` class to keep a list of jobs.
-** Pros: Only need to maintain a single list of employees. Finding jobs that are assigned to an `Employee` object only requires going through the job list. 
+** Pros: Only need to maintain a single list of employees. Finding jobs that are assigned to an `Employee` object only requires going through the job list.
 ** Cons: Finding all employees belonging to a job, requires going through the job list of all employees. The removal of a job, requires going through all employees, as a job can be assigned to multiple employees.
 
 ===== Aspect: Checking if given employee indices point to valid employees in CarviciM
@@ -365,8 +365,6 @@ The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
 * _Alternative:_ Allow `ParserUtil` to hold employee list.
 ** Pros: `AddJobCommandParser` determines if the employee indices point to valid employees, and creates the `Job` object.
 ** Cons: Allowing `ParserUtil` to hold the list of employees introduce more coupling among the classes.
-
-====
 // end::addJob[]
 
 // tag::set[]
@@ -509,8 +507,13 @@ If there is no `INDEX` present, `theme` command will return an invalid message, 
 
 ==== Design Considerations
 
-===== Aspect: Implementation of ThemeCommand +
-* **Current choice:** Utilizing `SetThemRequestEvent` and allow `MainWindow` to handle the raised event to set the theme of the application. Ensuring persistent theme setting by updating `UserPref` to store and retrieve relevant stylesheet used.
+===== Aspect: Implementation of `ThemeCommand` +
+* **Current choice:** Utilizing `SetThemRequestEvent` and allow `MainWindow` to handle the raised event to set the theme of the application.
+** Pros: Lesser responsibility for `ThemeCommand`.
+** Cons: Harder for new developer to understand the behavior of theme setting, as it utilizes event handling.
+* _Alternative:_ Instantiate `ThemeCommand` in `MainWindow` that passes `Stage` as a parameter. Then, perform theme setting in `ThemeCommand`.
+** Pros: Easy to implement.
+** Cons: Violates Law of Demeter as `ThemeCommand` has knowledge and access to `Stage`.
 // end::theme[]
 
 // tag::undoredo[]

@@ -286,6 +286,7 @@ The job adding mechanism is facilitated by a `AddJobCommand` which is an `Undoab
 [NOTE]
 If the parameters are invalid, `addj` command will return an invalid message, which shows the usage information to the user.
 (e.g. `addj n/John Doe p/9999999 e/john@example.com v/SHG123 w/-1`).
+====
 
 `AddJobCommandParser` code snippet to validate the parameters, `NAME`, `PHONE`, `EMAIL`, `VEHICLE_NUMBER`, `ASSIGNED_EMPLOYEE_INDEX+`, which returns `AddJobCommand` object if valid, and invalid message otherwise:
 [source,java]

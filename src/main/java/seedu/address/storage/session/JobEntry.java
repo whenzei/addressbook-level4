@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 import static seedu.address.model.remark.Remark.isValidRemark;
 

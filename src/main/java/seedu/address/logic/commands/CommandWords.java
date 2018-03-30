@@ -23,6 +23,7 @@ public class CommandWords implements Serializable {
      */
     public static final String[] COMMANDS = {
         AddCommand.COMMAND_WORD,
+        ArchiveCommand.COMMAND_WORD,
         ClearCommand.COMMAND_WORD,
         DeleteCommand.COMMAND_WORD,
         EditCommand.COMMAND_WORD,

@@ -9,7 +9,7 @@ import seedu.address.commons.exceptions.DataConversionException;
 import seedu.address.commons.util.XmlUtil;
 
 /**
- * Stores addressbook data in an XML file
+ * Stores addressbook and archivejob data in an XML file
  */
 public class XmlFileStorage {
     /**
@@ -24,6 +24,20 @@ public class XmlFileStorage {
         }
     }
 
+    //@@author richardson0694
+    /**
+     * Saves the given archivejob data to the specified file.
+     */
+    public static void saveDataToFile(File file, XmlSerializableArchiveJob archiveJob)
+            throws FileNotFoundException {
+        try {
+            XmlUtil.saveDataToFile(file, archiveJob);
+        } catch (JAXBException e) {
+            throw new AssertionError("Unexpected exception " + e.getMessage());
+        }
+    }
+
+    //@@author
     /**
      * Returns address book in the file or an empty address book
      */
@@ -31,6 +45,19 @@ public class XmlFileStorage {
                                                                             FileNotFoundException {
         try {
             return XmlUtil.getDataFromFile(file, XmlSerializableAddressBook.class);
+        } catch (JAXBException e) {
+            throw new DataConversionException(e);
+        }
+    }
+
+    //@@author richardson0694
+    /**
+     * Returns archive job in the file or an empty address book
+     */
+    public static XmlSerializableArchiveJob loadDataFromArchiveFile(File file) throws DataConversionException,
+            FileNotFoundException {
+        try {
+            return XmlUtil.getDataFromFile(file, XmlSerializableArchiveJob.class);
         } catch (JAXBException e) {
             throw new DataConversionException(e);
         }

@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import seedu.address.model.session.exceptions.FileFormatException;
+import seedu.address.storage.session.exceptions.FileFormatException;
 
 //@@author yuhongherald
 /**

@@ -1,8 +1,8 @@
-package seedu.address.model.session.exceptions;
+package seedu.address.storage.session.exceptions;
 
 //@@author yuhongherald
 /**
- * Represents an error from attempting to read an excel file in {@link seedu.address.model.session.ImportSession}.
+ * Represents an error from attempting to read an excel file in {@link seedu.address.storage.session.ImportSession}.
  */
 public class FileAccessException extends Exception {
     public FileAccessException(String message) {

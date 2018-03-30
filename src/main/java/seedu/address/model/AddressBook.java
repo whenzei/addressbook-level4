@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 import javafx.collections.ObservableList;
 import seedu.address.model.job.Date;
+import seedu.address.model.job.DateRange;
 import seedu.address.model.job.Job;
 import seedu.address.model.job.JobList;
 import seedu.address.model.job.JobNumber;
@@ -36,6 +38,7 @@ public class AddressBook implements ReadOnlyAddressBook {
     private final UniqueEmployeeList employees;
     private final UniqueTagList tags;
     private final JobList jobs;
+    private JobList archiveJobs;
 
     /*
      * The 'unusual' code block below is an non-static initialization block, sometimes used to avoid duplication
@@ -48,6 +51,7 @@ public class AddressBook implements ReadOnlyAddressBook {
         employees = new UniqueEmployeeList();
         tags = new UniqueTagList();
         jobs = new JobList();
+        archiveJobs = new JobList();
     }
 
     public AddressBook() {}
@@ -103,6 +107,24 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addJob(Job job) {
         jobs.add(job);
+    }
+
+    //@@author richardson0694
+    /**
+     * Archives job entries in CarviciM.
+     */
+    public void archiveJob(DateRange dateRange) {
+        archiveJobs = new JobList();
+        Iterator<Job> iterator = jobs.iterator();
+        while (iterator.hasNext()) {
+            Job job = iterator.next();
+            Date date = job.getDate();
+            Date startDate = dateRange.getStartDate();
+            Date endDate = dateRange.getEndDate();
+            if (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0) {
+                archiveJobs.add(job);
+            }
+        }
     }
 
     //// employee-level operations
@@ -241,6 +263,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Tag> getTagList() {
         return tags.asObservableList();
+    }
+
+    @Override
+    public ObservableList<Job> getArchiveJobList() {
+        return archiveJobs.asObservableList();
     }
 
     @Override

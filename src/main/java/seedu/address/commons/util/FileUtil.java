@@ -27,6 +27,20 @@ public class FileUtil {
         }
     }
 
+    //@@author richardson0694
+    /**
+     * Creates a file if it does not exist along with its missing parent directories.
+     * @throws IOException if the file or directory cannot be created.
+     */
+    public static void createEvenIfExist(File file) throws IOException {
+        if (isFileExists(file)) {
+            file.delete();
+            createFile(file);
+        } else {
+            createFile(file);
+        }
+    }
+
     /**
      * Creates a file if it does not exist along with its missing parent directories
      *

@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,9 +11,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import seedu.address.model.session.exceptions.DataIndexOutOfBoundsException;
-import seedu.address.model.session.exceptions.FileAccessException;
-import seedu.address.model.session.exceptions.FileFormatException;
+import seedu.address.storage.session.exceptions.DataIndexOutOfBoundsException;
+import seedu.address.storage.session.exceptions.FileAccessException;
+import seedu.address.storage.session.exceptions.FileFormatException;
 
 //@@author yuhongherald
 /**

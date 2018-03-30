@@ -52,7 +52,8 @@ public class AddressBookTest {
         List<Employee> newEmployees = Arrays.asList(ALICE, ALICE);
         List<Job> newJobs = new ArrayList<>();
         List<Tag> newTags = new ArrayList<>(ALICE.getTags());
-        AddressBookStub newData = new AddressBookStub(newEmployees, newJobs, newTags);
+        List<Job> newArchiveJobs = new ArrayList<>();
+        AddressBookStub newData = new AddressBookStub(newEmployees, newJobs, newTags, newArchiveJobs);
 
         thrown.expect(AssertionError.class);
         addressBook.resetData(newData);
@@ -77,11 +78,14 @@ public class AddressBookTest {
         private final ObservableList<Employee> employees = FXCollections.observableArrayList();
         private final ObservableList<Job> jobs = FXCollections.observableArrayList();
         private final ObservableList<Tag> tags = FXCollections.observableArrayList();
+        private final ObservableList<Job> archiveJobs = FXCollections.observableArrayList();
 
-        AddressBookStub(Collection<Employee> employees, Collection<Job> jobs, Collection<? extends Tag> tags) {
+        AddressBookStub(Collection<Employee> employees, Collection<Job> jobs, Collection<? extends Tag> tags,
+                        Collection<Job> archiveJobs) {
             this.employees.setAll(employees);
             this.jobs.setAll(jobs);
             this.tags.setAll(tags);
+            this.archiveJobs.setAll(archiveJobs);
         }
 
         @Override
@@ -97,6 +101,11 @@ public class AddressBookTest {
         @Override
         public ObservableList<Tag> getTagList() {
             return tags;
+        }
+
+        @Override
+        public ObservableList<Job> getArchiveJobList() {
+            return archiveJobs;
         }
     }
 

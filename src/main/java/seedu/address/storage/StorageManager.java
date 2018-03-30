@@ -22,12 +22,14 @@ public class StorageManager extends ComponentManager implements Storage {
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
     private AddressBookStorage addressBookStorage;
     private UserPrefsStorage userPrefsStorage;
+    private ArchiveJobStorage archiveJobStorage;
 
-
-    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage,
+                          ArchiveJobStorage archiveJobStorage) {
         super();
         this.addressBookStorage = addressBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.archiveJobStorage = archiveJobStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -84,9 +86,40 @@ public class StorageManager extends ComponentManager implements Storage {
         logger.info(LogsCenter.getEventHandlingLogMessage(event, "Local data changed, saving to file"));
         try {
             saveAddressBook(event.data);
+            saveArchiveJob(event.data);
         } catch (IOException e) {
             raise(new DataSavingExceptionEvent(e));
         }
+    }
+
+    //@@author richardson0694
+    // ================ ArchiveJob methods ==============================
+
+    @Override
+    public String getArchiveJobFilePath() {
+        return archiveJobStorage.getArchiveJobFilePath();
+    }
+
+    @Override
+    public Optional<ReadOnlyAddressBook> readArchiveJob() throws DataConversionException, IOException {
+        return readArchiveJob(archiveJobStorage.getArchiveJobFilePath());
+    }
+
+    @Override
+    public Optional<ReadOnlyAddressBook> readArchiveJob(String filePath) throws DataConversionException, IOException {
+        logger.fine("Attempting to read data from file: " + filePath);
+        return archiveJobStorage.readArchiveJob(filePath);
+    }
+
+    @Override
+    public void saveArchiveJob(ReadOnlyAddressBook addressBook) throws IOException {
+        saveArchiveJob(addressBook, archiveJobStorage.getArchiveJobFilePath());
+    }
+
+    @Override
+    public void saveArchiveJob(ReadOnlyAddressBook addressBook, String filePath) throws IOException {
+        logger.fine("Attempting to write to data file: " + filePath);
+        archiveJobStorage.saveArchiveJob(addressBook, filePath);
     }
 
 }

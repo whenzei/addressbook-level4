@@ -1,4 +1,4 @@
-package seedu.address.model.session.exceptions;
+package seedu.address.storage.session.exceptions;
 
 //@@author yuhongherald
 /**

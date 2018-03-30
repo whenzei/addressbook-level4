@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 import java.util.List;
 
-import seedu.address.model.session.exceptions.DataIndexOutOfBoundsException;
+import seedu.address.storage.session.exceptions.DataIndexOutOfBoundsException;
 
 //@@author yuhongherald
 /**

@@ -12,6 +12,7 @@ public class UserPrefs {
 
     private GuiSettings guiSettings;
     private String addressBookFilePath = "data/addressbook.xml";
+    private String archiveJobFilePath = "data/archivejob.xml";
     private String addressBookName = "MyAddressBook";
     private CommandWords commandWords;
     private String themeName;
@@ -88,6 +89,14 @@ public class UserPrefs {
 
     public void setAddressBookFilePath(String addressBookFilePath) {
         this.addressBookFilePath = addressBookFilePath;
+    }
+
+    public String getArchiveJobFilePath() {
+        return archiveJobFilePath;
+    }
+
+    public void setArchiveJobFilePath(String archiveJobFilePath) {
+        this.archiveJobFilePath = archiveJobFilePath;
     }
 
     public String getAddressBookName() {

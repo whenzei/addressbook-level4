@@ -32,7 +32,8 @@ public class StorageManagerTest {
     public void setUp() {
         XmlAddressBookStorage addressBookStorage = new XmlAddressBookStorage(getTempFilePath("ab"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        storageManager = new StorageManager(addressBookStorage, userPrefsStorage);
+        XmlArchiveJobStorage archiveJobStorage = new XmlArchiveJobStorage(getTempFilePath("cd"));
+        storageManager = new StorageManager(addressBookStorage, userPrefsStorage, archiveJobStorage);
     }
 
     private String getTempFilePath(String fileName) {
@@ -76,7 +77,8 @@ public class StorageManagerTest {
     public void handleAddressBookChangedEvent_exceptionThrown_eventRaised() {
         // Create a StorageManager while injecting a stub that  throws an exception when the save method is called
         Storage storage = new StorageManager(new XmlAddressBookStorageExceptionThrowingStub("dummy"),
-                                             new JsonUserPrefsStorage("dummy"));
+                                             new JsonUserPrefsStorage("dummy"),
+                new XmlArchiveJobStorageExceptionThrowingStub("dummy"));
         storage.handleAddressBookChangedEvent(new AddressBookChangedEvent(new AddressBook()));
         assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof DataSavingExceptionEvent);
     }
@@ -97,5 +99,19 @@ public class StorageManagerTest {
         }
     }
 
+    /**
+     * A Stub class to throw an exception when the save method is called
+     */
+    class XmlArchiveJobStorageExceptionThrowingStub extends XmlArchiveJobStorage {
+
+        public XmlArchiveJobStorageExceptionThrowingStub(String filePath) {
+            super(filePath);
+        }
+
+        @Override
+        public void saveArchiveJob(ReadOnlyAddressBook addressBook, String filePath) throws IOException {
+            throw new IOException("dummy exception");
+        }
+    }
 
 }

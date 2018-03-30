@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 /**
  * For row entries of an excel sheet

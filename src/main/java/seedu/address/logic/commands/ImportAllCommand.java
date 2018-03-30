@@ -9,10 +9,10 @@ import java.util.List;
 
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.job.Job;
-import seedu.address.model.session.ImportSession;
-import seedu.address.model.session.exceptions.DataIndexOutOfBoundsException;
-import seedu.address.model.session.exceptions.FileAccessException;
-import seedu.address.model.session.exceptions.FileFormatException;
+import seedu.address.storage.session.ImportSession;
+import seedu.address.storage.session.exceptions.DataIndexOutOfBoundsException;
+import seedu.address.storage.session.exceptions.FileAccessException;
+import seedu.address.storage.session.exceptions.FileFormatException;
 
 //@@author yuhongherald
 /**

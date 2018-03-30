@@ -12,6 +12,7 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.commons.util.StringUtil;
+import seedu.address.model.job.Date;
 import seedu.address.model.job.VehicleNumber;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -190,7 +191,6 @@ public class ParserUtil {
         return tagSet;
     }
 
-
     /**
      * Parses a {@code String vehicleNumber} into a {@code VehicleNumber}.
      * Leading and trailing whitespaces will be trimmed.
@@ -218,4 +218,32 @@ public class ParserUtil {
         requireNonNull(vehicleNumber);
         return vehicleNumber.isPresent() ? Optional.of(parseVehicleNumber(vehicleNumber.get())) : Optional.empty();
     }
+
+    //@@author richardson0694
+    /**
+     * Parses a {@code String date} into a {@code Date}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code date} is invalid.
+     */
+    public static Date parseDate(String date) throws IllegalValueException {
+        requireNonNull(date);
+        String trimmedDate = date.trim();
+        if (!Date.isValidDate(trimmedDate)) {
+            throw new IllegalValueException(Date.MESSAGE_DATE_CONSTRAINTS);
+        }
+        return new Date(date);
+    }
+
+    /**
+     * Parses a {@code Optional<String> date} into an {@code Optional<Date>}
+     * if {@code date} is present.
+     *
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Date> parseDate(Optional<String> date) throws IllegalValueException {
+        requireNonNull(date);
+        return date.isPresent() ? Optional.of(parseDate(date.get())) : Optional.empty();
+    }
+
 }

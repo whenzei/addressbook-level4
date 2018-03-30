@@ -16,6 +16,7 @@ import seedu.address.commons.core.ComponentManager;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.events.model.AddressBookChangedEvent;
 import seedu.address.logic.commands.CommandWords;
+import seedu.address.model.job.DateRange;
 import seedu.address.model.job.Job;
 import seedu.address.model.job.JobNumber;
 import seedu.address.model.job.exceptions.JobNotFoundException;
@@ -113,6 +114,12 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public synchronized void closeJob(Job target) throws JobNotFoundException {
+    }
+
+    @Override
+    public synchronized void archiveJob(DateRange dateRange) {
+        addressBook.archiveJob(dateRange);
+        indicateAddressBookChanged();
     }
 
     @Override

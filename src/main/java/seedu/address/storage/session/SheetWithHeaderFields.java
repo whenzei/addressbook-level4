@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.model.job.Status.STATUS_CLOSED;
@@ -8,17 +8,17 @@ import static seedu.address.model.person.Email.isValidEmail;
 import static seedu.address.model.person.Name.isValidName;
 import static seedu.address.model.person.Phone.isValidPhone;
 import static seedu.address.model.remark.Remark.isValidRemark;
-import static seedu.address.model.session.SheetParser.APPROVAL_STATUS;
-import static seedu.address.model.session.SheetParser.CLIENT_EMAIL;
-import static seedu.address.model.session.SheetParser.CLIENT_NAME;
-import static seedu.address.model.session.SheetParser.CLIENT_PHONE;
-import static seedu.address.model.session.SheetParser.COMMENTS;
-import static seedu.address.model.session.SheetParser.EMPLOYEE_EMAIL;
-import static seedu.address.model.session.SheetParser.EMPLOYEE_NAME;
-import static seedu.address.model.session.SheetParser.EMPLOYEE_PHONE;
-import static seedu.address.model.session.SheetParser.REMARKS;
-import static seedu.address.model.session.SheetParser.STATUS;
-import static seedu.address.model.session.SheetParser.VEHICLE_NUMBER;
+import static seedu.address.storage.session.SheetParser.APPROVAL_STATUS;
+import static seedu.address.storage.session.SheetParser.CLIENT_EMAIL;
+import static seedu.address.storage.session.SheetParser.CLIENT_NAME;
+import static seedu.address.storage.session.SheetParser.CLIENT_PHONE;
+import static seedu.address.storage.session.SheetParser.COMMENTS;
+import static seedu.address.storage.session.SheetParser.EMPLOYEE_EMAIL;
+import static seedu.address.storage.session.SheetParser.EMPLOYEE_NAME;
+import static seedu.address.storage.session.SheetParser.EMPLOYEE_PHONE;
+import static seedu.address.storage.session.SheetParser.REMARKS;
+import static seedu.address.storage.session.SheetParser.STATUS;
+import static seedu.address.storage.session.SheetParser.VEHICLE_NUMBER;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,8 +45,8 @@ import seedu.address.model.person.UniqueEmployeeList;
 import seedu.address.model.person.exceptions.DuplicateEmployeeException;
 import seedu.address.model.remark.Remark;
 import seedu.address.model.remark.RemarkList;
-import seedu.address.model.session.exceptions.DataIndexOutOfBoundsException;
-import seedu.address.model.session.exceptions.FileFormatException;
+import seedu.address.storage.session.exceptions.DataIndexOutOfBoundsException;
+import seedu.address.storage.session.exceptions.FileFormatException;
 
 //@@uathor yuhongherald
 /**

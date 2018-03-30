@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.logic.commands.CommandWords;
+import seedu.address.model.job.DateRange;
 import seedu.address.model.job.Job;
 import seedu.address.model.job.exceptions.JobNotFoundException;
 import seedu.address.model.person.Employee;
@@ -43,6 +44,9 @@ public interface Model {
 
     /** Closes the given job */
     void closeJob(Job target) throws JobNotFoundException;
+
+    /** Archives the job entries within the date range*/
+    void archiveJob(DateRange dateRange);
 
     /** Deletes the given employee. */
     void deletePerson(Employee target) throws EmployeeNotFoundException;

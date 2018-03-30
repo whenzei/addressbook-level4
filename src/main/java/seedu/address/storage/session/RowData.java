@@ -1,4 +1,4 @@
-package seedu.address.model.session;
+package seedu.address.storage.session;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import seedu.address.model.session.exceptions.DataIndexOutOfBoundsException;
+import seedu.address.storage.session.exceptions.DataIndexOutOfBoundsException;
 
 //@@author yuhongherald
 /**

@@ -12,7 +12,7 @@ import seedu.address.model.UserPrefs;
 /**
  * API of the Storage component
  */
-public interface Storage extends AddressBookStorage, UserPrefsStorage {
+public interface Storage extends AddressBookStorage, UserPrefsStorage, ArchiveJobStorage {
 
     @Override
     Optional<UserPrefs> readUserPrefs() throws DataConversionException, IOException;
@@ -28,6 +28,15 @@ public interface Storage extends AddressBookStorage, UserPrefsStorage {
 
     @Override
     void saveAddressBook(ReadOnlyAddressBook addressBook) throws IOException;
+
+    @Override
+    String getArchiveJobFilePath();
+
+    @Override
+    Optional<ReadOnlyAddressBook> readArchiveJob() throws DataConversionException, IOException;
+
+    @Override
+    void saveArchiveJob(ReadOnlyAddressBook addressBook) throws IOException;
 
     /**
      * Saves the current version of the Address Book to the hard disk.

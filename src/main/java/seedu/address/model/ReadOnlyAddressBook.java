@@ -26,4 +26,10 @@ public interface ReadOnlyAddressBook {
      * Returns an unmodifiable view of the jobs list.
      */
     ObservableList<Job> getJobList();
+
+    /**
+     * Returns an unmodifiable view of the archive jobs list.
+     */
+    ObservableList<Job> getArchiveJobList();
+
 }

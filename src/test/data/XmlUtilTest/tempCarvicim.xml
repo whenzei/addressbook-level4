@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<carvicim>
+    <employees>
+        <id>1</id>
+        <firstName>John</firstName>
+        <lastName>Doe</lastName>
+        <githubUsername></githubUsername>
+        <street></street>
+        <postalCode></postalCode>
+        <city></city>
+    </employees>
+    <tags>
+        <name>Friends</name>
+    </tags>
+</carvicim>

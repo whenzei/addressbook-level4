@@ -1,52 +1,52 @@
 package systemtests;
 
-import static seedu.address.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_MECHANIC;
-import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_TECHNICIAN;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_TECHNICIAN;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
-import static seedu.address.testutil.TypicalPersons.ALICE;
-import static seedu.address.testutil.TypicalPersons.AMY;
-import static seedu.address.testutil.TypicalPersons.BOB;
-import static seedu.address.testutil.TypicalPersons.CARL;
-import static seedu.address.testutil.TypicalPersons.HOON;
-import static seedu.address.testutil.TypicalPersons.IDA;
-import static seedu.address.testutil.TypicalPersons.KEYWORD_MATCHING_MEIER;
+import static seedu.carvicim.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.carvicim.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static seedu.carvicim.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
+import static seedu.carvicim.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
+import static seedu.carvicim.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
+import static seedu.carvicim.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
+import static seedu.carvicim.logic.commands.CommandTestUtil.NAME_DESC_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.NAME_DESC_BOB;
+import static seedu.carvicim.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.PHONE_DESC_BOB;
+import static seedu.carvicim.logic.commands.CommandTestUtil.TAG_DESC_MECHANIC;
+import static seedu.carvicim.logic.commands.CommandTestUtil.TAG_DESC_TECHNICIAN;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_NAME_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_TAG_TECHNICIAN;
+import static seedu.carvicim.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.carvicim.testutil.TypicalEmployees.ALICE;
+import static seedu.carvicim.testutil.TypicalEmployees.AMY;
+import static seedu.carvicim.testutil.TypicalEmployees.BOB;
+import static seedu.carvicim.testutil.TypicalEmployees.CARL;
+import static seedu.carvicim.testutil.TypicalEmployees.HOON;
+import static seedu.carvicim.testutil.TypicalEmployees.IDA;
+import static seedu.carvicim.testutil.TypicalEmployees.KEYWORD_MATCHING_MEIER;
 
 import org.junit.Test;
 
-import seedu.address.commons.core.Messages;
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.AddEmployeeCommand;
-import seedu.address.logic.commands.RedoCommand;
-import seedu.address.logic.commands.UndoCommand;
-import seedu.address.model.Model;
-import seedu.address.model.person.Email;
-import seedu.address.model.person.Employee;
-import seedu.address.model.person.Name;
-import seedu.address.model.person.Phone;
-import seedu.address.model.person.exceptions.DuplicateEmployeeException;
-import seedu.address.model.tag.Tag;
-import seedu.address.testutil.EmployeeBuilder;
-import seedu.address.testutil.PersonUtil;
+import seedu.carvicim.commons.core.Messages;
+import seedu.carvicim.commons.core.index.Index;
+import seedu.carvicim.logic.commands.AddEmployeeCommand;
+import seedu.carvicim.logic.commands.RedoCommand;
+import seedu.carvicim.logic.commands.UndoCommand;
+import seedu.carvicim.model.Model;
+import seedu.carvicim.model.person.Email;
+import seedu.carvicim.model.person.Employee;
+import seedu.carvicim.model.person.Name;
+import seedu.carvicim.model.person.Phone;
+import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
+import seedu.carvicim.model.tag.Tag;
+import seedu.carvicim.testutil.EmployeeBuilder;
+import seedu.carvicim.testutil.PersonUtil;
 
-public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
+public class AddEmployeeCommandSystemTest extends CarvicimSystemTest {
 
     @Test
     public void add() throws Exception {
@@ -54,7 +54,7 @@ public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
 
         /* ------------------------ Perform add operations on the shown unfiltered list ----------------------------- */
 
-        /* Case: add a employee without tags to a non-empty address book, command with leading spaces and
+        /* Case: add a employee without tags to a non-empty carvicim book, command with leading spaces and
          * trailing spaces -> added
          */
         Employee toAdd = AMY;
@@ -73,21 +73,21 @@ public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
         expectedResultMessage = RedoCommand.MESSAGE_SUCCESS;
         assertCommandSuccess(command, model, expectedResultMessage);
 
-        /* Case: add a employee with all fields same as another employee in the address book except name -> added */
+        /* Case: add a employee with all fields same as another employee in the carvicim book except name -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY)
                 .withTags(VALID_TAG_TECHNICIAN).build();
         command = AddEmployeeCommand.COMMAND_WORD + NAME_DESC_BOB + PHONE_DESC_AMY
                 + EMAIL_DESC_AMY + TAG_DESC_TECHNICIAN;
         assertCommandSuccess(command, toAdd);
 
-        /* Case: add a employee with all fields same as another employee in the address book except phone -> added */
+        /* Case: add a employee with all fields same as another employee in the carvicim book except phone -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_AMY)
                 .withTags(VALID_TAG_TECHNICIAN).build();
         command = AddEmployeeCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_BOB
                 + EMAIL_DESC_AMY + TAG_DESC_TECHNICIAN;
         assertCommandSuccess(command, toAdd);
 
-        /* Case: add a employee with all fields same as another employee in the address book except email -> added */
+        /* Case: add a employee with all fields same as another employee in the carvicim book except email -> added */
         toAdd = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_BOB)
                 .withTags(VALID_TAG_TECHNICIAN).build();
         command = AddEmployeeCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY
@@ -95,7 +95,7 @@ public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
         assertCommandSuccess(command, toAdd);
 
 
-        /* Case: add to empty address book -> added */
+        /* Case: add to empty carvicim book -> added */
         deleteAllPersons();
         assertCommandSuccess(ALICE);
 
@@ -127,9 +127,9 @@ public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
         assertCommandFailure(command, AddEmployeeCommand.MESSAGE_DUPLICATE_PERSON);
 
         /* Case: add a duplicate employee except with different tags -> rejected */
-        // "friends" is an existing tag used in the default model, see TypicalPersons#ALICE
+        // "friends" is an existing tag used in the default model, see TypicalEmployees#ALICE
         // This test will fail if a new tag that is not in the model is used, see the bug documented in
-        // AddressBook#addEmployee(Employee)
+        // Carvicim#addEmployee(Employee)
         command = PersonUtil.getAddCommand(HOON) + " " + PREFIX_TAG.getPrefix() + "mechanic";
         assertCommandFailure(command, AddEmployeeCommand.MESSAGE_DUPLICATE_PERSON);
 
@@ -176,8 +176,8 @@ public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
      * the current model added with {@code toAdd}.<br>
      * 5. Status bar's sync status changes.<br>
      * Verifications 1, 3 and 4 are performed by
-     * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
-     * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
+     * {@code CarvicimSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
+     * @see CarvicimSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandSuccess(Employee toAdd) {
         assertCommandSuccess(PersonUtil.getAddCommand(toAdd), toAdd);
@@ -223,8 +223,8 @@ public class AddEmployeeCommandSystemTest extends AddressBookSystemTest {
      * 4. {@code Model}, {@code Storage} and {@code PersonListPanel} remain unchanged.<br>
      * 5. Browser url, selected card and status bar remain unchanged.<br>
      * Verifications 1, 3 and 4 are performed by
-     * {@code AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
-     * @see AddressBookSystemTest#assertApplicationDisplaysExpected(String, String, Model)
+     * {@code CarvicimSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>
+     * @see CarvicimSystemTest#assertApplicationDisplaysExpected(String, String, Model)
      */
     private void assertCommandFailure(String command, String expectedResultMessage) {
         Model expectedModel = getModel();

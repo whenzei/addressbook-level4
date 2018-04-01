@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<carvicim>
+    <!-- Employee with invalid name field -->
+    <employees>
+        <name>Ha!ns Mu@ster</name>
+        <phone isPrivate="false">9482424</phone>
+        <email isPrivate="false">hans@example.com</email>
+    </employees>
+</carvicim>

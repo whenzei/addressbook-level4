@@ -7,8 +7,8 @@
       "y" : 100
     }
   },
-  "addressBookFilePath" : "addressbook.xml",
-  "addressBookName" : "TypicalAddressBookName",
+  "carvicimFilePath": "carvicim.xml",
+  "carvicimName": "TypicalCarviciMName",
   "commandWords" : {
     "commands" : {
       "add" : "add",

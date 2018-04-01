@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Employee with missing name field -->
+<employee>
+    <phone>9482424</phone>
+    <email>hans@example</email>
+    <tagged>mechanic</tagged>
+</employee>

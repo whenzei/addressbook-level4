@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Employee with an invalid phone field -->
+<employee>
+    <name>Hans Muster</name>
+    <phone>9482asf424</phone>
+    <email>hans@example</email>
+    <tagged>mechanic</tagged>
+</employee>

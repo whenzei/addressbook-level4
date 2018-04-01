@@ -16,7 +16,7 @@ import seedu.carvicim.model.tag.Tag;
  * Contains utility methods for populating {@code Carvicim} with sample data.
  */
 public class SampleDataUtil {
-    public static Employee[] getSamplePersons() {
+    public static Employee[] getSampleEmployees() {
         return new Employee[] {
             new Employee(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
                 getTagSet("mechanic")),
@@ -33,10 +33,10 @@ public class SampleDataUtil {
         };
     }
 
-    public static ReadOnlyCarvicim getSampleAddressBook() {
+    public static ReadOnlyCarvicim getSampleCarvicim() {
         try {
             Carvicim sampleAb = new Carvicim();
-            for (Employee sampleEmployee : getSamplePersons()) {
+            for (Employee sampleEmployee : getSampleEmployees()) {
                 sampleAb.addEmployee(sampleEmployee);
             }
             return sampleAb;

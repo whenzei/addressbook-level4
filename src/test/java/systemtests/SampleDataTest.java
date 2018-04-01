@@ -45,7 +45,7 @@ public class SampleDataTest extends CarvicimSystemTest {
 
     @Test
     public void carvicim_dataFileDoesNotExist_loadSampleData() {
-        Employee[] expectedList = SampleDataUtil.getSamplePersons();
+        Employee[] expectedList = SampleDataUtil.getSampleEmployees();
         assertListMatching(getPersonListPanel(), expectedList);
     }
 }

@@ -20,7 +20,6 @@ import seedu.carvicim.model.job.JobList;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.Status;
 import seedu.carvicim.model.job.VehicleNumber;
-import seedu.carvicim.model.person.Customer;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.UniqueEmployeeList;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
@@ -217,31 +216,7 @@ public class Carvicim implements ReadOnlyCarvicim {
         });
         return employees;
     }
-
-    //@@author yuhongherald
-    /**
-     * Generates a random job for each employee
-     */
-    private void createRandomJobForEachEmployee() {
-        Job newJob;
-        for (Employee employee : employees) {
-            Customer customer = Customer.generateCustomer();
-            VehicleNumber vehicleNumber = new VehicleNumber("SXX0000X");
-            JobNumber jobNumber = new JobNumber();
-            Date date = new Date();
-            UniqueEmployeeList assignedEmployees = new UniqueEmployeeList();
-            try {
-                assignedEmployees.add(employee);
-            } catch (DuplicateEmployeeException e) {
-                // we just ignore
-            }
-            Status status = new Status("pending");
-            RemarkList remarks = new RemarkList();
-            newJob = new Job(customer, vehicleNumber, jobNumber, date, assignedEmployees, status, remarks);
-            jobs.add(newJob);
-        }
-    }
-
+    
     //// util methods
     //@@author
     @Override

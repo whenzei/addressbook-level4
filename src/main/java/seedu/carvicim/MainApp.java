@@ -96,7 +96,7 @@ public class MainApp extends Application {
             if (!carvicimOptional.isPresent()) {
                 logger.info("Data file not found. Will be starting with a sample Carvicim");
             }
-            initialData = carvicimOptional.orElseGet(SampleDataUtil::getSampleAddressBook);
+            initialData = carvicimOptional.orElseGet(SampleDataUtil::getSampleCarvicim);
         } catch (DataConversionException e) {
             logger.warning("Data file not in the correct format. Will be starting with an empty Carvicim");
             initialData = new Carvicim();

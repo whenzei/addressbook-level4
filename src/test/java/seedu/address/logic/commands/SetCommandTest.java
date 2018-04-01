@@ -20,7 +20,7 @@ public class SetCommandTest {
     public void execute_changeAdd_success() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        String currentWord = AddCommand.COMMAND_WORD;
+        String currentWord = AddEmployeeCommand.COMMAND_WORD;
         String newWord = getUnusedCommandWord(actualModel);
 
         setCommandWord(expectedModel, currentWord, newWord);
@@ -32,7 +32,7 @@ public class SetCommandTest {
     public void execute_changeAddUsingDefault_success() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        String currentWord = AddCommand.COMMAND_WORD;
+        String currentWord = AddEmployeeCommand.COMMAND_WORD;
         String newWord = getUnusedCommandWord(actualModel);
 
         setCommandWord(actualModel, currentWord, newWord);
@@ -46,7 +46,7 @@ public class SetCommandTest {
     public void execute_changeAddBackToDefault_success() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        String currentWord = AddCommand.COMMAND_WORD;
+        String currentWord = AddEmployeeCommand.COMMAND_WORD;
         String newWord = getUnusedCommandWord(actualModel);
 
         setCommandWord(actualModel, currentWord, newWord);
@@ -74,7 +74,7 @@ public class SetCommandTest {
     @Test
     public void execute_changeCommand_failureUsed() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        String currentWord = AddCommand.COMMAND_WORD;
+        String currentWord = AddEmployeeCommand.COMMAND_WORD;
         String newWord = getUnusedCommandWord(actualModel);
 
         setCommandWord(actualModel, SetCommand.COMMAND_WORD, newWord);
@@ -85,7 +85,7 @@ public class SetCommandTest {
     @Test
     public void execute_changeCommand_failureDefault() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        String currentWord = AddCommand.COMMAND_WORD;
+        String currentWord = AddEmployeeCommand.COMMAND_WORD;
         String newWord = SetCommand.COMMAND_WORD;
 
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
@@ -107,7 +107,7 @@ public class SetCommandTest {
     @Test
     public void execute_changeCommand_failureNoChange() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        String currentWord = AddCommand.COMMAND_WORD;
+        String currentWord = AddEmployeeCommand.COMMAND_WORD;
         String newWord = currentWord;
 
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);

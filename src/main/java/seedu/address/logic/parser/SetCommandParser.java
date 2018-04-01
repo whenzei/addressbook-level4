@@ -9,7 +9,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 
 //@@author yuhongherald
 /**
- * Parses input arguments and creates a new AddCommand object
+ * Parses input arguments and creates a new AddEmployeeCommand object
  */
 public class SetCommandParser implements Parser<SetCommand> {
 

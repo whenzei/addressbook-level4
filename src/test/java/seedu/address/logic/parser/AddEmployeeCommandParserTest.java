@@ -28,7 +28,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 
 import org.junit.Test;
 
-import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddEmployeeCommand;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Employee;
 import seedu.address.model.person.Name;
@@ -36,8 +36,8 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.EmployeeBuilder;
 
-public class AddCommandParserTest {
-    private AddCommandParser parser = new AddCommandParser();
+public class AddEmployeeCommandParserTest {
+    private AddEmployeeCommandParser parser = new AddEmployeeCommandParser();
 
     @Test
     public void parse_allFieldsPresent_success() {
@@ -46,26 +46,26 @@ public class AddCommandParserTest {
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + TAG_DESC_TECHNICIAN, new AddCommand(expectedEmployee));
+                + TAG_DESC_TECHNICIAN, new AddEmployeeCommand(expectedEmployee));
 
         // multiple names - last name accepted
         assertParseSuccess(parser, NAME_DESC_AMY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + TAG_DESC_TECHNICIAN, new AddCommand(expectedEmployee));
+                + TAG_DESC_TECHNICIAN, new AddEmployeeCommand(expectedEmployee));
 
         // multiple phones - last phone accepted
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_AMY + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + TAG_DESC_TECHNICIAN, new AddCommand(expectedEmployee));
+                + TAG_DESC_TECHNICIAN, new AddEmployeeCommand(expectedEmployee));
 
         // multiple emails - last email accepted
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_AMY + EMAIL_DESC_BOB
-                + TAG_DESC_TECHNICIAN, new AddCommand(expectedEmployee));
+                + TAG_DESC_TECHNICIAN, new AddEmployeeCommand(expectedEmployee));
 
         // multiple tags - all accepted
         Employee expectedEmployeeMultipleTags = new EmployeeBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
                 .withTags(VALID_TAG_TECHNICIAN, VALID_TAG_MECHANIC).build();
         assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + TAG_DESC_MECHANIC + TAG_DESC_TECHNICIAN, new AddCommand(expectedEmployeeMultipleTags));
+                + TAG_DESC_MECHANIC + TAG_DESC_TECHNICIAN, new AddEmployeeCommand(expectedEmployeeMultipleTags));
     }
 
     @Test
@@ -74,12 +74,12 @@ public class AddCommandParserTest {
         Employee expectedEmployee = new EmployeeBuilder().withName(VALID_NAME_AMY).withPhone(VALID_PHONE_AMY)
                 .withEmail(VALID_EMAIL_AMY).withTags().build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY,
-                new AddCommand(expectedEmployee));
+                new AddEmployeeCommand(expectedEmployee));
     }
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddEmployeeCommand.MESSAGE_USAGE);
 
         // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
@@ -123,6 +123,6 @@ public class AddCommandParserTest {
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + TAG_DESC_MECHANIC + TAG_DESC_TECHNICIAN,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddEmployeeCommand.MESSAGE_USAGE));
     }
 }

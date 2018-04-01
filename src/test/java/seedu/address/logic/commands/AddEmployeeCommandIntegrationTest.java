@@ -16,9 +16,9 @@ import seedu.address.model.person.Employee;
 import seedu.address.testutil.EmployeeBuilder;
 
 /**
- * Contains integration tests (interaction with the Model) for {@code AddCommand}.
+ * Contains integration tests (interaction with the Model) for {@code AddEmployeeCommand}.
  */
-public class AddCommandIntegrationTest {
+public class AddEmployeeCommandIntegrationTest {
 
     private Model model;
 
@@ -35,20 +35,20 @@ public class AddCommandIntegrationTest {
         expectedModel.addPerson(validEmployee);
 
         assertCommandSuccess(prepareCommand(validEmployee, model), model,
-                String.format(AddCommand.MESSAGE_SUCCESS, validEmployee), expectedModel);
+                String.format(AddEmployeeCommand.MESSAGE_SUCCESS, validEmployee), expectedModel);
     }
 
     @Test
     public void execute_duplicatePerson_throwsCommandException() {
         Employee employeeInList = model.getAddressBook().getEmployeeList().get(0);
-        assertCommandFailure(prepareCommand(employeeInList, model), model, AddCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(prepareCommand(employeeInList, model), model, AddEmployeeCommand.MESSAGE_DUPLICATE_PERSON);
     }
 
     /**
-     * Generates a new {@code AddCommand} which upon execution, adds {@code employee} into the {@code model}.
+     * Generates a new {@code AddEmployeeCommand} which upon execution, adds {@code employee} into the {@code model}.
      */
-    private AddCommand prepareCommand(Employee employee, Model model) {
-        AddCommand command = new AddCommand(employee);
+    private AddEmployeeCommand prepareCommand(Employee employee, Model model) {
+        AddEmployeeCommand command = new AddEmployeeCommand(employee);
         command.setData(model, new CommandHistory(), new UndoRedoStack());
         return command;
     }

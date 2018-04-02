@@ -61,7 +61,7 @@ public class DeleteEmployeeCommand extends UndoableCommand {
         employeeToDelete = lastShownEmployeeList.get(targetIndex.getZeroBased());
 
         while (jobIterator.hasNext()) {
-            if(jobIterator.next().hasEmployee(employeeToDelete)) {
+            if (jobIterator.next().hasEmployee(employeeToDelete)) {
                 throw new CommandException(Messages.MESSAGE_EMPLOYEE_IS_ASSIGNED);
             }
         }

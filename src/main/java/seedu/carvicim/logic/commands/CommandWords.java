@@ -26,7 +26,6 @@ public class CommandWords implements Serializable {
         ArchiveCommand.COMMAND_WORD,
         ClearCommand.COMMAND_WORD,
         DeleteEmployeeCommand.COMMAND_WORD,
-        EditCommand.COMMAND_WORD,
         ExitCommand.COMMAND_WORD,
         FindEmployeeCommand.COMMAND_WORD,
         HelpCommand.COMMAND_WORD,

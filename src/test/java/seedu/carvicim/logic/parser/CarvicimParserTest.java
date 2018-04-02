@@ -18,8 +18,6 @@ import org.junit.rules.ExpectedException;
 import seedu.carvicim.logic.commands.AddEmployeeCommand;
 import seedu.carvicim.logic.commands.ClearCommand;
 import seedu.carvicim.logic.commands.DeleteEmployeeCommand;
-import seedu.carvicim.logic.commands.EditCommand;
-import seedu.carvicim.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.carvicim.logic.commands.ExitCommand;
 import seedu.carvicim.logic.commands.FindEmployeeCommand;
 import seedu.carvicim.logic.commands.HelpCommand;
@@ -31,7 +29,6 @@ import seedu.carvicim.logic.commands.UndoCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.NameContainsKeywordsPredicate;
-import seedu.carvicim.testutil.EditPersonDescriptorBuilder;
 import seedu.carvicim.testutil.EmployeeBuilder;
 import seedu.carvicim.testutil.PersonUtil;
 
@@ -59,15 +56,6 @@ public class CarvicimParserTest {
         DeleteEmployeeCommand command = (DeleteEmployeeCommand) parser.parseCommand(
                 DeleteEmployeeCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new DeleteEmployeeCommand(INDEX_FIRST_PERSON), command);
-    }
-
-    @Test
-    public void parseCommand_edit() throws Exception {
-        Employee employee = new EmployeeBuilder().build();
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(employee).build();
-        EditCommand command = (EditCommand) parser.parseCommand(EditCommand.COMMAND_WORD + " "
-                + INDEX_FIRST_PERSON.getOneBased() + " " + PersonUtil.getPersonDetails(employee));
-        assertEquals(new EditCommand(INDEX_FIRST_PERSON, descriptor), command);
     }
 
     @Test

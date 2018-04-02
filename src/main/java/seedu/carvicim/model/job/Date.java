@@ -12,10 +12,10 @@ import java.time.format.DateTimeFormatter;
  */
 public class Date {
 
-    public static final String MESSAGE_DATE_CONSTRAINTS = "Date should be of the format MMM D YYYY";
+    public static final String MESSAGE_DATE_CONSTRAINTS = "Date should be of the format MMM DD YYYY";
     public static final String DATE_VALIDATION_REGEX = "\\w\\w\\w\\s(0[1-9]|[12][0-9]|3[01])\\s(19|20)\\d\\d";
 
-    private static final String DATE_FORMATTER_PATTERN = "MMM d yyy";
+    private static final String DATE_FORMATTER_PATTERN = "MMM dd yyy";
 
     private static final String DATE_SPLIT_REGEX = " ";
     private static final int DATE_DATA_INDEX_DAY = 1;

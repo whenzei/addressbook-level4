@@ -225,6 +225,7 @@ public class XmlAdaptedJobTest {
         Assert.assertThrows(IllegalValueException.class, expectedMessage, job::toModelType);
     }
 
+    /**Generates a sample employe in the Xml form*/
     private XmlAdaptedEmployee generateSampleEmployee() {
         List<XmlAdaptedTag> bensonTags = new ArrayList<>();
         bensonTags.add(new XmlAdaptedTag("mechanic"));

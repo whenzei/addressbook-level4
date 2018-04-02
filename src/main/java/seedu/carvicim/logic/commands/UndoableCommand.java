@@ -2,6 +2,7 @@ package seedu.carvicim.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.carvicim.commons.util.CollectionUtil.requireAllNonNull;
+import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_JOBS;
 import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import seedu.carvicim.logic.commands.exceptions.CommandException;
@@ -41,6 +42,7 @@ public abstract class UndoableCommand extends Command {
         requireAllNonNull(model, previousAddressBook);
         model.resetData(previousAddressBook, previousCommandWords);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        model.updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
     }
 
     /**

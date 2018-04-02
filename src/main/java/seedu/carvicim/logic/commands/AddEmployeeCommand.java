@@ -17,7 +17,7 @@ public class AddEmployeeCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "adde";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to the carvicim book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to the carvicim. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "

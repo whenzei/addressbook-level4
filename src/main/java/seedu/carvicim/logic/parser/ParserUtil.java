@@ -13,10 +13,12 @@ import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.commons.exceptions.IllegalValueException;
 import seedu.carvicim.commons.util.StringUtil;
 import seedu.carvicim.model.job.Date;
+import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.VehicleNumber;
 import seedu.carvicim.model.person.Email;
 import seedu.carvicim.model.person.Name;
 import seedu.carvicim.model.person.Phone;
+import seedu.carvicim.model.remark.Remark;
 import seedu.carvicim.model.tag.Tag;
 
 /**
@@ -246,4 +248,52 @@ public class ParserUtil {
         return date.isPresent() ? Optional.of(parseDate(date.get())) : Optional.empty();
     }
 
+    //@@author whenzei
+    /**
+     * Parses a {@code String remark} into a {@code Remark}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code remark} is invalid.
+     */
+    public static Remark parseRemark(String remark) throws IllegalValueException {
+        requireNonNull(remark);
+        String trimmedRemark = remark.trim();
+        if (!Remark.isValidRemark(trimmedRemark)) {
+            throw new IllegalValueException(Remark.MESSAGE_REMARKS_CONSTRAINTS);
+        }
+        return new Remark(trimmedRemark);
+    }
+
+    /**
+     * Parses a {@code Optional<String> remark} into an {@code Optional<Remark>} if {@code remark} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<Remark> parseRemark(Optional<String> remark) throws IllegalValueException {
+        requireNonNull(remark);
+        return remark.isPresent() ? Optional.of(parseRemark(remark.get())) : Optional.empty();
+    }
+
+    /**
+     * Parses a {@code String jobNumber} into a {@code JobNumber}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws IllegalValueException if the given {@code jobNumber} is invalid.
+     */
+    public static JobNumber parseJobNumber(String jobNumber) throws IllegalValueException {
+        requireNonNull(jobNumber);
+        String trimmedJobNumber = jobNumber.trim();
+        if (!JobNumber.isValidJobNumber(trimmedJobNumber)) {
+            throw new IllegalValueException(JobNumber.MESSAGE_JOB_NUMBER_CONSTRAINT);
+        }
+        return new JobNumber(trimmedJobNumber);
+    }
+
+    /**
+     * Parses a {@code Optional<String> jobNumber} into an {@code Optional<JobNumber>} if {@code jobNumber} is present.
+     * See header comment of this class regarding the use of {@code Optional} parameters.
+     */
+    public static Optional<JobNumber> parseJobNumber(Optional<String> jobNumber) throws IllegalValueException {
+        requireNonNull(jobNumber);
+        return jobNumber.isPresent() ? Optional.of(parseJobNumber(jobNumber.get())) : Optional.empty();
+    }
 }

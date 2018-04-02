@@ -7,6 +7,8 @@ package seedu.carvicim.model.job;
 public class JobNumber {
     private static int nextJobNumber;
 
+    public static final String MESSAGE_JOB_NUMBER_CONSTRAINT = "Job number should be a positive number (non-zero)";
+
     public final String value;
 
     public JobNumber() {
@@ -31,6 +33,12 @@ public class JobNumber {
 
     public static void incrementNextJobNumber() {
         nextJobNumber++;
+    }
+
+    public static boolean isValidJobNumber(String jobNumber) {
+        int value = Integer.parseInt(jobNumber);
+        return (value > 0);
+
     }
 
     public int asInteger() {

@@ -81,6 +81,10 @@ public class Job {
         return Collections.unmodifiableSet(remarks.toSet());
     }
 
+    public void addRemark(Remark remark) {
+        remarks.add(remark);
+    }
+
     public boolean hasEmployee(Employee employee) {
         return assignedEmployees.contains(employee);
     }

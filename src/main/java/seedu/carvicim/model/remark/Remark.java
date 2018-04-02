@@ -14,7 +14,7 @@ public class Remark {
     /*
      * Remark argument should be anything, except just whitespace or newline
      */
-    public static final String REMARK_VALIDATION_REGEX = "/.*\\S.*/";
+    public static final String REMARK_VALIDATION_REGEX = "(?!^ +$)^.+$";
 
     public final String value;
 

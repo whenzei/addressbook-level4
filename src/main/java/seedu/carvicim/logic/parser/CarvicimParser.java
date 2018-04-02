@@ -21,6 +21,7 @@ import seedu.carvicim.logic.commands.ImportAllCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
 import seedu.carvicim.logic.commands.LoginCommand;
 import seedu.carvicim.logic.commands.RedoCommand;
+import seedu.carvicim.logic.commands.RemarkCommand;
 import seedu.carvicim.logic.commands.SelectCommand;
 import seedu.carvicim.logic.commands.SetCommand;
 import seedu.carvicim.logic.commands.SortCommand;
@@ -129,6 +130,9 @@ public class CarvicimParser {
 
         case AddJobCommand.COMMAND_WORD:
             return new AddJobCommandParser().parse(arguments);
+
+        case RemarkCommand.COMMAND_WORD:
+            return new RemarkCommandParser().parse(arguments);
 
         case LoginCommand.COMMAND_WORD:
             return new LoginCommand();

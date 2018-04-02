@@ -13,6 +13,8 @@ import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
+import seedu.carvicim.model.remark.Remark;
+import seedu.carvicim.model.remark.RemarkList;
 
 //@@author whenzei
 /**
@@ -52,8 +54,12 @@ public class JobDisplayPanel extends UiPart<Region> {
 
     @Subscribe
     private void handleJobPanelSelectionChangedEvent(JobPanelSelectionChangedEvent event) {
+
         assignedEmployees.setVisible(true);
+
+        //Clear previous selection's information
         assignedEmployees.refresh();
+        remarks.getChildren().clear();
 
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         final Job job = event.getJob();
@@ -66,5 +72,12 @@ public class JobDisplayPanel extends UiPart<Region> {
         email.setText(job.getClient().getEmail().toString());
 
         assignedEmployees.setItems(job.getAssignedEmployeesAsObservableList());
+
+        int count = 1;
+        for (Remark remark : job.getRemarks()) {
+            remarks.getChildren().add(new Label(count + ") " + remark.value));
+            count++;
+        }
+
     }
 }

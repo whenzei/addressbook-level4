@@ -100,7 +100,7 @@
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <FlowPane fx:id="remarks" prefHeight="200.0" prefWidth="200.0" styleClass="content" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <FlowPane fx:id="remarks" prefHeight="200.0" prefWidth="200.0" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label fx:id="vehicleNumber" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="date" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label fx:id="status" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="1" />

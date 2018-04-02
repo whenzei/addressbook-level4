@@ -17,14 +17,10 @@ import seedu.carvicim.model.job.Date;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobList;
-import seedu.carvicim.model.job.JobNumber;
-import seedu.carvicim.model.job.Status;
-import seedu.carvicim.model.job.VehicleNumber;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.UniqueEmployeeList;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
-import seedu.carvicim.model.remark.RemarkList;
 import seedu.carvicim.model.tag.Tag;
 import seedu.carvicim.model.tag.UniqueTagList;
 
@@ -216,7 +212,7 @@ public class Carvicim implements ReadOnlyCarvicim {
         });
         return employees;
     }
-    
+
     //// util methods
     //@@author
     @Override

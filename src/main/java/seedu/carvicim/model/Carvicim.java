@@ -105,6 +105,9 @@ public class Carvicim implements ReadOnlyCarvicim {
         jobs.add(job);
     }
 
+    /**
+     * Adds a remark to a specified job in Carvici
+     */
     public void addRemark(Job job, Remark remark) {
         Iterator<Job> iterator = jobs.iterator();
         while (iterator.hasNext()) {

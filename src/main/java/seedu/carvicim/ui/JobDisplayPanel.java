@@ -14,7 +14,6 @@ import seedu.carvicim.commons.core.LogsCenter;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.remark.Remark;
-import seedu.carvicim.model.remark.RemarkList;
 
 //@@author whenzei
 /**

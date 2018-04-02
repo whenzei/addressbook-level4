@@ -41,7 +41,7 @@ public interface Model {
     void initJobNumber();
 
     /** Adds the given remark to the job */
-     void addRemark(Job job, Remark remark) throws JobNotFoundException;
+    void addRemark(Job job, Remark remark) throws JobNotFoundException;
 
     /** Adds the given job */
     void addJob(Job job);

@@ -22,7 +22,7 @@ import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
  * Supports a minimal set of list operations.
  *
  * @see Employee#equals(Object)
- * @see CollectionUtil#elementsAreUnique(Collection)
+ * @see CollectionUtil
  */
 public class UniqueEmployeeList implements Iterable<Employee> {
 
@@ -119,6 +119,13 @@ public class UniqueEmployeeList implements Iterable<Employee> {
      */
     public void sortName(Comparator comparator) {
         Collections.sort(internalList, comparator);
+    }
+
+    /**
+     * Returns number of employees in the list
+     */
+    public int size() {
+        return internalList.size();
     }
 
     @Override

@@ -2,12 +2,14 @@ package seedu.carvicim.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
 import seedu.carvicim.commons.core.Messages;
 import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
+import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
 
@@ -48,13 +50,22 @@ public class DeleteEmployeeCommand extends UndoableCommand {
 
     @Override
     protected void preprocessUndoableCommand() throws CommandException {
-        List<Employee> lastShownList = model.getFilteredPersonList();
+        List<Employee> lastShownEmployeeList = model.getFilteredPersonList();
+        List<Job>  lastShownJobList = model.getFilteredJobList();
+        Iterator<Job> jobIterator = lastShownJobList.iterator();
 
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+        if (targetIndex.getZeroBased() >= lastShownEmployeeList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
         }
 
-        employeeToDelete = lastShownList.get(targetIndex.getZeroBased());
+        employeeToDelete = lastShownEmployeeList.get(targetIndex.getZeroBased());
+
+        while (jobIterator.hasNext()) {
+            if(jobIterator.next().hasEmployee(employeeToDelete)) {
+                throw new CommandException(Messages.MESSAGE_EMPLOYEE_IS_ASSIGNED);
+            }
+        }
+
     }
 
     @Override

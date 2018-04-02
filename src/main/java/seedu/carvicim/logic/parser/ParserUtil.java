@@ -283,7 +283,7 @@ public class ParserUtil {
         requireNonNull(jobNumber);
         String trimmedJobNumber = jobNumber.trim();
         if (!JobNumber.isValidJobNumber(trimmedJobNumber)) {
-            throw new IllegalValueException(JobNumber.MESSAGE_JOB_NUMBER_CONSTRAINT);
+            throw new IllegalValueException(JobNumber.MESSAGE_JOB_NUMBER_CONSTRAINTS);
         }
         return new JobNumber(trimmedJobNumber);
     }

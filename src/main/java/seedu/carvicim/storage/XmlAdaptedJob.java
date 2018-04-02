@@ -117,6 +117,9 @@ public class XmlAdaptedJob {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     JobNumber.class.getSimpleName()));
         }
+        if (!JobNumber.isValidJobNumber(this.jobNumber)) {
+            throw new IllegalValueException(JobNumber.MESSAGE_JOB_NUMBER_CONSTRAINTS);
+        }
         final JobNumber jobNumber = new JobNumber(this.jobNumber);
 
         if (this.name == null) {
@@ -160,6 +163,9 @@ public class XmlAdaptedJob {
 
         if (this.date == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Date.class.getSimpleName()));
+        }
+        if (!Date.isValidDate(this.date)) {
+            throw new IllegalValueException(Date.MESSAGE_DATE_CONSTRAINTS);
         }
         final Date date = new Date(this.date);
 

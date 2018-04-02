@@ -3,14 +3,17 @@ package seedu.carvicim.logic.commands;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static seedu.carvicim.commons.core.Messages.MESSAGE_EMPLOYEE_IS_ASSIGNED;
 import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.carvicim.logic.commands.CommandTestUtil.prepareRedoCommand;
 import static seedu.carvicim.logic.commands.CommandTestUtil.prepareUndoCommand;
 import static seedu.carvicim.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicim;
+import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicimWithAssignedJobs;
 import static seedu.carvicim.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.carvicim.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.carvicim.testutil.TypicalIndexes.INDEX_THIRD_PERSON;
 
 import org.junit.Test;
 
@@ -30,6 +33,31 @@ import seedu.carvicim.model.person.Employee;
 public class DeleteEmployeeCommandTest {
 
     private Model model = new ModelManager(getTypicalCarvicim(), new UserPrefs());
+
+    @Test
+    public void execute_deleteSuccess_notAssignedToJob() throws Exception {
+        model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
+
+        Employee employeeToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteEmployeeCommand deleteEmployeeCommand = prepareCommand(INDEX_FIRST_PERSON);
+
+        assertCommandFailure(deleteEmployeeCommand, model, MESSAGE_EMPLOYEE_IS_ASSIGNED);
+
+    }
+
+    @Test
+    public void execute_deleteFailure_assignedToJob() throws Exception {
+        model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
+
+        Employee employeeToDelete = model.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
+        DeleteEmployeeCommand deleteEmployeeCommand = prepareCommand(INDEX_THIRD_PERSON);
+
+        String expectedMessage = String.format(DeleteEmployeeCommand.MESSAGE_DELETE_PERSON_SUCCESS, employeeToDelete);
+        ModelManager expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
+        expectedModel.deletePerson(employeeToDelete);
+
+        assertCommandSuccess(deleteEmployeeCommand, model, expectedMessage, expectedModel);
+    }
 
     @Test
     public void execute_validIndexUnfilteredList_success() throws Exception {

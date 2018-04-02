@@ -8,14 +8,23 @@ import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_TAG_MECHANIC;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_TAG_TECHNICIAN;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_VEHICLE_NUMBER_A;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_VEHICLE_NUMBER_B;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import seedu.carvicim.model.Carvicim;
+import seedu.carvicim.model.job.Date;
+import seedu.carvicim.model.job.Job;
+import seedu.carvicim.model.job.JobNumber;
+import seedu.carvicim.model.job.Status;
+import seedu.carvicim.model.job.VehicleNumber;
 import seedu.carvicim.model.person.Employee;
+import seedu.carvicim.model.person.UniqueEmployeeList;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
+import seedu.carvicim.model.remark.RemarkList;
 
 /**
  * A utility class containing a list of {@code Employee} objects to be used in tests.
@@ -66,6 +75,40 @@ public class TypicalEmployees {
                 throw new AssertionError("not possible");
             }
         }
+        return ab;
+    }
+
+    /**
+     * Returns an {@code Carvicim} with all typical persons and jobs.
+     */
+    public static Carvicim getTypicalCarvicimWithAssignedJobs() {
+        Carvicim ab = new Carvicim();
+        for (Employee employee : getTypicalEmployees()) {
+            try {
+                ab.addEmployee(employee);
+            } catch (DuplicateEmployeeException e) {
+                throw new AssertionError("not possible");
+            }
+        }
+
+        UniqueEmployeeList assignedEmployeeList = new UniqueEmployeeList();
+        try {
+            assignedEmployeeList.add(ALICE);
+            assignedEmployeeList.add(BENSON);
+        } catch (DuplicateEmployeeException e) {
+            e.printStackTrace();
+        }
+
+        Job firstJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                new JobNumber("1"), new Date(), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
+                new RemarkList());
+        Job secondJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_B),
+                new JobNumber("2"), new Date(), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
+                new RemarkList());
+
+        ab.addJob(firstJob);
+        ab.addJob(secondJob);
+
         return ab;
     }
 

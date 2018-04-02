@@ -3,7 +3,7 @@ package seedu.carvicim.logic.commands;
 import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 /**
- * Lists all persons in the carvicim book to the user.
+ * Lists all persons in the Carvicim to the user.
  */
 public class ListEmployeeCommand extends Command {
 

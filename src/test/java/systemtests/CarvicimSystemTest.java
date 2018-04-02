@@ -28,7 +28,7 @@ import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.logic.commands.ClearCommand;
 import seedu.carvicim.logic.commands.FindEmployeeCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
-import seedu.carvicim.logic.commands.SelectCommand;
+import seedu.carvicim.logic.commands.SelectEmployeeCommand;
 import seedu.carvicim.model.Carvicim;
 import seedu.carvicim.model.Model;
 import seedu.carvicim.testutil.TypicalEmployees;
@@ -141,7 +141,7 @@ public abstract class CarvicimSystemTest {
      * Selects the employee at {@code index} of the displayed list.
      */
     protected void selectPerson(Index index) {
-        executeCommand(SelectCommand.COMMAND_WORD + " " + index.getOneBased());
+        executeCommand(SelectEmployeeCommand.COMMAND_WORD + " " + index.getOneBased());
         assertEquals(index.getZeroBased(), getPersonListPanel().getSelectedCardIndex());
     }
 

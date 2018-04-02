@@ -10,11 +10,11 @@ import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.person.Employee;
 
 /**
- * Selects a employee identified using it's last displayed index from the carvicim book.
+ * Selects a employee identified using it's last displayed index from the Carvicim.
  */
-public class SelectCommand extends Command {
+public class SelectEmployeeCommand extends Command {
 
-    public static final String COMMAND_WORD = "select";
+    public static final String COMMAND_WORD = "selecte";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Selects the employee identified by the index number used in the last employee listing.\n"
@@ -25,7 +25,7 @@ public class SelectCommand extends Command {
 
     private final Index targetIndex;
 
-    public SelectCommand(Index targetIndex) {
+    public SelectEmployeeCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -46,7 +46,7 @@ public class SelectCommand extends Command {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof SelectCommand // instanceof handles nulls
-                && this.targetIndex.equals(((SelectCommand) other).targetIndex)); // state check
+                || (other instanceof SelectEmployeeCommand // instanceof handles nulls
+                && this.targetIndex.equals(((SelectEmployeeCommand) other).targetIndex)); // state check
     }
 }

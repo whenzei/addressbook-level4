@@ -183,7 +183,9 @@ public class SessionData {
     public void freeResources() {
         workbook = null;
         importFile = null;
-        tempFile.delete();
+        if (tempFile != null) {
+            tempFile.delete();
+        }
         tempFile = null;
         saveFile = null;
         unreviewedJobEntries.clear();

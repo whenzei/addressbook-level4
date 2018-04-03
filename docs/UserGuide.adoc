@@ -107,7 +107,7 @@ Examples:
 === Closing a job entry: `closej`
 
 You can use this command to close an ongoing job based on its job number. +
-Format: `closej JOB_NUMBER`
+Format: `closej p/JOB_NUMBER`
 
 Examples:
 
@@ -176,11 +176,11 @@ Format: `sort`
 You can use this command to view a list of all employees in CarviciM. +
 Format: `listj`
 
-=== Selecting employees by list number: `select`
+=== Selecting employees by list number: `selecte`
 
 You can use this command to select the specified employee from CarviciM to view jobs associated
 with the emlpoyee. +
-Format: `select INDEX`
+Format: `selecte INDEX`
 
 ****
 * Selects the employee at the specified `INDEX`.
@@ -192,13 +192,13 @@ Examples:
 ** Example 1: +
 . `liste` +
 *** You will see a list of employees displayed in the UI panel.
-. `select 2` +
+. `selecte 2` +
 *** You will see an updated <<job-display-panel,job display panel>> which has the jobs of the 2nd employee.
 
 ** Example 2: +
 . `finde Betsy` +
 *** You will see the results of the `finde` command which shows all employees with matching keyword name.
-. `select 1` +
+. `selecte 1` +
 *** You will see an updated <<job-display-panel,job display panel>> which has the jobs of the 1st employee.
 
 === Locating employees by name: `finde`
@@ -480,9 +480,9 @@ Examples:
 *** You will see the deleted employee present in the employees UI panel again.
 
 ** Example 2: +
-. `closej 1` +
+. `closej p/1` +
 *** You will see that job number 1 is removed from the <<jobs-ui-panel,jobs UI panel>>.
-. `undo` (reverses the `closej 1` command) +
+. `undo` (reverses the `closej p/1` command) +
 *** You will see that job number 1 is added back into the jobs UI panel.
 . `undo` +
 *** The `undo` command fails as there are no undoable commands.
@@ -503,15 +503,15 @@ Examples:
 *** You will see that the same employee is removed from the employees UI panel again.
 
 ** Example 2: +
-. `closej 1` +
+. `closej p/1` +
 *** You will see that the job number 1 is removed from the <<jobs-ui-panel,jobs UI panel>>.
 . `deletee 1` +
 *** You will see that the first employee is removed from the employees UI panel.
 . `undo` (reverses the `deletee 1` command) +
 *** You will see that the deleted employee is added back into the employees UI panel.
-. `undo` (reverses the `closej 1` command) +
+. `undo` (reverses the `closej p/1` command) +
 *** You will see that the closed job number 1 is added back into the jobs UI panel.
-. `redo` (reapplies the `closej 1` command) +
+. `redo` (reapplies the `closej p/1` command) +
 *** You will see that the job number 1 is removed from the jobs UI panel again.
 . `redo` (reapplies the `deletee 1` command) +
 *** You will see that the same employee is removed from the employees UI panel.
@@ -562,8 +562,8 @@ _{explain how the user can enable/disable data encryption}_
 
 * *Add Job* `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
 e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
-* *Close Job* `closej JOB_NUMBER` +
-e.g. `closej 1232`
+* *Close Job* `closej p/JOB_NUMBER` +
+e.g. `closej p/1232`
 * *Add Remark* `remark j/JOB_NUMBER r/REMARK` +
 e.g. `remark j/12 r/Urgent`
 * *Archive job entries* `archive sd/START_DATE ed/END_DATE` +
@@ -572,6 +572,8 @@ e.g. `archive sd/Mar 25 2018 ed/Apr 03 2018`
 e.g. `adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
 * *Delete Employee* : `deletee INDEX` +
 e.g. `deletee 3`
+* *Select Employee* : `selecte INDEX` +
+e.g. `selecte 1`
 * *Find Employees* : `finde KEYWORD [MORE_KEYWORDS]` +
 e.g. `finde James Jake`
 * *List Employee* : `liste`

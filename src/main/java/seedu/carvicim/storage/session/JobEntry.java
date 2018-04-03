@@ -20,7 +20,7 @@ import seedu.carvicim.model.remark.RemarkList;
 /**
  * Represents a job entry in an (@link ImportSession)
  */
-public class JobEntry extends Job implements ExcelRowReference {
+public class JobEntry extends Job {
     public static final String NEWLINE = "\n";
 
     private final int sheetNumber;
@@ -82,11 +82,11 @@ public class JobEntry extends Job implements ExcelRowReference {
         return stringBuilder.toString();
     }
 
-    @Override public int getSheetNumber() {
+    public int getSheetNumber() {
         return sheetNumber;
     }
 
-    @Override public int getRowNumber() {
+    public int getRowNumber() {
         return rowNumber;
     }
 }

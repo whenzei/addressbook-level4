@@ -34,6 +34,7 @@ import seedu.carvicim.storage.StorageManager;
 import seedu.carvicim.storage.UserPrefsStorage;
 import seedu.carvicim.storage.XmlArchiveJobStorage;
 import seedu.carvicim.storage.XmlCarvicimStorage;
+import seedu.carvicim.storage.session.ImportSession;
 import seedu.carvicim.ui.Ui;
 import seedu.carvicim.ui.UiManager;
 
@@ -211,6 +212,7 @@ public class MainApp extends Application {
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
         }
+        ImportSession.getInstance().getSessionData().freeResources();
         Platform.exit();
         System.exit(0);
     }

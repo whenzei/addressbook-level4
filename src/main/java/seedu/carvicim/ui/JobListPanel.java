@@ -14,6 +14,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
+import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.commons.events.ui.JumpToListRequestEvent;
 import seedu.carvicim.commons.events.ui.PersonPanelSelectionChangedEvent;
@@ -97,6 +98,13 @@ public class JobListPanel extends UiPart<Region> {
     private void handlePersonPanelSelectionChangedEvent(PersonPanelSelectionChangedEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         updateList(event.getNewSelection().employee);
+    }
+
+    @Subscribe
+    private void handleDisplayAllJobsEvent(DisplayAllJobsEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        jobList = event.getJobList();
+        setConnections(jobList);
     }
 
     private void updateList(Employee employee) {

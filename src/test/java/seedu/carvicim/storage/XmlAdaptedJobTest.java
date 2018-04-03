@@ -1,6 +1,8 @@
 package seedu.carvicim.storage;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 import static seedu.carvicim.storage.XmlAdaptedJob.MISSING_FIELD_MESSAGE_FORMAT;
 import static seedu.carvicim.testutil.TypicalEmployees.BENSON;
 import static seedu.carvicim.testutil.TypicalEmployees.CARL;
@@ -223,6 +225,52 @@ public class XmlAdaptedJobTest {
                 VALID_VEHICLE_NUMBER, VALID_STATUS, null, assignedEmployees, remarks);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Date.class.getSimpleName());
         Assert.assertThrows(IllegalValueException.class, expectedMessage, job::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullStatus_throwsIllegalValueException() throws DuplicateEmployeeException {
+        XmlAdaptedEmployee sampleEmployee = generateSampleEmployee();
+        List<XmlAdaptedEmployee> assignedEmployees = new ArrayList<>();
+        assignedEmployees.add(sampleEmployee);
+
+        List<XmlAdaptedRemark> remarks = new ArrayList<>();
+
+        XmlAdaptedJob job = new XmlAdaptedJob(VALID_JOB_NUMBER, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_VEHICLE_NUMBER, null, VALID_DATE, assignedEmployees, remarks);
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Status.class.getSimpleName());
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, job::toModelType);
+    }
+
+    @Test
+    public void equals() {
+        XmlAdaptedEmployee sampleEmployee = generateSampleEmployee();
+        List<XmlAdaptedEmployee> assignedEmployees = new ArrayList<>();
+        assignedEmployees.add(sampleEmployee);
+
+        List<XmlAdaptedRemark> remarks = new ArrayList<>();
+
+        XmlAdaptedJob job1 = new XmlAdaptedJob(VALID_JOB_NUMBER, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_VEHICLE_NUMBER, VALID_STATUS, VALID_DATE, assignedEmployees, remarks);
+        XmlAdaptedJob job2 = new XmlAdaptedJob(VALID_JOB_NUMBER + 1, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_VEHICLE_NUMBER, VALID_STATUS, VALID_DATE, assignedEmployees, remarks);
+
+        // same object -> returns true
+        assertTrue(job1.equals(job1));
+
+        // same values -> returns true
+        XmlAdaptedJob jobCopy = new XmlAdaptedJob(VALID_JOB_NUMBER, VALID_NAME, VALID_PHONE, VALID_EMAIL,
+                VALID_VEHICLE_NUMBER, VALID_STATUS, VALID_DATE, assignedEmployees, remarks);
+        assertTrue(job1.equals(jobCopy));
+
+        // different types -> returns false
+        assertFalse(job1.equals(1));
+
+        // null -> returns false
+        assertFalse(job1.equals(null));
+
+        // different jobs -> return false
+        assertFalse(job1.equals(job2));
+
     }
 
     /**Generates a sample employe in the Xml form*/

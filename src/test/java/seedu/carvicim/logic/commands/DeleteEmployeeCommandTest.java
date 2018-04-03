@@ -35,7 +35,7 @@ public class DeleteEmployeeCommandTest {
     private Model model = new ModelManager(getTypicalCarvicim(), new UserPrefs());
 
     @Test
-    public void execute_deleteSuccess_notAssignedToJob() throws Exception {
+    public void execute_deleteFailure_employeeIsAssignedToJob() throws Exception {
         model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
 
         Employee employeeToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -46,7 +46,7 @@ public class DeleteEmployeeCommandTest {
     }
 
     @Test
-    public void execute_deleteFailure_assignedToJob() throws Exception {
+    public void execute_deleteSuccess_employeeNotAssignedToJob() throws Exception {
         model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
 
         Employee employeeToDelete = model.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());

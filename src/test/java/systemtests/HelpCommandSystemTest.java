@@ -13,7 +13,7 @@ import guitests.GuiRobot;
 import guitests.guihandles.HelpWindowHandle;
 import seedu.carvicim.logic.commands.DeleteEmployeeCommand;
 import seedu.carvicim.logic.commands.HelpCommand;
-import seedu.carvicim.logic.commands.SelectCommand;
+import seedu.carvicim.logic.commands.SelectEmployeeCommand;
 import seedu.carvicim.ui.StatusBarFooter;
 
 /**
@@ -55,7 +55,7 @@ public class HelpCommandSystemTest extends CarvicimSystemTest {
         getMainWindowHandle().focus();
 
         // assert that while the help window is open the UI updates correctly for a command execution
-        executeCommand(SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        executeCommand(SelectEmployeeCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals("", getCommandBox().getInput());
         assertCommandBoxShowsDefaultStyle();
         assertNotEquals(HelpCommand.SHOWING_HELP_MESSAGE, getResultDisplay().getText());

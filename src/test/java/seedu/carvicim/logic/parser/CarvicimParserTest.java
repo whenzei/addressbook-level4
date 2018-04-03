@@ -24,7 +24,7 @@ import seedu.carvicim.logic.commands.HelpCommand;
 import seedu.carvicim.logic.commands.HistoryCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
 import seedu.carvicim.logic.commands.RedoCommand;
-import seedu.carvicim.logic.commands.SelectCommand;
+import seedu.carvicim.logic.commands.SelectEmployeeCommand;
 import seedu.carvicim.logic.commands.UndoCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
 import seedu.carvicim.model.person.Employee;
@@ -99,9 +99,9 @@ public class CarvicimParserTest {
 
     @Test
     public void parseCommand_select() throws Exception {
-        SelectCommand command = (SelectCommand) parser.parseCommand(
-                SelectCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
-        assertEquals(new SelectCommand(INDEX_FIRST_PERSON), command);
+        SelectEmployeeCommand command = (SelectEmployeeCommand) parser.parseCommand(
+                SelectEmployeeCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new SelectEmployeeCommand(INDEX_FIRST_PERSON), command);
     }
 
     @Test

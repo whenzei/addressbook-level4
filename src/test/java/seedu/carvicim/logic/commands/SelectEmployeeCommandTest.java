@@ -26,9 +26,9 @@ import seedu.carvicim.model.UserPrefs;
 import seedu.carvicim.ui.testutil.EventsCollectorRule;
 
 /**
- * Contains integration tests (interaction with the Model) for {@code SelectCommand}.
+ * Contains integration tests (interaction with the Model) for {@code SelectEmployeeCommand}.
  */
-public class SelectCommandTest {
+public class SelectEmployeeCommandTest {
     @Rule
     public final EventsCollectorRule eventsCollectorRule = new EventsCollectorRule();
 
@@ -75,14 +75,14 @@ public class SelectCommandTest {
 
     @Test
     public void equals() {
-        SelectCommand selectFirstCommand = new SelectCommand(INDEX_FIRST_PERSON);
-        SelectCommand selectSecondCommand = new SelectCommand(INDEX_SECOND_PERSON);
+        SelectEmployeeCommand selectFirstCommand = new SelectEmployeeCommand(INDEX_FIRST_PERSON);
+        SelectEmployeeCommand selectSecondCommand = new SelectEmployeeCommand(INDEX_SECOND_PERSON);
 
         // same object -> returns true
         assertTrue(selectFirstCommand.equals(selectFirstCommand));
 
         // same values -> returns true
-        SelectCommand selectFirstCommandCopy = new SelectCommand(INDEX_FIRST_PERSON);
+        SelectEmployeeCommand selectFirstCommandCopy = new SelectEmployeeCommand(INDEX_FIRST_PERSON);
         assertTrue(selectFirstCommand.equals(selectFirstCommandCopy));
 
         // different types -> returns false
@@ -96,15 +96,15 @@ public class SelectCommandTest {
     }
 
     /**
-     * Executes a {@code SelectCommand} with the given {@code index}, and checks that {@code JumpToListRequestEvent}
+     * Executes a {@code SelectEmployeeCommand} with the given {@code index}, and checks that {@code JumpToListRequestEvent}
      * is raised with the correct index.
      */
     private void assertExecutionSuccess(Index index) {
-        SelectCommand selectCommand = prepareCommand(index);
+        SelectEmployeeCommand selectEmployeeCommand = prepareCommand(index);
 
         try {
-            CommandResult commandResult = selectCommand.execute();
-            assertEquals(String.format(SelectCommand.MESSAGE_SELECT_PERSON_SUCCESS, index.getOneBased()),
+            CommandResult commandResult = selectEmployeeCommand.execute();
+            assertEquals(String.format(SelectEmployeeCommand.MESSAGE_SELECT_PERSON_SUCCESS, index.getOneBased()),
                     commandResult.feedbackToUser);
         } catch (CommandException ce) {
             throw new IllegalArgumentException("Execution of command should not fail.", ce);
@@ -115,14 +115,14 @@ public class SelectCommandTest {
     }
 
     /**
-     * Executes a {@code SelectCommand} with the given {@code index}, and checks that a {@code CommandException}
+     * Executes a {@code SelectEmployeeCommand} with the given {@code index}, and checks that a {@code CommandException}
      * is thrown with the {@code expectedMessage}.
      */
     private void assertExecutionFailure(Index index, String expectedMessage) {
-        SelectCommand selectCommand = prepareCommand(index);
+        SelectEmployeeCommand selectEmployeeCommand = prepareCommand(index);
 
         try {
-            selectCommand.execute();
+            selectEmployeeCommand.execute();
             fail("The expected CommandException was not thrown.");
         } catch (CommandException ce) {
             assertEquals(expectedMessage, ce.getMessage());
@@ -131,11 +131,11 @@ public class SelectCommandTest {
     }
 
     /**
-     * Returns a {@code SelectCommand} with parameters {@code index}.
+     * Returns a {@code SelectEmployeeCommand} with parameters {@code index}.
      */
-    private SelectCommand prepareCommand(Index index) {
-        SelectCommand selectCommand = new SelectCommand(index);
-        selectCommand.setData(model, new CommandHistory(), new UndoRedoStack());
-        return selectCommand;
+    private SelectEmployeeCommand prepareCommand(Index index) {
+        SelectEmployeeCommand selectEmployeeCommand = new SelectEmployeeCommand(index);
+        selectEmployeeCommand.setData(model, new CommandHistory(), new UndoRedoStack());
+        return selectEmployeeCommand;
     }
 }

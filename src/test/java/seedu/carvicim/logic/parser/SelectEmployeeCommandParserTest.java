@@ -7,23 +7,23 @@ import static seedu.carvicim.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.Test;
 
-import seedu.carvicim.logic.commands.SelectCommand;
+import seedu.carvicim.logic.commands.SelectEmployeeCommand;
 
 /**
  * Test scope: similar to {@code DeleteEmployeeCommandParserTest}.
  * @see DeleteEmployeeCommandParserTest
  */
-public class SelectCommandParserTest {
+public class SelectEmployeeCommandParserTest {
 
-    private SelectCommandParser parser = new SelectCommandParser();
+    private SelectEmployeeCommandParser parser = new SelectEmployeeCommandParser();
 
     @Test
     public void parse_validArgs_returnsSelectCommand() {
-        assertParseSuccess(parser, "1", new SelectCommand(INDEX_FIRST_PERSON));
+        assertParseSuccess(parser, "1", new SelectEmployeeCommand(INDEX_FIRST_PERSON));
     }
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, SelectEmployeeCommand.MESSAGE_USAGE));
     }
 }

@@ -17,6 +17,7 @@ import seedu.carvicim.model.job.Date;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobList;
+import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.UniqueEmployeeList;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
@@ -107,7 +108,20 @@ public class Carvicim implements ReadOnlyCarvicim {
     }
 
     /**
-     * Adds a remark to a specified job in Carvici
+     * Removes {@code job} from this {@code Carvicim}.
+     * @throws JobNotFoundException if the {@code job} is not in this {@code Carvicim}.
+     */
+    public boolean closeJob(Job job) throws JobNotFoundException {
+        if (jobs.remove(job)) {
+            return true;
+        } else {
+            throw new JobNotFoundException();
+        }
+    }
+
+
+    /**
+     * Adds a remark to a specified job in Carvicim
      */
     public void addRemark(Job job, Remark remark) {
         Iterator<Job> iterator = jobs.iterator();
@@ -262,6 +276,8 @@ public class Carvicim implements ReadOnlyCarvicim {
         return other == this // short circuit if same object
                 || (other instanceof Carvicim // instanceof handles nulls
                 && this.employees.equals(((Carvicim) other).employees)
+                && this.jobs.equals(((Carvicim) other).jobs)
+                && this.archiveJobs.equals(((Carvicim) other).archiveJobs)
                 && this.tags.equalsOrderInsensitive(((Carvicim) other).tags));
     }
 

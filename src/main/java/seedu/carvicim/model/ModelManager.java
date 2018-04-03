@@ -144,6 +144,9 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public synchronized void closeJob(Job target) throws JobNotFoundException {
+        carvicim.closeJob(target);
+        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+        indicateAddressBookChanged();
     }
 
     @Override

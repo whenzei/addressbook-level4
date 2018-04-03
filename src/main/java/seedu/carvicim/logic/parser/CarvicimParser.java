@@ -12,6 +12,7 @@ import seedu.carvicim.logic.commands.AddEmployeeCommand;
 import seedu.carvicim.logic.commands.AddJobCommand;
 import seedu.carvicim.logic.commands.ArchiveCommand;
 import seedu.carvicim.logic.commands.ClearCommand;
+import seedu.carvicim.logic.commands.CloseJobCommand;
 import seedu.carvicim.logic.commands.Command;
 import seedu.carvicim.logic.commands.CommandWords;
 import seedu.carvicim.logic.commands.DeleteEmployeeCommand;
@@ -165,6 +166,9 @@ public class CarvicimParser {
 
         case RejectCommand.COMMAND_WORD:
             return new RejectCommandParser().parse(arguments);
+
+        case CloseJobCommand.COMMAND_WORD:
+            return new CloseJobCommandParser().parse(arguments);
 
         case AcceptCommand.COMMAND_WORD:
             return new AcceptCommandParser().parse(arguments);

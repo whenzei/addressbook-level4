@@ -62,10 +62,19 @@ public class DeleteEmployeeCommandSystemTest extends CarvicimSystemTest {
 
         /* Case: filtered employee list, delete index within bounds of carvicim book and employee list -> deleted */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        Index
-                index = INDEX_FIRST_PERSON;
+        Index index = INDEX_FIRST_PERSON;
         assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
         assertCommandSuccess(index);
+
+        /* Case: filtered employee list, delete index within bounds of carvicim but out of bounds of employee list
+         * -> rejected
+         */
+        showPersonsWithName(KEYWORD_MATCHING_MEIER);
+        int invalidIndex = getModel().getCarvicim().getEmployeeList().size();
+        command = DeleteEmployeeCommand.COMMAND_WORD + " " + invalidIndex;
+        assertCommandFailure(command, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
+
+        /* ------------------- Performing delete operation while a employee card is selected ---------------------- */
 
         /* Case: delete the selected employee -> employee list panel selects the employee before the deleted employee */
         showAllPersons();
@@ -140,7 +149,7 @@ public class DeleteEmployeeCommandSystemTest extends CarvicimSystemTest {
      * 1. Asserts that the command box displays an empty string.<br>
      * 2. Asserts that the result display box displays {@code expectedResultMessage}.<br>
      * 3. Asserts that the model related components equal to {@code expectedModel}.<br>
-     * 4. Asserts that the browser url and selected card remains unchanged.<br>
+     * 4. Asserts that the selected card remains unchanged.<br>
      * 5. Asserts that the status bar's sync status changes.<br>
      * 6. Asserts that the command box has the default style class.<br>
      * Verifications 1 to 3 are performed by
@@ -168,7 +177,7 @@ public class DeleteEmployeeCommandSystemTest extends CarvicimSystemTest {
      * 1. Asserts that the command box displays {@code command}.<br>
      * 2. Asserts that result display box displays {@code expectedResultMessage}.<br>
      * 3. Asserts that the model related components equal to the current model.<br>
-     * 4. Asserts that the browser url, selected card and status bar remain unchanged.<br>
+     * 4. Asserts that the selected card and status bar remain unchanged.<br>
      * 5. Asserts that the command box has the error style.<br>
      * Verifications 1 to 3 are performed by
      * {@code CarvicimSystemTest#assertApplicationDisplaysExpected(String, String, Model)}.<br>

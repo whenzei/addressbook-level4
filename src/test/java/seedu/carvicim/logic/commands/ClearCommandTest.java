@@ -1,7 +1,7 @@
 package seedu.carvicim.logic.commands;
 
 import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicim;
+import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicimWithAssignedJobs;
 
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class ClearCommandTest {
 
     @Test
     public void execute_nonEmptyAddressBook_success() {
-        Model model = new ModelManager(getTypicalCarvicim(), new UserPrefs());
+        Model model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
         assertCommandSuccess(prepareCommand(model), model, ClearCommand.MESSAGE_SUCCESS, model);
     }
 

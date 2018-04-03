@@ -90,6 +90,7 @@ public class Carvicim implements ReadOnlyCarvicim {
 
         try {
             setEmployees(syncedEmployeeList);
+            setJobs(syncedJobList);
         } catch (DuplicateEmployeeException e) {
             throw new AssertionError("AddressBooks should not have duplicate employees");
         }

@@ -58,7 +58,8 @@ public class SelectEmployeeCommandSystemTest extends CarvicimSystemTest {
          */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
         int invalidIndex = getModel().getCarvicim().getEmployeeList().size();
-        assertCommandFailure(SelectEmployeeCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
+        assertCommandFailure(SelectEmployeeCommand.COMMAND_WORD + " " + invalidIndex,
+                MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
 
         /* Case: filtered employee list, select index within bounds of carvicim book and employee list -> selected */
         Index validIndex = Index.fromOneBased(1);
@@ -78,7 +79,8 @@ public class SelectEmployeeCommandSystemTest extends CarvicimSystemTest {
 
         /* Case: invalid index (size + 1) -> rejected */
         invalidIndex = getModel().getFilteredPersonList().size() + 1;
-        assertCommandFailure(SelectEmployeeCommand.COMMAND_WORD + " " + invalidIndex, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
+        assertCommandFailure(SelectEmployeeCommand.COMMAND_WORD + " " + invalidIndex,
+                MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
 
         /* Case: invalid arguments (alphabets) -> rejected */
         assertCommandFailure(SelectEmployeeCommand.COMMAND_WORD + " abc",

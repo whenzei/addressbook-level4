@@ -2,7 +2,8 @@
 ifdef::env-github,env-browser[:relfileprefix: docs/]
 
 https://travis-ci.org/CS2103JAN2018-W09-B1/main[image:https://travis-ci.org/CS2103JAN2018-W09-B1/main.svg?branch=master[Build Status]]
-https://coveralls.io/github/se-edu/addressbook-level4?branch=master[image:https://coveralls.io/repos/github/CS2103JAN2018-W09-B1/main/badge.svg?branch=master[Coverage Status]]
+https://coveralls.io/github/CS2103JAN2018-W09-B1/main?branch=master[image:https://coveralls.io/repos/github/CS2103JAN2018-W09-B1/main/badge.svg?branch=master[Coverage Status]]
+
 
 image::docs/images/CarviciM_logo.PNG[width="150", align="left"]
 CarviciM is your go-to desktop application for managing car servicing jobs. If you prefer to perform your tasks with minimal usage of the mouse, this is the application just for you!

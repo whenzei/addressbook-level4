@@ -527,8 +527,23 @@ Format: `exit`
 CarviciM data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
 
+=== Login to Gmail : `login`
+
+You can use this command to login to Gmail. This command will direct you to the login page of Google. +
+Format: `login`
+
+[NOTE]
+====
+After you have successfully logged in, Google will ask if you allow CarviciM to access your Gmail. Click on `Allow`.
+====
+
 === Email assigned employees belonging to a job : `email`
 
+*V1.4 (current):*
+You can use this command to send an email to a dummy email address. +
+Format: `email`
+
+*V1.5 (future):*
 You can use this command to send a notice email to all assigned employees of a job. +
 Format: `email JOB_NUMBER`
 

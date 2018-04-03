@@ -44,4 +44,11 @@ public interface Storage extends CarvicimStorage, UserPrefsStorage, ArchiveJobSt
      * Raises {@link DataSavingExceptionEvent} if there was an error during saving.
      */
     void handleAddressBookChangedEvent(CarvicimChangedEvent abce);
+
+    /**
+     * Saves the archived job entries to the hard disk.
+     *   Creates the data file if it is missing.
+     * Raises {@link DataSavingExceptionEvent} if there was an error during saving.
+     */
+    void handleArchiveEvent(CarvicimChangedEvent abce);
 }

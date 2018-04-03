@@ -129,6 +129,25 @@ Examples:
 *** You will see "Remark added: ..." followed by the details of the remark in the result display. +
 *** You will see the newly added remark in the <<job-display-panel,job display panel>>, when the job is selected.
 
+=== Archiving job entries: `archive`
+
+You can use this command to archive job entries. +
+Format: `archive sd/START_DATE ed/END_DATE`
+
+****
+* Archives the job entries within the specified `START_DATE` and `END_DATE`.
+* The `START_DATE` *must be earlier than* the `END_DATE`.
+* Both dates should be in the form of *MMM DD YYYY*.
+****
+
+Examples:
+
+** Example 1: +
+. `archive sd/Mar 25 2018 ed/Apr 03 2018` +
+*** Archive the job entries within the selected date range into CarviciM. +
+*** You will see "Archived Successfully" +
+*** You will see the newly created archive file.
+
 === Adding an employee: `adde`
 
 You can use this command to add an employee to CarviciM. +
@@ -146,6 +165,11 @@ Examples:
 
 You can use this command to view a list of all employees in CarviciM. +
 Format: `liste`
+
+=== Sorting all employees : `sort`
+
+You can use this command to sort the list of employees alphabetically in CarviciM. +
+Format: `sort`
 
 === Listing all jobs : `listj`
 
@@ -527,6 +551,8 @@ e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 e.g. `closej 1232`
 * *Add Remark* `remark j/JOB_NUMBER r/REMARK` +
 e.g. `remark j/12 r/Urgent`
+* *Archive job entries* `archive sd/START_DATE ed/END_DATE` +
+e.g. `archive sd/Mar 25 2018 ed/Apr 03 2018`
 * *Add Employee* `adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` +
 e.g. `adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
 * *Delete Employee* : `deletee INDEX` +
@@ -534,6 +560,7 @@ e.g. `deletee 3`
 * *Find Employees* : `finde KEYWORD [MORE_KEYWORDS]` +
 e.g. `finde James Jake`
 * *List Employee* : `liste`
+* *Sort Employee* : `sort`
 * *Import excel file* : `import` +
 e.g. `import excel.xls`
 * *Accept imported job* : `accept NUMBER` +

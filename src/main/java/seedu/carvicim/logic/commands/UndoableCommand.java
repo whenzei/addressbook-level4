@@ -8,6 +8,8 @@ import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.Carvicim;
 import seedu.carvicim.model.ReadOnlyCarvicim;
+import seedu.carvicim.storage.session.ImportSession;
+import seedu.carvicim.storage.session.SessionData;
 
 /**
  * Represents a command which can be undone and redone.
@@ -15,6 +17,7 @@ import seedu.carvicim.model.ReadOnlyCarvicim;
 public abstract class UndoableCommand extends Command {
     private ReadOnlyCarvicim previousAddressBook;
     private CommandWords previousCommandWords;
+    private SessionData sessionData;
 
     protected abstract CommandResult executeUndoableCommand() throws CommandException;
 
@@ -25,6 +28,7 @@ public abstract class UndoableCommand extends Command {
         requireNonNull(model);
         this.previousAddressBook = new Carvicim(model.getCarvicim());
         this.previousCommandWords = new CommandWords(model.getCommandWords());
+        this.sessionData = ImportSession.getInstance().getSessionData();
     }
 
     /**
@@ -43,6 +47,7 @@ public abstract class UndoableCommand extends Command {
         model.resetData(previousAddressBook, previousCommandWords);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+        ImportSession.getInstance().setSessionData(sessionData);
     }
 
     /**

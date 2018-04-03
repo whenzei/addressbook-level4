@@ -6,6 +6,8 @@ import static seedu.carvicim.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.carvicim.logic.commands.AcceptAllCommand;
+import seedu.carvicim.logic.commands.AcceptCommand;
 import seedu.carvicim.logic.commands.AddEmployeeCommand;
 import seedu.carvicim.logic.commands.AddJobCommand;
 import seedu.carvicim.logic.commands.ArchiveCommand;
@@ -18,13 +20,19 @@ import seedu.carvicim.logic.commands.FindEmployeeCommand;
 import seedu.carvicim.logic.commands.HelpCommand;
 import seedu.carvicim.logic.commands.HistoryCommand;
 import seedu.carvicim.logic.commands.ImportAllCommand;
+import seedu.carvicim.logic.commands.ImportCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
+import seedu.carvicim.logic.commands.ListJobCommand;
 import seedu.carvicim.logic.commands.LoginCommand;
 import seedu.carvicim.logic.commands.RedoCommand;
+import seedu.carvicim.logic.commands.RejectAllCommand;
+import seedu.carvicim.logic.commands.RejectCommand;
 import seedu.carvicim.logic.commands.RemarkCommand;
+import seedu.carvicim.logic.commands.SaveCommand;
 import seedu.carvicim.logic.commands.SelectCommand;
 import seedu.carvicim.logic.commands.SetCommand;
 import seedu.carvicim.logic.commands.SortCommand;
+import seedu.carvicim.logic.commands.SwitchCommand;
 import seedu.carvicim.logic.commands.ThemeCommand;
 import seedu.carvicim.logic.commands.UndoCommand;
 
@@ -136,6 +144,30 @@ public class CarvicimParser {
 
         case LoginCommand.COMMAND_WORD:
             return new LoginCommand();
+
+        case ImportCommand.COMMAND_WORD:
+            return new ImportCommandParser().parse(arguments);
+
+        case SaveCommand.COMMAND_WORD:
+            return new SaveCommand();
+
+        case ListJobCommand.COMMAND_WORD:
+            return new ListJobCommand();
+
+        case SwitchCommand.COMMAND_WORD:
+            return new SwitchCommand();
+
+        case AcceptAllCommand.COMMAND_WORD:
+            return new AcceptAllCommand();
+
+        case RejectAllCommand.COMMAND_WORD:
+            return new RejectAllCommand();
+
+        case RejectCommand.COMMAND_WORD:
+            return new RejectCommandParser().parse(arguments);
+
+        case AcceptCommand.COMMAND_WORD:
+            return new AcceptCommandParser().parse(arguments);
 
         default:
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 import seedu.carvicim.storage.session.exceptions.DataIndexOutOfBoundsException;
 
@@ -13,7 +12,7 @@ import seedu.carvicim.storage.session.exceptions.DataIndexOutOfBoundsException;
 /**
  * Represents a field that spans one or more columns
  */
-public class RowData implements ExcelColumnSpannable {
+public class RowData {
     private final int startIndex;
     private final int endIndex;
 
@@ -22,31 +21,19 @@ public class RowData implements ExcelColumnSpannable {
         this.endIndex = endIndex;
     }
 
-    @Override
     public int getStartIndex() {
         return startIndex;
     }
 
-    @Override
     public int getEndIndex() {
         return endIndex;
     }
 
-    @Override
-    public ArrayList<String> readData(Workbook workbook, int sheetNumber, int rowNumber)
-            throws DataIndexOutOfBoundsException {
-        if (sheetNumber < workbook.getFirstVisibleTab()
-                || sheetNumber >= workbook.getNumberOfSheets() + workbook.getFirstVisibleTab()) {
-            throw new DataIndexOutOfBoundsException("Sheets", workbook.getFirstVisibleTab(),
-                    workbook.getNumberOfSheets() + workbook.getFirstVisibleTab(), sheetNumber);
-        }
-        Sheet sheet = workbook.getSheetAt(sheetNumber);
-        return readDataFromSheet(sheet, rowNumber);
-    }
-
-    @Override
+    /**
+     * Reads all the entries between (@code startIndex) and (@code endIndex) from a row in the excel file
+     */
     public ArrayList<String> readDataFromSheet(Sheet sheet, int rowNumber)
-        throws DataIndexOutOfBoundsException {
+            throws DataIndexOutOfBoundsException {
         if (rowNumber < sheet.getFirstRowNum() || rowNumber > sheet.getLastRowNum()) {
             throw new DataIndexOutOfBoundsException("Rows", sheet.getFirstRowNum(), sheet.getLastRowNum(), rowNumber);
         }

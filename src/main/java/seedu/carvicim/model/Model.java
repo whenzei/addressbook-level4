@@ -18,11 +18,18 @@ import seedu.carvicim.model.remark.Remark;
  * The API of the Model component.
  */
 public interface Model {
+
     /** {@code Predicate} that always evaluate to true */
     Predicate<Employee> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
 
     /** {@code Predicate} that always evaluate to true */
     Predicate<Job> PREDICATE_SHOW_ALL_JOBS = unused -> true;
+
+    boolean isViewingImportedJobs();
+
+    void switchJobView();
+
+    void resetJobView();
 
     /** Clears existing backing model and replaces with the provided new data. */
     void resetData(ReadOnlyCarvicim newData, CommandWords newCommandWords);

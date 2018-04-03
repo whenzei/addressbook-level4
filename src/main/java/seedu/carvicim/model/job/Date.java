@@ -15,7 +15,7 @@ public class Date {
     public static final String MESSAGE_DATE_CONSTRAINTS = "Date should be of the format MMM DD YYYY";
     public static final String DATE_VALIDATION_REGEX = "\\w\\w\\w\\s(0[1-9]|[12][0-9]|3[01])\\s(19|20)\\d\\d";
 
-    private static final String DATE_FORMATTER_PATTERN = "MMM dd yyy";
+    private static final String DATE_FORMATTER_PATTERN = "MMM dd yyyy";
 
     private static final String DATE_SPLIT_REGEX = " ";
     private static final int DATE_DATA_INDEX_DAY = 1;
@@ -61,7 +61,7 @@ public class Date {
     }
 
     /**
-     * Generates the string representation of the current date on the system
+     * Convert month abbreviation to number
      */
     private int convertMonth(String month) {
         int i;

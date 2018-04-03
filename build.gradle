@@ -72,6 +72,8 @@ dependencies {
     compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     compile 'com.google.apis:google-api-services-people:v1-rev250-1.23.0'
 
+    compile 'javax.mail:mail:1.4.7'
+
 }
 
 shadowJar {

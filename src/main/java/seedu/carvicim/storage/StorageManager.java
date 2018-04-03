@@ -86,7 +86,6 @@ public class StorageManager extends ComponentManager implements Storage {
         logger.info(LogsCenter.getEventHandlingLogMessage(event, "Local data changed, saving to file"));
         try {
             saveCarvicim(event.data);
-            saveArchiveJob(event.data);
         } catch (IOException e) {
             raise(new DataSavingExceptionEvent(e));
         }
@@ -120,6 +119,17 @@ public class StorageManager extends ComponentManager implements Storage {
     public void saveArchiveJob(ReadOnlyCarvicim carvicim, String filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
         archiveJobStorage.saveArchiveJob(carvicim, filePath);
+    }
+
+    @Override
+    @Subscribe
+    public void handleArchiveEvent(CarvicimChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event, "Archiving data, saving to file"));
+        try {
+            saveArchiveJob(event.data);
+        } catch (IOException e) {
+            raise(new DataSavingExceptionEvent(e));
+        }
     }
 
 }

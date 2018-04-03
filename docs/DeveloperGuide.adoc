@@ -602,6 +602,111 @@ If there is no `INDEX` present, `theme` command will return an invalid message, 
 ** Cons: Violates Law of Demeter as `ThemeCommand` has knowledge and access to `Stage`.
 // end::theme[]
 
+// tag::sort[]
+=== Sort feature
+==== Current Implementation
+
+The sort mechanism is facilitated by a `Comparator`. It supports the comparison of employee’s name and arranges the employee list alphabetically.
+
+The `Comparator` is implemented this way:
+[source,java]
+----
+    public UniqueEmployeeList sortList() {
+        employees.sortName(new Comparator<Employee>() {
+            @Override
+            public int compare(Employee employee1, Employee employee2) {
+                return employee1.getName().toString().compareToIgnoreCase(employee2.getName().toString());
+            }
+        });
+        return employees;
+    }
+----
+
+The following sequence diagram shows how the sort operation works:
+
+.`SortCommand` sequence diagram
+image::SortSequenceDiagram.png[width="800"]
+
+==== Design Considerations
+
+===== Aspect: How `SortCommand` executes +
+* **Current choice:** Sorts the employee list after typing in the sort command.
+** Pros: Easy to implement, Able to locate the newly added employee easily at the end of the Employee UI Panel.
+** Cons: May be a hassle to type the sort command word whenever we want to sort the employee list.
+* _Alternative:_ Sorts the employee list automatically after adding new employee.
+** Pros: We do not need to type in the sort command word.
+** Cons: We must look through the entire employee list to locate the newly added employee.
+// end::sort[]
+
+// tag::archive[]
+=== Archive feature
+==== Current Implementation
+
+...
+
+The `ArchiveCommand` is implemented this way to ensure that the specified starting date is earlier than the ending date:
+[source,java]
+----
+public CommandResult executeUndoableCommand() throws CommandException {
+    if (toArchive.compareTo(toArchive.getStartDate(), toArchive.getEndDate()) > 0) {
+        throw new CommandException(MESSAGE_INVALID_DATERANGE);
+    }
+    requireNonNull(model);
+    model.archiveJob(toArchive);
+    return new CommandResult(MESSAGE_SUCCESS);
+}
+----
+
+`Carvicim` code snippet that extracts the job entries within the selected date range:
+[source,java]
+----
+public void archiveJob(DateRange dateRange) {
+    archiveJobs = new JobList();
+    Iterator<Job> iterator = jobs.iterator();
+    while (iterator.hasNext()) {
+        Job job = iterator.next();
+        Date date = job.getDate();
+        Date startDate = dateRange.getStartDate();
+        Date endDate = dateRange.getEndDate();
+        if (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0) {
+            archiveJobs.add(job);
+        }
+    }
+}
+----
+
+`StorageManager` code snippet that handles CarvicimChangedEvent to archive the job entries:
+[source,java]
+----
+public void handleArchiveEvent(CarvicimChangedEvent event) {
+    logger.info(LogsCenter.getEventHandlingLogMessage(event, "Archiving data, saving to file"));
+    try {
+        saveArchiveJob(event.data);
+    } catch (IOException e) {
+        raise(new DataSavingExceptionEvent(e));
+    }
+}
+----
+
+==== Design Considerations
+
+===== Aspect: How `ArchiveCommand` executes +
+* **Current choice:** Archive job entries within a selected date range.
+** Pros: We get to select the range of job entries that we will like to archive.
+** Cons: Harder to implement.
+* _Alternative:_ Archives all job entries.
+** Pros: Easy to implement.
+** Cons: We cannot select the range of job entries that we will like to archive.
+
+===== Aspect: How `ArchiveCommand` saves data +
+* **Current choice:** Overwrites the existing archive file.
+** Pros: Will use less memory.
+** Cons: We cannot archive multiple files.
+* _Alternative:_ Creates a new archive file.
+** Pros: We get to archive multiple files with different selected date range.
+** Cons: May have performance issues in terms of memory usage.
+// end::archive[]
+
 // tag::undoredo[]
 === Undo/Redo feature
 ==== Current Implementation
@@ -1589,6 +1694,16 @@ Use case ends.
 Use case ends.
 
 [discrete]
+=== Use case: Sort employee list
+
+*MSS*
+
+1.  User request to sort employee list.
+2.  CarviciM sorts employee list alphabetically according to their names.
++
+Use case ends.
+
+[discrete]
 === Use case: Customize the colour label of job status
 
 *MSS*
@@ -1809,22 +1924,28 @@ Use case ends.
 Use case ends.
 
 [discrete]
-=== Use case: Sort employee list
-
-*MSS*
-
-1.  User request to sort employee list.
-2.  CarviciM sorts employee list alphabetically according to their names.
-+
-Use case ends.
-
-[discrete]
 === Use case: Archiving of job entries
 
 *MSS*
 
 1.  User specifies the date range for archiving.
-2.  CarviciM extracts the job entries within the selected range and archive them.
+2.  CarviciM extracts the job entries within the selected range and saves them to a new file.
++
+Use case ends.
+
+*Extensions*
+
+[none]
+* 1a. The given date format is invalid.
+[none]
+** 1a1. CarviciM shows an error message.
++
+Use case ends.
+
+[none]
+* 1b. The given date range is invalid.
+[none]
+** 1b1. CarviciM shows an error message.
 +
 Use case ends.
 

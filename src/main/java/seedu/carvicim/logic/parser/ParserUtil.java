@@ -74,6 +74,19 @@ public class ParserUtil {
      * trimmed.
      * @throws IllegalValueException if the specified index is invalid (not non-zero unsigned integer).
      */
+    public static int parseInteger(String integer) throws IllegalValueException {
+        String trimmedIndex = integer.trim();
+        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+            throw new IllegalValueException(MESSAGE_INVALID_INDEX);
+        }
+        return Integer.parseInt(trimmedIndex);
+    }
+
+    /**
+     * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
+     * trimmed.
+     * @throws IllegalValueException if the specified index is invalid (not non-zero unsigned integer).
+     */
     public static Index parseIndex(String oneBasedIndex) throws IllegalValueException {
         String trimmedIndex = oneBasedIndex.trim();
         if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {

@@ -86,7 +86,7 @@ These are the command format for the user guide:
 You can use this command to bring up the help menu. +
 Format: `help`
 
-=== Adding an job entry: `addj`
+=== Adding a job entry: `addj`
 
 You can use this command to add a job to CarviciM. +
 Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+`
@@ -117,6 +117,18 @@ Examples:
 *** You will see "Job 123 closed" in the <<result-display,result display>>. +
 *** You will not see job of number 123 in the <<jobs-ui-panel,jobs UI panel>>.
 
+=== Adding remark to a job: `remark`
+
+You can use this command to add a remark to a specified job. +
+Format: `remark j/JOB_NUMBER r/REMARK`
+
+Examples:
+
+** Example 1: +
+. `remark j/3 r/Take note of the headlights` +
+*** You will see "Remark added: ..." followed by the details of the remark in the result display. +
+*** You will see the newly added remark in the <<job-display-panel,job display panel>>, when the job is selected.
+
 === Adding an employee: `adde`
 
 You can use this command to add an employee to CarviciM. +
@@ -135,24 +147,35 @@ Examples:
 You can use this command to view a list of all employees in CarviciM. +
 Format: `liste`
 
-=== Editing a employee : `edite`
+=== Listing all jobs : `listj`
 
-You can use this command to edit an existing employee in CarviciM. +
-Format: `edite INDEX [p/PHONE] [e/EMAIL] [t/TAG]...`
+You can use this command to view a list of all employees in CarviciM. +
+Format: `listj`
+
+=== Selecting employees by list number: `select`
+
+You can use this command to select the specified employee from CarviciM to view jobs associated
+with the emlpoyee. +
+Format: `select INDEX`
 
 ****
-* Edits the employee at the specified `INDEX`. The index refers to the index number shown in the last employee listing. The index *must be a positive integer* 1, 2, 3, ...
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
+* Selects the employee at the specified `INDEX`.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* 1, 2, 3, ...
 ****
-
 Examples:
 
 ** Example 1: +
-. `edite 1 p/91234567 e/johndoe@example.com` +
-*** Edits the phone number and email address of the 1st employee to be `91234567` and `johndoe@example.com` respectively. +
-*** You will see "Edited Employee: ... " followed by the new updated details of the employee in the <<result-display,result display>>. +
-*** You will see the edited employee details in the <<employees-ui-panel,employee UI panel>>.
+. `liste` +
+*** You will see a list of employees displayed in the UI panel.
+. `select 2` +
+*** You will see an updated <<job-display-panel,job display panel>> which has the jobs of the 2nd employee.
+
+** Example 2: +
+. `finde Betsy` +
+*** You will see the results of the `finde` command which shows all employees with matching keyword name.
+. `select 1` +
+*** You will see an updated <<job-display-panel,job display panel>> which has the jobs of the 1st employee.
 
 === Locating employees by name: `finde`
 
@@ -176,6 +199,7 @@ Examples:
 ** Example 2: +
 . `finde Betsy Tim John` +
 *** You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees UI panel.
+
 
 === Deleting an employee : `deletee`
 
@@ -218,18 +242,20 @@ Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 Examples:
 
 ** Example 1: +
-. `set add a` +
-*** Sets `add` command word to `a` using default. +
-*** You will see "add has been replaced with a!" in the <<result-display,result display>>.
+. `set adde a` +
+*** Sets `adde` command word to `a` using default. +
+*** You will see "adde has been replaced with a!" in the <<result-display,result display>>.
 
 ** Example 2: +
-. `set delete d` +
-*** Sets `delete` command word to `d` using default. +
-*** You will see "delete has been replaced with d!" in the result display.
+. `set deletee d` +
+*** Sets `deletee` command word to `d` using default. +
+*** You will see "deletee has been replaced with d!" in the result display.
 // end::set[]
 
 // tag::importexport[]
 === Importing jobs from an excel file
+
+[[import-command]]
 ==== Importing a new excel file: `import`
 
 You can use this command to load your excel file by filename or filepath. +
@@ -245,29 +271,51 @@ Format: `import FILE_PATH`
 Examples:
 
 ** Example 1: +
-. `import excel.xls` +
-*** Imports file excel.xls.
+. `import excel.xlsx` +
+*** Imports file excel.xlsx.
 
+==== Importing and accepting all job entries in an excel file: `importAll`
+
+Similar to <<import-command, `import`>> command, `importAll` also loads an excel file,
+additionally it accepts all job entries and saves the reviews of the jobs. `importAll` is
+equivalent to an <<import-command, `import`>>, <<acceptAll-command, `acceptAll`>> and
+<<save-command, `save`>>.
+
+[TIP]
+You can use this command to import all job entries from an excel file to save time.
+
+Examples:
+
+** Example 1: +
+. `importAll excel.xlsx` +
+*** Imports file excel.xlsx, accepts all job entries and saves the reviewed job entries as
+an external excel file.
+
+==== Switching views between unreviewed jobs and jobs in CarviciM: `switch`
+
+You can use this command to switch between the list of unreviewed jobs and jobs in CarviciM. +
+Format: `switch`
 
 ==== Accepting and rejecting changes
 
 You can use 4 commands when reviewing changes:
-* `accept INDEX`
-* `reject INDEX`
+* `accept NUMBER`
+* `reject NUMBER`
 * `acceptAll`
 * `rejectAll`
 
 ===== Accepting 1 job: `accept`
 
-Accepts a job specified at position INDEX in imported list.
-Format: `accept INDEX`
+Accepts a job with job number NUMBER in imported list.
+Format: `accept NUMBER`
 
 Examples:
 
 ** Example 1: +
 . `accept 1` +
-*** Accepts the first job entry and removes it from imported list.
+*** Accepts the job entry with job number 1 and removes it from imported list.
 
+[[acceptAll-command]]
 ===== Accepting all remaining imported jobs: `acceptAll`
 
 Accepts all remaining jobs.
@@ -281,14 +329,14 @@ Examples:
 
 ===== Rejecting 1 job: `reject`
 
-Rejects a job specified at position INDEX in imported list.
-Format: `reject INDEX`
+Rejects a job with job number NUMBER in imported list.
+Format: `reject NUMBER`
 
 Examples:
 
 ** Example 1: +
 . `reject 1` +
-*** Rejects the first job entry and removes it from imported list.
+*** Rejects job entry with job number 1 and removes it from imported list. It is not added to CarviciM.
 
 ===== Rejecting all remaining imported jobs: `rejectAll`
 
@@ -301,7 +349,7 @@ Examples:
 . `rejectAll` +
 *** Rejects all remaining job entries and clears the imported list.
 
-==== Writing comments to your reviews
+==== Writing comments to your reviews #Coming in V1.5#
 
 While accepting or rejecting changes, you can enter your comments behind the command.
 
@@ -328,16 +376,16 @@ Examples:
 . `rejectAll Please check the customer details.` +
 *** Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
 
-==== Sharing your feedback with your employees
+[[save-command]]
+==== Sharing your feedback with your employees: `save`
 
-If you want to share your feedback, you can export it as an excel file, reflecting accept/reject with comments.
-Format: `export FILE_PATH`
+If you want to share your feedback, you can save it as an excel file, reflecting accept/reject with comments.
+Format: `save`
 
 [TIP]
 ====
-* You can type any filename supported by your computer's storage format.
-* If you forgot to export your feedback, you can find it under C:\User\Documents\CarviciM\feedback.xls.
-* The feedback file's format is support for future imports.
+* You can find it in the same directory as the imported excel file, with the time
+it is saved added to the end of the filename.
 ====
 
 [NOTE]
@@ -392,7 +440,7 @@ Format: `undo`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde`, `deletee`, `edit` and `cleare`).
+Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde`, `deletee` and `remark`).
 ====
 
 Examples:
@@ -445,11 +493,6 @@ Examples:
 *** You will see that the same employee is removed from the employees UI panel.
 // end::undoredo[]
 
-=== Clearing all employees : `cleare`
-
-You can use this command to clear all employees from CarviciM. +
-Format: `cleare`
-
 === Exiting the program : `exit`
 
 You can use this command to exit the program. +
@@ -478,30 +521,39 @@ _{explain how the user can enable/disable data encryption}_
 
 == Command Summary
 
-* *Add Job* `adde n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
+* *Add Job* `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
 e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 * *Close Job* `closej JOB_NUMBER` +
 e.g. `closej 1232`
+* *Add Remark* `remark j/JOB_NUMBER r/REMARK` +
+e.g. `remark j/12 r/Urgent`
 * *Add Employee* `adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` +
 e.g. `adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
-* *Clear Employees* : `cleare`
 * *Delete Employee* : `deletee INDEX` +
 e.g. `deletee 3`
-* *Edit Employee* : `edite INDEX [p/PHONE_NUMBER] [e/EMAIL] [t/TAG]...` +
-e.g. `edite 2 e/jameslee@example.com`
 * *Find Employees* : `finde KEYWORD [MORE_KEYWORDS]` +
 e.g. `finde James Jake`
 * *List Employee* : `liste`
 * *Import excel file* : `import` +
 e.g. `import excel.xls`
+* *Accept imported job* : `accept NUMBER` +
+e.g. `accept 1`
+* *Reject imported job* : `reject NUMBER` +
+e.g. `reject 1`
+* *Accept all imported job* : `acceptAll` +
+e.g. `acceptAll`
+* *Reject all imported job* : `rejectAll` +
+e.g. `rejectAll`
+* *Save comments on job imports* : `save` +
+e.g. `save`
 * *Help* : `help`
 * *History* : `history`
 * *Undo* : `undo`
 * *Redo* : `redo`
-* *Email Assigned Employees Of A Job* : `email` +
+* *Email Assigned Employees Of A Job* : `email JOB_NUMBER` +
 e.g. `email 123`
 * *Change <<command-word,Command Word>>* : `set` +
-e.g. `set add a`
+e.g. `set adde a`
 * *Theme* : `theme INDEX` +
 e.g. `theme 1`
 
@@ -514,6 +566,9 @@ A region on the User Interface which displays the list of jobs.
 
 [[employees-ui-panel]] Employees UI Panel::
 A region on the User Interface which displays the list of employees.
+
+[[job-display-panel]] Job Display Panel::
+A region on the User Interface which display the details of a job.
 
 [[result-display]] Result Display::
 A region on the User Interface which displays the result of executed commands.

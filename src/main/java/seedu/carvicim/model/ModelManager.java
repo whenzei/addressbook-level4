@@ -13,8 +13,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.carvicim.commons.core.ComponentManager;
+import seedu.carvicim.commons.core.EventsCenter;
 import seedu.carvicim.commons.core.LogsCenter;
 import seedu.carvicim.commons.events.model.CarvicimChangedEvent;
+import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
 import seedu.carvicim.logic.commands.CommandWords;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
@@ -24,6 +26,7 @@ import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
 import seedu.carvicim.model.remark.Remark;
+import seedu.carvicim.storage.session.ImportSession;
 
 /**
  * Represents the in-memory model of the carvicim book data.
@@ -38,6 +41,8 @@ public class ModelManager extends ComponentManager implements Model {
     private final FilteredList<Job> filteredJobs;
     private final CommandWords commandWords;
 
+    private boolean isViewingImportedJobs;
+
     /**
      * Initializes a ModelManager with the given carvicim and userPrefs.
      */
@@ -51,10 +56,34 @@ public class ModelManager extends ComponentManager implements Model {
         filteredEmployees = new FilteredList<>(this.carvicim.getEmployeeList());
         filteredJobs = new FilteredList<>(this.carvicim.getJobList());
         this.commandWords = userPrefs.getCommandWords();
+        isViewingImportedJobs = false;
     }
 
     public ModelManager() {
         this(new Carvicim(), new UserPrefs());
+    }
+
+    @Override
+    public boolean isViewingImportedJobs() {
+        return isViewingImportedJobs;
+    }
+
+    @Override
+    public void switchJobView() {
+        isViewingImportedJobs = !isViewingImportedJobs;
+    }
+
+    @Override
+    public void resetJobView() {
+        ObservableList<Job> jobList;
+        if (isViewingImportedJobs) {
+            jobList = FXCollections.observableList(
+                    ImportSession.getInstance().getSessionData().getUnreviewedJobEntries());
+        } else {
+            jobList = getFilteredJobList();
+        }
+        EventsCenter.getInstance().post(
+                new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(jobList)));
     }
 
     //@@author whenzei

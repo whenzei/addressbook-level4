@@ -62,19 +62,10 @@ public class DeleteEmployeeCommandSystemTest extends CarvicimSystemTest {
 
         /* Case: filtered employee list, delete index within bounds of carvicim book and employee list -> deleted */
         showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        Index index = INDEX_FIRST_PERSON;
+        Index
+                index = INDEX_FIRST_PERSON;
         assertTrue(index.getZeroBased() < getModel().getFilteredPersonList().size());
         assertCommandSuccess(index);
-
-        /* Case: filtered employee list, delete index within bounds of carvicim book but out of bounds of employee list
-         * -> rejected
-         */
-        showPersonsWithName(KEYWORD_MATCHING_MEIER);
-        int invalidIndex = getModel().getCarvicim().getEmployeeList().size();
-        command = DeleteEmployeeCommand.COMMAND_WORD + " " + invalidIndex;
-        assertCommandFailure(command, MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
-
-        /* ------------------- Performing delete operation while a employee card is selected ---------------------- */
 
         /* Case: delete the selected employee -> employee list panel selects the employee before the deleted employee */
         showAllPersons();

@@ -69,7 +69,6 @@ public class JobDisplayPanel extends UiPart<Region> {
      * Updates the necessary FXML elements
      */
     private void updateFxmlElements(Job job) {
-
         assignedEmployees.setVisible(true);
 
         //Clear previous selection's information

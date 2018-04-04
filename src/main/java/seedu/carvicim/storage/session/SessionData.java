@@ -44,6 +44,7 @@ public class SessionData {
     public static final String TEMPFILE_SUFFIX = "temp";
     public static final String ERROR_MESSAGE_UNITIALIZED = "There is no imported file to save!";
 
+    private final ArrayList<JobEntry> jobEntries;
     private final ArrayList<JobEntry> unreviewedJobEntries;
     private final ArrayList<JobEntry> reviewedJobEntries;
     private final ArrayList<SheetWithHeaderFields> sheets;
@@ -56,9 +57,34 @@ public class SessionData {
 
 
     public SessionData() {
+        jobEntries = new ArrayList<>();
         unreviewedJobEntries = new ArrayList<>();
         reviewedJobEntries = new ArrayList<>();
         sheets = new ArrayList<>();
+    }
+
+    public SessionData(ArrayList<JobEntry> jobEntries, ArrayList<JobEntry> unreviewedJobEntries,
+                       ArrayList<JobEntry> reviewedJobEntries,
+                       ArrayList<SheetWithHeaderFields> sheets,
+                       File importFile, File tempFile, Workbook workbook, File saveFile) {
+        this.jobEntries = jobEntries;
+        this.unreviewedJobEntries = unreviewedJobEntries;
+        this.reviewedJobEntries = reviewedJobEntries;
+        this.sheets = sheets;
+        this.importFile = importFile;
+        this.tempFile = tempFile;
+        this.workbook = workbook;
+        this.saveFile = saveFile;
+    }
+
+    /**
+     * Creates a copy of sessionData and returns it
+     */
+    public SessionData createCopy() {
+        SessionData other = new SessionData(new ArrayList<>(jobEntries), new ArrayList<>(unreviewedJobEntries),
+                new ArrayList<>(reviewedJobEntries), new ArrayList<>(sheets), importFile,
+                tempFile, workbook, saveFile);
+        return other;
     }
 
     public boolean isInitialized() {
@@ -166,6 +192,16 @@ public class SessionData {
         if (!isInitialized()) {
             throw new UnitializedException(ERROR_MESSAGE_UNITIALIZED);
         }
+        for (JobEntry jobEntry : jobEntries) {
+            SheetWithHeaderFields sheet = sheets.get(jobEntry.getSheetNumber());
+            sheet.commentJobEntry(jobEntry.getRowNumber(), jobEntry.getCommentsAsString());
+            if (jobEntry.isApproved()) {
+                sheet.approveJobEntry(jobEntry.getRowNumber());
+            } else {
+                sheet.rejectJobEntry(jobEntry.getRowNumber());
+            }
+        }
+
         if (saveFile == null) { // does not check if a file exists
             saveFile = generateFile(SAVEFILE_SUFFIX);
         }
@@ -215,8 +251,11 @@ public class SessionData {
      */
     public void addSheet(SheetWithHeaderFields sheetWithHeaderFields) {
         Iterator<JobEntry> jobEntryIterator = sheetWithHeaderFields.iterator();
+        JobEntry jobEntry;
         while (jobEntryIterator.hasNext()) {
-            unreviewedJobEntries.add(jobEntryIterator.next());
+            jobEntry = jobEntryIterator.next();
+            jobEntries.add(jobEntry);
+            unreviewedJobEntries.add(jobEntry);
         }
         sheets.add(sheetWithHeaderFields.getSheetIndex(), sheetWithHeaderFields);
     }
@@ -270,13 +309,6 @@ public class SessionData {
         unreviewedJobEntries.remove(jobEntry);
         if (approved) {
             reviewedJobEntries.add(jobEntry);
-        }
-        SheetWithHeaderFields sheet = sheets.get(jobEntry.getSheetNumber());
-        sheet.commentJobEntry(jobEntry.getRowNumber(), jobEntry.getCommentsAsString());
-        if (approved) {
-            sheet.approveJobEntry(jobEntry.getRowNumber());
-        } else {
-            sheet.rejectJobEntry(jobEntry.getRowNumber());
         }
     }
 }

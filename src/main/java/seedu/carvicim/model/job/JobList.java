@@ -3,6 +3,7 @@ package seedu.carvicim.model.job;
 import static java.util.Objects.requireNonNull;
 import static seedu.carvicim.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -19,6 +20,9 @@ import seedu.carvicim.model.person.Employee;
 public class JobList implements Iterable<Job> {
 
     private final ObservableList<Job> internalList = FXCollections.observableArrayList();
+    private int jobCount = 0;
+    private int ongoingCount = 0;
+    private int closedCount = 0;
 
     /**
      * Returns true if the list contains an equivalent employee as the given argument
@@ -82,7 +86,59 @@ public class JobList implements Iterable<Job> {
         return predicate;
     }
 
-    //@@author whenzei
+    //@@author richardson0694
+    /**
+     * Get the job list for the current month.
+     */
+    public JobList getCurrentMonthJobList() {
+        JobList currentMonthList = new JobList();
+        LocalDate localDate = LocalDate.now();
+        int month = localDate.getMonth().getValue();
+        Iterator<Job> iterator = internalList.iterator();
+        while (iterator.hasNext()) {
+            Job job = iterator.next();
+            if (job.getDate().getMonth() == month) {
+                currentMonthList.add(job);
+            }
+        }
+        return currentMonthList;
+    }
+
+    /**
+     * Get the respective job counts for the current month.
+     */
+    public JobList analyseList(JobList analyseList) {
+        analyseList = analyseList.getCurrentMonthJobList();
+        Iterator<Job> iterator = analyseList.iterator();
+        while (iterator.hasNext()) {
+            Job job = iterator.next();
+            Status ongoing = new Status("ongoing");
+            if (job.getStatus().equals(ongoing)) {
+                analyseList.ongoingCount++;
+            } else {
+                analyseList.closedCount++;
+            }
+            analyseList.jobCount++;
+        }
+        return analyseList;
+    }
+
+    /**
+     * Get the respective job counts.
+     */
+    public String getAnalyseResult() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("Number of Jobs: ")
+                .append(jobCount)
+                .append(" Number of Ongoing: ")
+                .append(ongoingCount)
+                .append(" Number of Closed: ")
+                .append(closedCount)
+                .append("\n");
+        return builder.toString();
+    }
+
+    //@@author owzhenwei
     @Override
     public Iterator<Job> iterator() {
         return internalList.iterator();

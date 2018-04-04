@@ -27,6 +27,7 @@ import seedu.carvicim.model.ReadOnlyCarvicim;
 import seedu.carvicim.model.UserPrefs;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
+import seedu.carvicim.model.job.JobList;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.VehicleNumber;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
@@ -166,6 +167,12 @@ public class AddJobCommandTest {
         @Override
         public void archiveJob(DateRange dateRange) {
             fail("This method should not be called");
+        }
+
+        @Override
+        public JobList analyseJob(JobList jobList) {
+            fail("This method should not be called");
+            return null;
         }
 
         @Override

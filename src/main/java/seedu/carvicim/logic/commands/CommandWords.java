@@ -25,6 +25,7 @@ public class CommandWords implements Serializable {
      */
     public static final String[] COMMANDS = {
         AddEmployeeCommand.COMMAND_WORD,
+        AnalyseCommand.COMMAND_WORD,
         ArchiveCommand.COMMAND_WORD,
         ClearCommand.COMMAND_WORD,
         DeleteEmployeeCommand.COMMAND_WORD,

@@ -20,6 +20,7 @@ import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
 import seedu.carvicim.logic.commands.CommandWords;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
+import seedu.carvicim.model.job.JobList;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
@@ -208,6 +209,11 @@ public class ModelManager extends ComponentManager implements Model {
     public void sortPersonList() {
         carvicim.sortList();
         indicateAddressBookChanged();
+    }
+
+    @Override
+    public JobList analyseJob(JobList jobList) {
+        return carvicim.analyseJob(jobList);
     }
 
     //=========== Filtered Employee List Accessors =============================================================

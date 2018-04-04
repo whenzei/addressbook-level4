@@ -28,7 +28,7 @@ public abstract class UndoableCommand extends Command {
         requireNonNull(model);
         this.previousAddressBook = new Carvicim(model.getCarvicim());
         this.previousCommandWords = new CommandWords(model.getCommandWords());
-        this.sessionData = ImportSession.getInstance().getSessionData();
+        this.sessionData = ImportSession.getInstance().getSessionData().createCopy();
     }
 
     /**
@@ -48,6 +48,7 @@ public abstract class UndoableCommand extends Command {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         ImportSession.getInstance().setSessionData(sessionData);
+        model.resetJobView();
     }
 
     /**

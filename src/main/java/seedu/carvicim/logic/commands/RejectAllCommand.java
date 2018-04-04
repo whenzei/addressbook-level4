@@ -31,6 +31,9 @@ public class RejectAllCommand extends UndoableCommand {
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
         ImportSession importSession = ImportSession.getInstance();
+        if (importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
+            throw new CommandException("There are no job entries to review!");
+        }
         try {
             importSession.reviewAllRemainingJobEntries(false);
             List<Job> jobs = new ArrayList<>(importSession.getSessionData().getReviewedJobEntries());

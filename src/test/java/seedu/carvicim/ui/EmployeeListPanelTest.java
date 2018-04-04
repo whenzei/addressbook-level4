@@ -21,7 +21,8 @@ public class EmployeeListPanelTest extends GuiUnitTest {
     private static final ObservableList<Employee> TYPICAL_EMPLOYEES =
             FXCollections.observableList(getTypicalEmployees());
 
-    private static final JumpToEmployeeListRequestEvent JUMP_TO_SECOND_EVENT = new JumpToEmployeeListRequestEvent(INDEX_SECOND_PERSON);
+    private static final JumpToEmployeeListRequestEvent JUMP_TO_SECOND_EVENT =
+            new JumpToEmployeeListRequestEvent(INDEX_SECOND_PERSON);
 
     private PersonListPanelHandle personListPanelHandle;
 

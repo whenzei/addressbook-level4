@@ -65,6 +65,9 @@ public class JobDisplayPanel extends UiPart<Region> {
         updateFxmlElements(event.getJob());
     }
 
+    /**
+     * Updates the necessary FXML elements
+     */
     private void updateFxmlElements(Job job) {
 
         assignedEmployees.setVisible(true);

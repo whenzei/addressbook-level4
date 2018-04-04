@@ -3,6 +3,7 @@ package seedu.carvicim.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import seedu.carvicim.model.Carvicim;
+import seedu.carvicim.model.job.JobNumber;
 
 /**
  * Clears the carvicim book.
@@ -17,6 +18,7 @@ public class ClearCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() {
         requireNonNull(model);
         model.resetData(new Carvicim(), new CommandWords());
+        JobNumber.initialize("1");
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

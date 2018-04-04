@@ -17,21 +17,21 @@ public class AddEmployeeCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "adde";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to the carvicim. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to CarviciM. "
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_NAME + "John Doe "
-            + PREFIX_PHONE + "98765432 "
-            + PREFIX_EMAIL + "johnd@example.com "
-            + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+            + PREFIX_NAME + "Tom Dick "
+            + PREFIX_PHONE + "98665432 "
+            + PREFIX_EMAIL + "tomdicl@example.com "
+            + PREFIX_TAG + "technician "
+            + PREFIX_TAG + "mechanic";
 
     public static final String MESSAGE_SUCCESS = "New employee added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This employee already exists in the carvicim book";
+    public static final String MESSAGE_DUPLICATE_PERSON = "This employee already exists in CarviciM";
 
     private final Employee toAdd;
 

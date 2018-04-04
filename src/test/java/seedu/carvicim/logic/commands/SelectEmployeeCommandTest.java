@@ -111,13 +111,14 @@ public class SelectEmployeeCommandTest {
             throw new IllegalArgumentException("Execution of command should not fail.", ce);
         }
 
-        JumpToEmployeeListRequestEvent lastEvent = (JumpToEmployeeListRequestEvent) eventsCollectorRule.eventsCollector.getMostRecent();
+        JumpToEmployeeListRequestEvent lastEvent =
+                (JumpToEmployeeListRequestEvent) eventsCollectorRule.eventsCollector.getMostRecent();
         assertEquals(index, Index.fromZeroBased(lastEvent.targetIndex));
     }
 
     /**
-     * Executes a {@code SelectEmployeeCommand} with the given {@code index}, and checks that a {@code CommandException}
-     * is thrown with the {@code expectedMessage}.
+     * Executes a {@code SelectEmployeeCommand} with the given {@code index},
+     * and checks that a {@code CommandException} is thrown with the {@code expectedMessage}.
      */
     private void assertExecutionFailure(Index index, String expectedMessage) {
         SelectEmployeeCommand selectEmployeeCommand = prepareCommand(index);

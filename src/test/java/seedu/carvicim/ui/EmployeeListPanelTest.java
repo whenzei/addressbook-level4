@@ -14,14 +14,14 @@ import guitests.guihandles.PersonCardHandle;
 import guitests.guihandles.PersonListPanelHandle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import seedu.carvicim.commons.events.ui.JumpToListRequestEvent;
+import seedu.carvicim.commons.events.ui.JumpToEmployeeListRequestEvent;
 import seedu.carvicim.model.person.Employee;
 
 public class EmployeeListPanelTest extends GuiUnitTest {
     private static final ObservableList<Employee> TYPICAL_EMPLOYEES =
             FXCollections.observableList(getTypicalEmployees());
 
-    private static final JumpToListRequestEvent JUMP_TO_SECOND_EVENT = new JumpToListRequestEvent(INDEX_SECOND_PERSON);
+    private static final JumpToEmployeeListRequestEvent JUMP_TO_SECOND_EVENT = new JumpToEmployeeListRequestEvent(INDEX_SECOND_PERSON);
 
     private PersonListPanelHandle personListPanelHandle;
 

@@ -5,7 +5,7 @@ import java.util.List;
 import seedu.carvicim.commons.core.EventsCenter;
 import seedu.carvicim.commons.core.Messages;
 import seedu.carvicim.commons.core.index.Index;
-import seedu.carvicim.commons.events.ui.JumpToListRequestEvent;
+import seedu.carvicim.commons.events.ui.JumpToEmployeeListRequestEvent;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.person.Employee;
 
@@ -38,7 +38,7 @@ public class SelectEmployeeCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_EMPLOYEE_DISPLAYED_INDEX);
         }
 
-        EventsCenter.getInstance().post(new JumpToListRequestEvent(targetIndex));
+        EventsCenter.getInstance().post(new JumpToEmployeeListRequestEvent(targetIndex));
         return new CommandResult(String.format(MESSAGE_SELECT_PERSON_SUCCESS, targetIndex.getOneBased()));
 
     }

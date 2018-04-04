@@ -13,7 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
-import seedu.carvicim.commons.events.ui.JumpToListRequestEvent;
+import seedu.carvicim.commons.events.ui.JumpToEmployeeListRequestEvent;
 import seedu.carvicim.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.carvicim.model.person.Employee;
 
@@ -62,7 +62,7 @@ public class PersonListPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    private void handleJumpToListRequestEvent(JumpToListRequestEvent event) {
+    private void handleJumpToEmployeeListRequestEvent(JumpToEmployeeListRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         scrollTo(event.targetIndex);
     }

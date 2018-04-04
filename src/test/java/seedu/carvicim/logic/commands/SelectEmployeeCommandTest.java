@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import seedu.carvicim.commons.core.Messages;
 import seedu.carvicim.commons.core.index.Index;
-import seedu.carvicim.commons.events.ui.JumpToListRequestEvent;
+import seedu.carvicim.commons.events.ui.JumpToEmployeeListRequestEvent;
 import seedu.carvicim.logic.CommandHistory;
 import seedu.carvicim.logic.UndoRedoStack;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
@@ -97,7 +97,7 @@ public class SelectEmployeeCommandTest {
 
     /**
      * Executes a {@code SelectEmployeeCommand} with the given {@code index},
-     * and checks that {@code JumpToListRequestEvent}
+     * and checks that {@code JumpToEmployeeListRequestEvent}
      * is raised with the correct index.
      */
     private void assertExecutionSuccess(Index index) {
@@ -111,7 +111,7 @@ public class SelectEmployeeCommandTest {
             throw new IllegalArgumentException("Execution of command should not fail.", ce);
         }
 
-        JumpToListRequestEvent lastEvent = (JumpToListRequestEvent) eventsCollectorRule.eventsCollector.getMostRecent();
+        JumpToEmployeeListRequestEvent lastEvent = (JumpToEmployeeListRequestEvent) eventsCollectorRule.eventsCollector.getMostRecent();
         assertEquals(index, Index.fromZeroBased(lastEvent.targetIndex));
     }
 

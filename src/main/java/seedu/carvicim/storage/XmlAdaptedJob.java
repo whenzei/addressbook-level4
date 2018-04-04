@@ -170,7 +170,7 @@ public class XmlAdaptedJob {
         final Date date = new Date(this.date);
 
 
-        final RemarkList remarks = new RemarkList(new HashSet<>(jobRemarks));
+        final RemarkList remarks = new RemarkList(new ArrayList<>(jobRemarks));
         final UniqueEmployeeList assignedEmployees = new UniqueEmployeeList();
         assignedEmployees.setEmployees(jobAssignedEmployees);
 

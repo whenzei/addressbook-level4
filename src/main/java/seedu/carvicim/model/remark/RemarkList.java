@@ -3,8 +3,10 @@ package seedu.carvicim.model.remark;
 import static java.util.Objects.requireNonNull;
 import static seedu.carvicim.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javafx.collections.FXCollections;
@@ -16,37 +18,23 @@ import javafx.collections.ObservableList;
  */
 public class RemarkList implements Iterable<Remark> {
 
-    private final ObservableList<Remark> internalList = FXCollections.observableArrayList();
+    private final ArrayList<Remark> internalList;
 
     /**
      * Constructs empty RemarkList.
      */
-    public RemarkList() {}
+    public RemarkList() {
+        internalList = new ArrayList<>();
+    }
 
     /**
      * Creates a RemarkList using given remarks.
      * Enforces no nulls.
      */
-    public RemarkList(Set<Remark> remarks) {
+    public RemarkList(ArrayList<Remark> remarks) {
         requireAllNonNull(remarks);
+        internalList = new ArrayList<>();
         internalList.addAll(remarks);
-    }
-
-    /**
-     * Returns all remarks in this list as a Set.
-     * This set is mutable and change-insulated against the internal list.
-     */
-    public Set<Remark> toSet() {
-        return new HashSet<>(internalList);
-    }
-
-    /**
-     * Replaces the remarks in this list with those in the argument remark list
-     * @param remarks
-     */
-    public void setRemarks(Set<Remark> remarks) {
-        requireAllNonNull(remarks);
-        internalList.setAll(remarks);
     }
 
     /**
@@ -63,10 +51,17 @@ public class RemarkList implements Iterable<Remark> {
     }
 
     /**
-     * Returns the backing list as an unmodifiable {@code RemarkList}.
+     * Returns remark list
+     */
+    public ArrayList<Remark> getRemarks() {
+        return internalList;
+    }
+
+    /**
+     * Returns the list as an unmodifiable {@code RemarkList}.
      */
     public ObservableList<Remark> asObservableList() {
-        return FXCollections.unmodifiableObservableList(internalList);
+        return FXCollections.observableArrayList(internalList);
     }
 
     @Override

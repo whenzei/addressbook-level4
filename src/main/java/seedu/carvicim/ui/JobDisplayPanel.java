@@ -1,5 +1,6 @@
 package seedu.carvicim.ui;
 
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -83,8 +84,9 @@ public class JobDisplayPanel extends UiPart<Region> {
         assignedEmployees.setItems(job.getAssignedEmployeesAsObservableList());
 
         int count = 1;
-        for (Remark remark : job.getRemarks()) {
-            remarks.getChildren().add(new Label(count + ") " + remark.value));
+        Iterator<Remark> remarkIterator = job.getRemarks().iterator();
+        while (remarkIterator.hasNext()) {
+            remarks.getChildren().add(new Label(count + ") " + remarkIterator.next().value));
             count++;
         }
     }

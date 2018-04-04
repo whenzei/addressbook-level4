@@ -16,6 +16,7 @@ import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.remark.Remark;
 
+//@@author whenzei
 /**
  * Adds a remark to a job in Carvicim
  */

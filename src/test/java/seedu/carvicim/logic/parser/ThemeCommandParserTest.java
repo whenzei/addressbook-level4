@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import seedu.carvicim.logic.commands.ThemeCommand;
 
-//@author owzhenwei
+//@@author whenzei
 /**
  * Test scope: similar to {@code DeleteEmployeeCommandParserTest}.
  * @see DeleteEmployeeCommandParserTest

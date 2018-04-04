@@ -9,7 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import seedu.carvicim.commons.core.EventsCenter;
 import seedu.carvicim.commons.core.Messages;
+import seedu.carvicim.commons.events.ui.JobDisplayPanelUpdateRequestEvent;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobNumber;
@@ -52,6 +54,7 @@ public class RemarkCommand extends UndoableCommand {
         } catch (JobNotFoundException jnfe) {
             throw new AssertionError("The target job cannot be missing");
         }
+        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(target));
         return new CommandResult(String.format(MESSAGE_REMARK_SUCCESS, remark));
     }
 

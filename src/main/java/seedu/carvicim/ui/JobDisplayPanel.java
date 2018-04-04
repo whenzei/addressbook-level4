@@ -11,6 +11,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
+import seedu.carvicim.commons.events.ui.JobDisplayPanelUpdateRequestEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.remark.Remark;
@@ -53,6 +54,17 @@ public class JobDisplayPanel extends UiPart<Region> {
 
     @Subscribe
     private void handleJobPanelSelectionChangedEvent(JobPanelSelectionChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateFxmlElements(event.getJob());
+    }
+
+    @Subscribe
+    private void handlJobDisplayPanelUpdateRequest(JobDisplayPanelUpdateRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateFxmlElements(event.getJob());
+    }
+
+    private void updateFxmlElements(Job job) {
 
         assignedEmployees.setVisible(true);
 
@@ -60,8 +72,6 @@ public class JobDisplayPanel extends UiPart<Region> {
         assignedEmployees.refresh();
         remarks.getChildren().clear();
 
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        final Job job = event.getJob();
         jobNumber.setText(job.getJobNumber().toString());
         status.setText(job.getStatus().toString());
         date.setText(job.getDate().toString());
@@ -77,6 +87,5 @@ public class JobDisplayPanel extends UiPart<Region> {
             remarks.getChildren().add(new Label(count + ") " + remark.value));
             count++;
         }
-
     }
 }

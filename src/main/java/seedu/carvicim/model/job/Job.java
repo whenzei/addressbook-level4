@@ -93,18 +93,6 @@ public class Job {
         return assignedEmployees.size();
     }
 
-    public void addRemark(Remark remark) {
-        remarks.add(remark);
-    }
-
-    public boolean hasEmployee(Employee employee) {
-        return assignedEmployees.contains(employee);
-    }
-
-    public int getEmployeeCount() {
-        return assignedEmployees.size();
-    }
-
     @Override
     public boolean equals(Object other) {
         if (other == this) {

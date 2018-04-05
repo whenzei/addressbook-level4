@@ -198,6 +198,99 @@ public class AddJobCommandTest {
     }
 }
 ```
+###### \java\seedu\carvicim\logic\commands\CloseJobCommandTest.java
+``` java
+
+/**
+ * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for
+ * {@code CloseJobCommand}
+ */
+public class CloseJobCommandTest {
+    private Model model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
+
+    @Test
+    public void execute_closeJobFailure_jobNotFound() {
+        CloseJobCommand closeJobCommand = prepareCommand(new JobNumber("999999"));
+        assertCommandFailure(closeJobCommand, model, MESSAGE_JOB_NOT_FOUND);
+    }
+
+    @Test
+    public void execute_closeJobSuccess_jobIsPresent() throws Exception {
+        Job jobToClose = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+
+        CloseJobCommand closeJobCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
+
+        String expectedMessage = String.format(CloseJobCommand.MESSAGE_CLOSE_JOB_SUCCESS, jobToClose);
+        ModelManager expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
+        expectedModel.closeJob(jobToClose);
+
+        assertCommandSuccess(closeJobCommand, model, expectedMessage, expectedModel);
+
+    }
+
+    /**
+     * 1. Closes a {@code Job} from CarviciM
+     * 2. Undo the closing of job
+     * 3. Redo the closing of job
+     */
+    @Test
+    public void executeUndoRedo_sameJobClosed() throws Exception {
+        UndoRedoStack undoRedoStack = new UndoRedoStack();
+        UndoCommand undoCommand = prepareUndoCommand(model, undoRedoStack);
+        RedoCommand redoCommand = prepareRedoCommand(model, undoRedoStack);
+        CloseJobCommand closeJobCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
+        Model expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
+
+        Job jobToClose = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+
+        // close -> closes the job number 1 which is the first job in the job list
+        closeJobCommand.execute();
+        undoRedoStack.push(closeJobCommand);
+
+        // undo -> reverts Carvicim back to previous state
+        assertCommandSuccess(undoCommand, model, UndoCommand.MESSAGE_SUCCESS, expectedModel);
+
+        expectedModel.closeJob(jobToClose);
+        assertNotEquals(jobToClose, model.getFilteredPersonList().get(INDEX_FIRST_JOB.getZeroBased()));
+        // redo -> closes same Job of job number 1
+        assertCommandSuccess(redoCommand, model, RedoCommand.MESSAGE_SUCCESS, expectedModel);
+
+    }
+
+    @Test
+    public void equals() throws Exception {
+        CloseJobCommand closeJobNumberOneCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
+        CloseJobCommand closeJobNumberTwoCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_TWO));
+
+        // same object -> returns ture
+        assertTrue(closeJobNumberOneCommand.equals(closeJobNumberOneCommand));
+
+        // same values -> returns true
+        CloseJobCommand closeJobNumberOneCommandCopy = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
+        assertTrue(closeJobNumberOneCommand.equals(closeJobNumberOneCommandCopy));
+
+        // one command preprocessed when previously equal -> returns false
+        closeJobNumberOneCommandCopy.preprocessUndoableCommand();
+        assertFalse(closeJobNumberOneCommand.equals(closeJobNumberOneCommandCopy));
+
+        // null -> returns false
+        assertFalse(closeJobNumberOneCommand.equals(null));
+
+        // different job -> returns false
+        assertFalse(closeJobNumberOneCommand.equals(closeJobNumberTwoCommand));
+
+    }
+
+    /**
+     * Returns a {@code CloseJobCommand} with the parameter {@code jobNumber}.
+     */
+    public CloseJobCommand prepareCommand(JobNumber jobNumber) {
+        CloseJobCommand closeJobCommand = new CloseJobCommand(jobNumber);
+        closeJobCommand.setData(model, new CommandHistory(), new UndoRedoStack());
+        return  closeJobCommand;
+    }
+}
+```
 ###### \java\seedu\carvicim\logic\commands\ListJobCommandTest.java
 ``` java
 
@@ -355,6 +448,105 @@ public class ThemeCommandTest {
     private ThemeCommand prepareCommand(Index index) {
         ThemeCommand themeCommand = new ThemeCommand(index);
         return themeCommand;
+    }
+}
+```
+###### \java\seedu\carvicim\logic\parser\AddJobCommandParserTest.java
+``` java
+public class AddJobCommandParserTest {
+
+    private AddJobCommandParser parser = new AddJobCommandParser();
+
+    @Test
+    public void parse_allFieldsPresent_success() {
+        Person expectedClient = new ClientBuilder().withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
+                .withEmail(VALID_EMAIL_BOB).build();
+
+        // one assigned employee
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE,
+                new AddJobCommand(expectedClient, new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                        generateOneValidEmployeeIndex()));
+
+        // two assigned employees
+        assertParseSuccess(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                        + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_TWO,
+                new AddJobCommand(expectedClient, new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                        generateTwoValidEmployeeIndices()));
+    }
+
+    @Test
+    public void parse_compulsoryFieldMissing_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE);
+
+        // missing name prefix
+        assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                        + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE, expectedMessage);
+
+        // missing phone prefix
+        assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB
+                        + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE, expectedMessage);
+        // missing phone prefix
+        assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB
+                + VEHICLE_NUMBER_DESC_ONE + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE, expectedMessage);
+
+        // missing vehicle number prefix
+        assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB
+                + VALID_VEHICLE_NUMBER_A + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE, expectedMessage);
+
+        // missing assigned employee prefix
+        assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB
+                + VALID_VEHICLE_NUMBER_A + VALID_ASSIGNED_EMPLOYEE_INDEX_A, expectedMessage);
+    }
+
+    @Test
+    public void parse_invalidValue_failure() {
+        //invalid vehicle number
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + INVALID_VEHICLE_NUM_DESC + ASSIGNED_EMPLOYEE_INDEX_DESC_ONE,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE));
+
+        //invalid assigned employee indices
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                        + VEHICLE_NUMBER_DESC_ONE + INVALID_ASSIGNED_EMPLOYEE_INDEX_DESC,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddJobCommand.MESSAGE_USAGE));
+    }
+
+    /**
+     * Generates an Arraylist of valid first assigned employee index
+     */
+    private ArrayList<Index> generateOneValidEmployeeIndex() {
+        ArrayList<Index> indices = new ArrayList<Index>();
+        indices.add(INDEX_FIRST_PERSON);
+        return indices;
+    }
+
+    /**
+     * Generates an Arraylist of valid first and second assigned employee index
+     */
+    private ArrayList<Index> generateTwoValidEmployeeIndices() {
+        ArrayList<Index> indices = new ArrayList<Index>();
+        indices.add(INDEX_FIRST_PERSON);
+        indices.add(INDEX_SECOND_PERSON);
+        return indices;
+    }
+}
+```
+###### \java\seedu\carvicim\logic\parser\CloseJobCommandParserTest.java
+``` java
+public class CloseJobCommandParserTest {
+
+    private CloseJobCommandParser parser = new CloseJobCommandParser();
+
+    @Test
+    public void parse_validArgs_returnsCloseJobCommand() {
+        assertParseSuccess(parser, JOB_NUMBER_DESC_A, new CloseJobCommand(new JobNumber(VALID_JOB_NUMBER_ONE)));
+    }
+
+    @Test
+    public void parse_invalidArgs_throwsParseException() {
+        assertParseFailure(parser, INVALID_JOB_NUMBER_DESC, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                CloseJobCommand.MESSAGE_USAGE));
     }
 }
 ```

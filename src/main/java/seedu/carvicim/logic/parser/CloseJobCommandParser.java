@@ -5,7 +5,6 @@ import static seedu.carvicim.logic.parser.CliSyntax.PREFIX_JOB_NUMBER;
 
 import java.util.stream.Stream;
 
-import jdk.nashorn.internal.runtime.ParserException;
 import seedu.carvicim.commons.exceptions.IllegalValueException;
 import seedu.carvicim.logic.commands.CloseJobCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
@@ -25,16 +24,16 @@ public class CloseJobCommandParser implements Parser<CloseJobCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_JOB_NUMBER);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_JOB_NUMBER) || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParserException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CloseJobCommand.MESSAGE_USAGE));
+        if (!arePrefixesPresent(argMultimap, PREFIX_JOB_NUMBER)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CloseJobCommand.MESSAGE_USAGE));
         }
 
         try {
             JobNumber jobNumber = ParserUtil.parseJobNumber(argMultimap.getValue(PREFIX_JOB_NUMBER)).get();
 
             return new CloseJobCommand(jobNumber);
-        } catch (IllegalValueException e) {
-            throw new ParseException(e.getMessage(), e);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CloseJobCommand.MESSAGE_USAGE));
         }
     }
 

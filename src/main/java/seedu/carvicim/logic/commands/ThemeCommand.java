@@ -6,7 +6,7 @@ import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.commons.events.ui.SetThemeRequestEvent;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 
-//@@author owzhenwei
+//@@author whenzei
 /**
  * Changes the theme of the application
  */

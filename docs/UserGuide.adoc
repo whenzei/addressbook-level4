@@ -17,7 +17,7 @@ By: `Team W09-B1`      Since: `Feb 2018`      Licence: `MIT`
 
 == Introduction
 
-CarviciM (Car Servicing Manager) is a desktop application for *managing car servicing jobs*. You can use Carvicim to add jobs, close ongoing jobs, import large number of job entries, manage employees for job assignment and notify employees of jobs through email. CarviciM is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CarviciM can get your management of servicing jobs done faster than traditional GUI apps. Interested? Jump to the <<Quick Start>> to get started. Enjoy!
+Welcome to CarviciM! CarviciM (short for Car Servicing Manager) is a desktop application for *car servicing managers* to *manage car servicing jobs with convenience and ease*. You can use Carvicim to add jobs, close ongoing jobs, import large number of job entries, manage employees for job assignment and notify employees of jobs through email. CarviciM is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CarviciM can get your management of servicing jobs done faster than traditional GUI apps. Interested to speed up your car servicing job allocation process? Jump to the <<Quick Start>> to get started. Enjoy!
 
 == About This User Guide
 
@@ -49,7 +49,7 @@ This user guide shows you how to get started using the CarviciM. It shows you ho
 Having any Java 8 version is not enough. +
 This app will not work with earlier versions of Java 8.
 +
-.  You can download the latest `addressbook.jar` link:{repoURL}/releases[here].
+.  You can download the latest `CarviciM.jar` link:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your CarviciM.
 .  Double-click the file to start the app. You should see the Graphical User Interface (GUI) in a few seconds.
 +
@@ -68,6 +68,8 @@ e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
 
 [[Features]]
 == Features
+
+This section will explain to you how you can use the features of CarviciM.
 
 ====
 *Command Format*
@@ -107,14 +109,14 @@ Examples:
 === Closing a job entry: `closej`
 
 You can use this command to close an ongoing job based on its job number. +
-Format: `closej p/JOB_NUMBER`
+Format: `closej j/JOB_NUMBER`
 
 Examples:
 
 ** Example 1: +
-. `closej 123` +
+. `closej j/123` +
 *** Closes the ongoing job of number 123 in CarviciM. +
-*** You will see "Job 123 closed" in the <<result-display,result display>>. +
+*** You will see "Closed Job: 123" in the <<result-display,result display>>. +
 *** You will not see job of number 123 in the <<jobs-ui-panel,jobs UI panel>>.
 
 === Adding remark to a job: `remark`
@@ -537,15 +539,7 @@ Format: `exit`
 CarviciM data are saved in the hard disk automatically after any command that changes the data. +
 There is no need to save manually.
 
-=== Login to Gmail : `login`
-
-You can use this command to login to Gmail. This command will direct you to the login page of Google. +
-Format: `login`
-
-[NOTE]
-====
-After you have successfully logged in, Google will ask if you allow CarviciM to access your Gmail. Click on `Allow`.
-====
+For your convenience, authorization information will be stored on your computer's file system, even after closing and reopening CarviciM, so you will never need to log in again.
 
 === Email assigned employees belonging to a job : `email`
 
@@ -573,7 +567,7 @@ _{explain how the user can enable/disable data encryption}_
 * *Add Job* `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
 e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 * *Close Job* `closej p/JOB_NUMBER` +
-e.g. `closej p/1232`
+e.g. `closej j/1232`
 * *Add Remark* `remark j/JOB_NUMBER r/REMARK` +
 e.g. `remark j/12 r/Urgent`
 * *Archive job entries* `archive sd/START_DATE ed/END_DATE` +

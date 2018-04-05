@@ -1,33 +1,15 @@
-package seedu.carvicim.commons;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
-import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
-
-import com.google.api.services.gmail.Gmail;
-
-//@@author charmaineleehc-reused
+# charmaineleehc-reused
+###### \java\seedu\carvicim\commons\GmailAuthenticator.java
+``` java
 /**
  * Allow for Gmail authentication process to take place
  */
 public class GmailAuthenticator {
 
-    private static final String APPLICATION_NAME = "CarviciM";
+    private static final String APPLICATION_NAME = "Carvicim";
 
     private static final java.io.File DATA_STORE_DIR = new java.io.File(
-            "./src/main/resources/.credentials/carvicim-gmail");
+            System.getProperty("user.home"), ".credentials/gmail-java-quickstart");
 
     private static FileDataStoreFactory dataStoreFactory;
 
@@ -98,3 +80,4 @@ public class GmailAuthenticator {
     }
 
 }
+```

@@ -1,7 +1,6 @@
 package seedu.carvicim.storage;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -170,7 +169,7 @@ public class XmlAdaptedJob {
         final Date date = new Date(this.date);
 
 
-        final RemarkList remarks = new RemarkList(new HashSet<>(jobRemarks));
+        final RemarkList remarks = new RemarkList(new ArrayList<>(jobRemarks));
         final UniqueEmployeeList assignedEmployees = new UniqueEmployeeList();
         assignedEmployees.setEmployees(jobAssignedEmployees);
 

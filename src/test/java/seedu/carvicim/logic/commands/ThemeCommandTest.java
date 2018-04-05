@@ -15,7 +15,7 @@ import seedu.carvicim.commons.events.ui.SetThemeRequestEvent;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.ui.testutil.EventsCollectorRule;
 
-//@author owzhenwei
+//@@author whenzei
 public class ThemeCommandTest {
     @Rule
     public final EventsCollectorRule eventsCollectorRule = new EventsCollectorRule();

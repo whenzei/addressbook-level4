@@ -204,7 +204,7 @@ public class MainWindow extends UiPart<Stage> {
         handleHelp();
     }
 
-    //@author owzhenwei
+    //@@author whenzei
     /**
      * Sets the the theme based on user's preference
      */

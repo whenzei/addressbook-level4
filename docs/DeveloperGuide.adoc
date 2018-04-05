@@ -149,7 +149,7 @@ Each of the four components
 * Defines its <<api, _API_>> in an `interface` with the same name as the Component.
 * Exposes its functionality using a `{Component Name}Manager` class.
 
-For example, the `Logic` component (see the class diagram given below) defines it's <<api, API>> in the `Logic.java` interface and exposes its functionality using the `LogicManager.java` class.
+For example, the `Logic` component defines it's <<api, API>> in the `Logic.java` interface and exposes its functionality using the `LogicManager.java` class (figure 2).
 
 .Class Diagram of the Logic Component
 image::LogicClassDiagram.png[width="800"]
@@ -189,7 +189,7 @@ image::UiClassDiagram.png[width="800"]
 
 <<api, *API*>> : link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `BrowserPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class (figure 5).
 
 The `UI` component uses https://en.wikipedia.org/wiki/JavaFX[JavaFx] UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the link:{repoURL}/src/main/java/seedu/address/ui/MainWindow.java[`MainWindow`] is specified in link:{repoURL}/src/main/resources/view/MainWindow.fxml[`MainWindow.fxml`]
 
@@ -219,7 +219,7 @@ Here is what happens when the UI makes an `execute()` call to Logic:
 .  `Logic` uses the `AddressBookParser` class to parse the user command.
 .  This results in a `Command` object which is executed by the `LogicManager`.
 .  The command execution can affect the `Model` (e.g. adding a employee) and/or raise events.
-.  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui`.
+.  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui` (figure 6).
 
 
 For a more specific example of the steps above, given below (figure 8) is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` <<api, API>> call.
@@ -237,7 +237,7 @@ image::ModelClassDiagram.png[width="800"]
 <<api, *API*>> : link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
 
-The `Model`,
+The `Model` (figure 9),
 
 * stores a `UserPref` object that represents the user's preferences.
 * stores the Address Book data.
@@ -254,7 +254,7 @@ image::StorageClassDiagram.png[width="800"]
 <<api, *API*>> : link:{repoURL}/src/main/java/seedu/address/storage/Storage.java[`Storage.java`]
 
 
-The `Storage` component,
+The `Storage` component (figure 10),
 
 * can save `UserPref` objects in json format and read it back.
 * can save the Address Book data in xml format and read it back.
@@ -272,7 +272,7 @@ This section describes some noteworthy details on how certain features are imple
 === Add job feature
 ==== Current Implementation
 
-`Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` (refer to figure).
+`Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` (figure 11).
 
 .Class Diagram of Model component
 image::ModelClassDiagram.png[width="800"]
@@ -387,7 +387,7 @@ Both are managed by the class `CommandWords`.
 
 `CommandWords` only deal with commands that have their default command word declared in the class level reference.
 
-As you can see from figure 12, AddressBookParser makes a reference to CommandWords. However, `CommandWords` resides in `UserPrefs` in the `Model` component. This is to facilitate the saving of data. CommandWords also has a method checkIntegrity, which ensures that object command words are 1 to 1 with class command words. This allows forward compatibility, as well as protects against data corruption to some extent.
+AddressBookParser makes a reference to CommandWords. However, `CommandWords` resides in `UserPrefs` in the `Model` component (figure 12). This is to facilitate the saving of data. CommandWords also has a method checkIntegrity, which ensures that object command words are 1 to 1 with class command words. This allows forward compatibility, as well as protects against data corruption to some extent.
 
 ==== Design Considerations
 

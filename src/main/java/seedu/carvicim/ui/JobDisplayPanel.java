@@ -1,5 +1,6 @@
 package seedu.carvicim.ui;
 
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -11,6 +12,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
+import seedu.carvicim.commons.events.ui.JobDisplayPanelUpdateRequestEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.remark.Remark;
@@ -53,15 +55,26 @@ public class JobDisplayPanel extends UiPart<Region> {
 
     @Subscribe
     private void handleJobPanelSelectionChangedEvent(JobPanelSelectionChangedEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateFxmlElements(event.getJob());
+    }
 
+    @Subscribe
+    private void handlJobDisplayPanelUpdateRequest(JobDisplayPanelUpdateRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        updateFxmlElements(event.getJob());
+    }
+
+    /**
+     * Updates the necessary FXML elements
+     */
+    private void updateFxmlElements(Job job) {
         assignedEmployees.setVisible(true);
 
         //Clear previous selection's information
         assignedEmployees.refresh();
         remarks.getChildren().clear();
 
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        final Job job = event.getJob();
         jobNumber.setText(job.getJobNumber().toString());
         status.setText(job.getStatus().toString());
         date.setText(job.getDate().toString());
@@ -73,10 +86,10 @@ public class JobDisplayPanel extends UiPart<Region> {
         assignedEmployees.setItems(job.getAssignedEmployeesAsObservableList());
 
         int count = 1;
-        for (Remark remark : job.getRemarks()) {
-            remarks.getChildren().add(new Label(count + ") " + remark.value));
+        Iterator<Remark> remarkIterator = job.getRemarks().iterator();
+        while (remarkIterator.hasNext()) {
+            remarks.getChildren().add(new Label(count + ") " + remarkIterator.next().value));
             count++;
         }
-
     }
 }

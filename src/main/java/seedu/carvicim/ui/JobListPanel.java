@@ -16,13 +16,12 @@ import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
 import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
-import seedu.carvicim.commons.events.ui.JumpToListRequestEvent;
 import seedu.carvicim.commons.events.ui.PersonPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobList;
 import seedu.carvicim.model.person.Employee;
 
-//@author yuhongherald
+//@@author yuhongherald
 /**
  * Panel containing the list of jobs.
  */
@@ -68,12 +67,6 @@ public class JobListPanel extends UiPart<Region> {
             jobListView.scrollTo(index);
             jobListView.getSelectionModel().clearAndSelect(index);
         });
-    }
-
-    @Subscribe
-    private void handleJumpToListRequestEvent(JumpToListRequestEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        scrollTo(event.targetIndex);
     }
 
     /**

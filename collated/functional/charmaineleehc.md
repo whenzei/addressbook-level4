@@ -1,21 +1,6 @@
-package seedu.carvicim.logic.commands;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Properties;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-import org.apache.commons.codec.binary.Base64;
-
-import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.model.Message;
-
-import seedu.carvicim.commons.GmailAuthenticator;
-
-//@@author charmaineleehc
+# charmaineleehc
+###### \java\seedu\carvicim\logic\commands\EmailCommand.java
+``` java
 /**
  * Sends email to employee.
  */
@@ -31,7 +16,7 @@ public class EmailCommand extends UndoableCommand {
 
     //these fields are temporarily static final, will no longer be so in v1.5
     private static final String EMAIL_ID = "me";
-    private static final String EMAIL_ADDRESS = "carvicim@gmail.com";
+    private static final String EMAIL_ADDRESS = "sugicharmcanfly@gmail.com";
     private static final String EMAIL_SUBJECT = "Job details";
     private static final String EMAIL_CONTENT = "Hello! :)";
 
@@ -111,3 +96,34 @@ public class EmailCommand extends UndoableCommand {
     }
 
 }
+```
+###### \java\seedu\carvicim\logic\commands\LoginCommand.java
+``` java
+/**
+ * Directs user to the login page of Gmail for user to log in.
+ */
+public class LoginCommand extends UndoableCommand {
+
+    public static final String COMMAND_WORD = "login";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Logs in user into Gmail account.\n"
+            + "Example: " + COMMAND_WORD;
+
+    public static final String MESSAGE_SUCCESS = "You have successfully logged into your Gmail account!";
+
+    private boolean isLoggedIn;
+
+    @Override
+    public CommandResult executeUndoableCommand() {
+        try {
+            new GmailAuthenticator();
+        } catch (IOException ioe) {
+            System.exit(1);
+        }
+
+        isLoggedIn = true;
+        return new CommandResult(MESSAGE_SUCCESS);
+    }
+
+}
+```

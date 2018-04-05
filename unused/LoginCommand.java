@@ -4,7 +4,9 @@ import java.io.IOException;
 
 import seedu.carvicim.commons.GmailAuthenticator;
 
-//@@author charmaineleehc
+//@@author charmaineleehc-unused
+//This command was needed intially as I wanted to allow the user to login to their own account. However, I later
+//decided that it would be better if CarviciM had its own Gmail account and the emails are sent from that account.
 /**
  * Directs user to the login page of Gmail for user to log in.
  */

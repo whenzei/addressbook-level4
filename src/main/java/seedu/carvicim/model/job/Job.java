@@ -2,6 +2,7 @@ package seedu.carvicim.model.job;
 
 import static seedu.carvicim.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -74,11 +75,10 @@ public class Job {
     }
 
     /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
+     * Returns an arraylist of remarks
      */
-    public Set<Remark> getRemarks() {
-        return Collections.unmodifiableSet(remarks.toSet());
+    public ArrayList<Remark> getRemarks() {
+        return remarks.getRemarks();
     }
 
     public void addRemark(Remark remark) {

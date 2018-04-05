@@ -37,8 +37,6 @@ public class DeleteEmployeeCommandTest {
     @Test
     public void execute_deleteFailure_employeeIsAssignedToJob() throws Exception {
         model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
-
-        Employee employeeToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteEmployeeCommand deleteEmployeeCommand = prepareCommand(INDEX_FIRST_PERSON);
 
         assertCommandFailure(deleteEmployeeCommand, model, MESSAGE_EMPLOYEE_IS_ASSIGNED);

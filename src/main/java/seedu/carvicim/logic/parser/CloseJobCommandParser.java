@@ -5,7 +5,6 @@ import static seedu.carvicim.logic.parser.CliSyntax.PREFIX_JOB_NUMBER;
 
 import java.util.stream.Stream;
 
-import jdk.nashorn.internal.runtime.ParserException;
 import seedu.carvicim.commons.exceptions.IllegalValueException;
 import seedu.carvicim.logic.commands.CloseJobCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
@@ -33,8 +32,8 @@ public class CloseJobCommandParser implements Parser<CloseJobCommand> {
             JobNumber jobNumber = ParserUtil.parseJobNumber(argMultimap.getValue(PREFIX_JOB_NUMBER)).get();
 
             return new CloseJobCommand(jobNumber);
-        } catch (IllegalValueException e) {
-            throw new ParseException(e.getMessage(), e);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CloseJobCommand.MESSAGE_USAGE));
         }
     }
 

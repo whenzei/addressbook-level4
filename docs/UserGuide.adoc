@@ -610,7 +610,7 @@ e.g. `email 123`
 e.g. `set adde a`
 * *Theme* : `theme INDEX` +
 e.g. `theme 1`
-* *Clear entire CarviciM* : `clear` 
+* *Clear entire CarviciM* : `clear`
 
 == Glossary
 [[command-box]] Command Box::

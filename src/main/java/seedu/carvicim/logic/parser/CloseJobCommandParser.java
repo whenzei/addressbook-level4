@@ -25,8 +25,8 @@ public class CloseJobCommandParser implements Parser<CloseJobCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_JOB_NUMBER);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_JOB_NUMBER) || !argMultimap.getPreamble().isEmpty()) {
-            throw new ParserException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CloseJobCommand.MESSAGE_USAGE));
+        if (!arePrefixesPresent(argMultimap, PREFIX_JOB_NUMBER)) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CloseJobCommand.MESSAGE_USAGE));
         }
 
         try {

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<carvicim>
+    <!-- Valid Job -->
+    <jobs>
+        <jobNumber>1</jobNumber>
+        <name>Customer1</name>
+        <phone>98765432</phone>
+        <email>customer1@example.com</email>
+        <vehicleNumber>SHG123A</vehicleNumber>
+        <status>ongoing</status>
+        <date>Mar 03 2018</date>
+        <assignedEmployees>
+            <name>Employee</name>
+            <phone>93210283</phone>
+            <email>employee@example.com</email>
+            <tagged>technician</tagged>
+        </assignedEmployees>
+    </jobs>
+    <!-- Job with invalid date -->
+    <jobs>
+        <jobNumber>2</jobNumber>
+        <name>Customer2</name>
+        <phone>98765432</phone>
+        <email>customer2@example.com</email>
+        <vehicleNumber>SHG123A</vehicleNumber>
+        <status>ongoing</status>
+        <date>03/03/2018</date>
+        <assignedEmployees>
+            <name>Employee</name>
+            <phone>93210283</phone>
+            <email>employee@example.com</email>
+            <tagged>technician</tagged>
+        </assignedEmployees>
+    </jobs>
+</carvicim>

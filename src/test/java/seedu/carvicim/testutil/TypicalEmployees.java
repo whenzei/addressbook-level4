@@ -128,6 +128,60 @@ public class TypicalEmployees {
         return ab;
     }
 
+    /**
+     * Returns an {@code Carvicim} with all typical employees and two jobs.
+     */
+    public static Carvicim getTypicalCarvicimWithJobs() {
+        Carvicim ab = new Carvicim();
+        for (Employee employee : getTypicalEmployees()) {
+            try {
+                ab.addEmployee(employee);
+            } catch (DuplicateEmployeeException e) {
+                throw new AssertionError("not possible");
+            }
+        }
+
+        UniqueEmployeeList assignedEmployeeList = new UniqueEmployeeList();
+        try {
+            assignedEmployeeList.add(ALICE);
+        } catch (DuplicateEmployeeException e) {
+            e.printStackTrace();
+        }
+
+        Job firstJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                new JobNumber("1"), new Date("Mar 01 2018"), assignedEmployeeList, new Status(Status.STATUS_CLOSED),
+                new RemarkList());
+        Job secondJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_B),
+                new JobNumber("2"), new Date("Mar 01 2018"), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
+                new RemarkList());
+
+        ab.addJob(firstJob);
+        ab.addJob(secondJob);
+
+        return ab;
+    }
+
+    /**
+     * Returns an {@code Carvicim} with one archived job.
+     */
+    public static Carvicim getTypicalCarvicimWithArchivedJob() {
+        Carvicim ab = new Carvicim();
+        UniqueEmployeeList assignedEmployeeList = new UniqueEmployeeList();
+        try {
+            assignedEmployeeList.add(ALICE);
+        } catch (DuplicateEmployeeException e) {
+            e.printStackTrace();
+        }
+
+        Job firstJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_A),
+                new JobNumber("1"), new Date("Mar 01 2018"), assignedEmployeeList, new Status(Status.STATUS_CLOSED),
+                new RemarkList());
+
+        ab.addJob(firstJob);
+
+        return ab;
+    }
+
     //@@author
     public static List<Employee> getTypicalEmployees() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));

@@ -138,7 +138,7 @@ public class JobList implements Iterable<Job> {
         return builder.toString();
     }
 
-    //@@author whenzei
+    //@@author owzhenwei
     @Override
     public Iterator<Job> iterator() {
         return internalList.iterator();

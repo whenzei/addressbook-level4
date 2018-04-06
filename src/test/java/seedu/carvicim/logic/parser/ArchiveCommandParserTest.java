@@ -7,28 +7,16 @@ import static seedu.carvicim.logic.commands.CommandTestUtil.INVALID_DATERANGE_DE
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_END_DATE;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_START_DATE;
 import static seedu.carvicim.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.carvicim.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import org.junit.Test;
 
 import seedu.carvicim.logic.commands.ArchiveCommand;
 import seedu.carvicim.model.job.Date;
-import seedu.carvicim.model.job.DateRange;
-import seedu.carvicim.testutil.DateRangeBuilder;
 
 //@@author richardson0694
 public class ArchiveCommandParserTest {
 
     private ArchiveCommandParser parser = new ArchiveCommandParser();
-
-    @Test
-    public void parse_allFieldsPresent_success() {
-        DateRange expectedDateRange = new DateRangeBuilder().withDateRange(VALID_START_DATE, VALID_END_DATE).build();
-
-        // one assigned employee
-        assertParseSuccess(parser, DATERANGE_DESC_ONE + DATERANGE_DESC_TWO,
-                new ArchiveCommand(expectedDateRange));
-    }
 
     @Test
     public void parse_compulsoryFieldMissing_failure() {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<archive>
+    <jobs>
+        <jobNumber>1</jobNumber>
+        <name>Alice Pauline</name>
+        <phone>85355255</phone>
+        <email>alice@gmail.com</email>
+        <vehicleNumber>SAT166A</vehicleNumber>
+        <status>closed</status>
+        <date>Mar 01 2018</date>
+        <assignedEmployees>
+            <name>Alice Pauline</name>
+            <phone>85355255</phone>
+            <email>alice@example.com</email>
+            <tagged>mechanic</tagged>
+        </assignedEmployees>
+    </jobs>
+</archive>

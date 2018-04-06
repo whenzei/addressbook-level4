@@ -17,6 +17,7 @@ import seedu.carvicim.model.job.Date;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobList;
+import seedu.carvicim.model.job.Status;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.UniqueEmployeeList;
@@ -138,18 +139,26 @@ public class Carvicim implements ReadOnlyCarvicim {
     /**
      * Archives job entries in Carvicim.
      */
-    public void archiveJob(DateRange dateRange) {
+    public int archiveJob(DateRange dateRange) {
+        int archiveJobCount = 0;
         archiveJobs = new JobList();
         Iterator<Job> iterator = jobs.iterator();
         while (iterator.hasNext()) {
             Job job = iterator.next();
             Date date = job.getDate();
+            Status status = job.getStatus();
+            Status closed = new Status("closed");
             Date startDate = dateRange.getStartDate();
             Date endDate = dateRange.getEndDate();
-            if (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0) {
+            boolean withinRange = (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0)
+                    ? true
+                    : false;
+            if (withinRange) {
                 archiveJobs.add(job);
+                archiveJobCount++;
             }
         }
+        return archiveJobCount;
     }
 
     /**

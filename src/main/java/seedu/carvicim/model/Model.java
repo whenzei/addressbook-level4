@@ -58,7 +58,7 @@ public interface Model {
     void closeJob(Job target) throws JobNotFoundException;
 
     /** Archives the job entries within the date range */
-    void archiveJob(DateRange dateRange);
+    int archiveJob(DateRange dateRange);
 
     /** Analyse job entries within this month */
     JobList analyseJob(JobList jobList);

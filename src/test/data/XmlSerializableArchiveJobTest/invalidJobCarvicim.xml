@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<archive>
+    <!-- Job with invalid date -->
+    <jobs>
+        <jobNumber>1</jobNumber>
+        <name>Customer</name>
+        <phone>98765432</phone>
+        <email>customer@example.com</email>
+        <vehicleNumber>SHG123A</vehicleNumber>
+        <status>ongoing</status>
+        <date>03/03/2018</date>
+        <assignedEmployees>
+            <name>Employee</name>
+            <phone>93210283</phone>
+            <email>employee@example.com</email>
+            <tagged>technician</tagged>
+        </assignedEmployees>
+    </jobs>
+</archive>

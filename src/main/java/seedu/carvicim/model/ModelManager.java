@@ -151,9 +151,13 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public synchronized void archiveJob(DateRange dateRange) {
-        carvicim.archiveJob(dateRange);
-        indicateAddressBookChanged();
+    public synchronized int archiveJob(DateRange dateRange) {
+        int archiveJobCount;
+        archiveJobCount = carvicim.archiveJob(dateRange);
+        if (archiveJobCount != 0) {
+            indicateAddressBookChanged();
+        }
+        return archiveJobCount;
     }
 
     @Override

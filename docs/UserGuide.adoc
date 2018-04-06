@@ -119,17 +119,9 @@ Examples:
 *** You will see "Closed Job: 123" in the <<result-display,result display>>. +
 *** You will not see job of number 123 in the <<jobs-ui-panel,jobs UI panel>>.
 
-=== Adding remark to a job: `remark`
+=== Adding remark to a job: #Coming in V1.5#
 
-You can use this command to add a remark to a specified job. +
-Format: `remark j/JOB_NUMBER r/REMARK`
-
-Examples:
-
-** Example 1: +
-. `remark j/3 r/Take note of the headlights` +
-*** You will see "Remark added: ..." followed by the details of the remark in the result display. +
-*** You will see the newly added remark in the <<job-display-panel,job display panel>>, when the job is selected.
+=== Assigning/removing employees to/from an ongoing job: #Coming in V1.5#
 
 === Archiving job entries: `archive`
 
@@ -466,7 +458,7 @@ Format: `undo`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde`, `deletee` and `remark`).
+Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde` and `deletee`).
 ====
 
 Examples:
@@ -568,8 +560,6 @@ _{explain how the user can enable/disable data encryption}_
 e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 * *Close Job* `closej p/JOB_NUMBER` +
 e.g. `closej j/1232`
-* *Add Remark* `remark j/JOB_NUMBER r/REMARK` +
-e.g. `remark j/12 r/Urgent`
 * *Archive job entries* `archive sd/START_DATE ed/END_DATE` +
 e.g. `archive sd/Mar 25 2018 ed/Apr 03 2018`
 * *Add Employee* `adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` +

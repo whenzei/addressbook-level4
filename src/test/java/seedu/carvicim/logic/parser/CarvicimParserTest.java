@@ -7,11 +7,15 @@ import static seedu.carvicim.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMA
 import static seedu.carvicim.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.carvicim.logic.commands.CommandTestUtil.ASSIGNED_EMPLOYEE_INDEX_DESC_ONE;
 import static seedu.carvicim.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.JOB_NUMBER_DESC_A;
 import static seedu.carvicim.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.carvicim.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.REMARK_DESC;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_JOB_NUMBER_ONE;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
+import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_REMARK;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VALID_VEHICLE_NUMBER_A;
 import static seedu.carvicim.logic.commands.CommandTestUtil.VEHICLE_NUMBER_DESC_ONE;
 import static seedu.carvicim.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -37,14 +41,17 @@ import seedu.carvicim.logic.commands.HelpCommand;
 import seedu.carvicim.logic.commands.HistoryCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
 import seedu.carvicim.logic.commands.RedoCommand;
+import seedu.carvicim.logic.commands.RemarkCommand;
 import seedu.carvicim.logic.commands.SelectEmployeeCommand;
 import seedu.carvicim.logic.commands.ThemeCommand;
 import seedu.carvicim.logic.commands.UndoCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
+import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.VehicleNumber;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.NameContainsKeywordsPredicate;
 import seedu.carvicim.model.person.Person;
+import seedu.carvicim.model.remark.Remark;
 import seedu.carvicim.testutil.ClientBuilder;
 import seedu.carvicim.testutil.EmployeeBuilder;
 import seedu.carvicim.testutil.PersonUtil;
@@ -128,7 +135,6 @@ public class CarvicimParserTest {
         assertEquals(new ThemeCommand(INDEX_FIRST_THEME), command);
     }
 
-    /* Requires bug fix
     @Test
     public void parseCommand_remark() throws Exception {
         RemarkCommand command = (RemarkCommand) parser.parseCommand(RemarkCommand.COMMAND_WORD + " "
@@ -138,7 +144,6 @@ public class CarvicimParserTest {
 
         assertEquals(new RemarkCommand(remark, jobNumber), command);
     }
-    */
 
     @Test
     public void parseCommand_addJob() throws Exception {

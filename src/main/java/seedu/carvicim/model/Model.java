@@ -13,7 +13,6 @@ import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
-import seedu.carvicim.model.remark.Remark;
 
 /**
  * The API of the Model component.
@@ -32,6 +31,8 @@ public interface Model {
 
     void resetJobView();
 
+    void resetJobDisplayPanel();
+
     /** Clears existing backing model and replaces with the provided new data. */
     void resetData(ReadOnlyCarvicim newData, CommandWords newCommandWords);
 
@@ -49,7 +50,7 @@ public interface Model {
     void initJobNumber();
 
     /** Adds the given remark to the job */
-    void addRemark(Job job, Remark remark) throws JobNotFoundException;
+    void addRemark(Job target, Job updatedJob) throws JobNotFoundException;
 
     /** Adds the given job */
     void addJob(Job job);

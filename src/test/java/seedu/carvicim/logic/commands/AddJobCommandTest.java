@@ -159,7 +159,7 @@ public class AddJobCommandTest {
         }
 
         @Override
-        public void closeJob(Job target) throws JobNotFoundException {
+        public void closeJob(Job target, Job updatedJob) throws JobNotFoundException {
             fail("This method should not be called.");
         }
 

@@ -24,6 +24,7 @@ import seedu.carvicim.commons.events.ui.ShowHelpRequestEvent;
 import seedu.carvicim.logic.Logic;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.UserPrefs;
+import seedu.carvicim.model.job.OngoingJobPredicate;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -132,7 +133,7 @@ public class MainWindow extends UiPart<Stage> {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
-        jobListPanel = new JobListPanel(logic.getFilteredJobList());
+        jobListPanel = new JobListPanel(logic.getFilteredJobList().filtered(new OngoingJobPredicate()));
         jobListPanelPlaceholder.getChildren().add(jobListPanel.getRoot());
 
         ResultDisplay resultDisplay = new ResultDisplay();

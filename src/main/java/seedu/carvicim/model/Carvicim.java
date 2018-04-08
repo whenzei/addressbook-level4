@@ -123,7 +123,7 @@ public class Carvicim implements ReadOnlyCarvicim {
     /**
      * Adds a remark to a specified job in Carvicim
      */
-    public void addRemark(Job target, Job updatedJob) {
+    public void updateJob(Job target, Job updatedJob) {
         jobs.replace(target, updatedJob);
     }
 

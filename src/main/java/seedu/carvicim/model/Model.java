@@ -9,6 +9,7 @@ import seedu.carvicim.logic.commands.CommandWords;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobList;
+import seedu.carvicim.model.job.OngoingJobPredicate;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
@@ -24,6 +25,8 @@ public interface Model {
 
     /** {@code Predicate} that always evaluate to true */
     Predicate<Job> PREDICATE_SHOW_ALL_JOBS = unused -> true;
+
+    Predicate<Job> PREDICATE_SHOW_ONGOING_JOBS = new OngoingJobPredicate();
 
     boolean isViewingImportedJobs();
 
@@ -53,7 +56,7 @@ public interface Model {
     void addJob(Job job);
 
     /** Closes the given job */
-    void closeJob(Job target) throws JobNotFoundException;
+    void closeJob(Job target, Job updatedJob) throws JobNotFoundException;
 
     /** Archives the job entries within the date range */
     int archiveJob(DateRange dateRange);

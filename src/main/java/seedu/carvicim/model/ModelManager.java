@@ -124,14 +124,14 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void addJob(Job job) {
         carvicim.addJob(job);
-        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
         indicateAddressBookChanged();
     }
 
     @Override
-    public synchronized void closeJob(Job target) throws JobNotFoundException {
-        carvicim.closeJob(target);
-        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+    public synchronized void closeJob(Job target, Job updatedJob) throws JobNotFoundException {
+        carvicim.updateJob(target, updatedJob);
+        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
         indicateAddressBookChanged();
     }
 
@@ -153,8 +153,8 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public synchronized void addRemark(Job target, Job updatedJob) {
-        carvicim.addRemark(target, updatedJob);
-        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+        carvicim.updateJob(target, updatedJob);
+        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
         indicateAddressBookChanged();
     }
 

@@ -46,7 +46,7 @@ public class Employee extends Person {
         }
 
         Employee otherEmployee = (Employee) other;
-        return otherEmployee.getName().equals(this.getName())
+        return otherEmployee.getName().fullName.equalsIgnoreCase(this.getName().fullName)
                 && otherEmployee.getPhone().equals(this.getPhone())
                 && otherEmployee.getEmail().equals(this.getEmail());
     }

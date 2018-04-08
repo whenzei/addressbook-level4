@@ -1,7 +1,5 @@
 package seedu.carvicim.logic.commands;
 
-//@@author whenzei
-
 import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicimWithAssignedJobs;
 
@@ -14,6 +12,7 @@ import seedu.carvicim.model.Model;
 import seedu.carvicim.model.ModelManager;
 import seedu.carvicim.model.UserPrefs;
 
+//@@author whenzei
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListJobCommand.
  */

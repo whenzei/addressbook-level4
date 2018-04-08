@@ -8,6 +8,8 @@ import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.Carvicim;
 import seedu.carvicim.model.ReadOnlyCarvicim;
+import seedu.carvicim.model.job.Job;
+import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.storage.session.ImportSession;
 import seedu.carvicim.storage.session.SessionData;
 
@@ -18,6 +20,8 @@ public abstract class UndoableCommand extends Command {
     private ReadOnlyCarvicim previousAddressBook;
     private CommandWords previousCommandWords;
     private SessionData sessionData;
+
+    protected String prevJobNumber;
 
     protected abstract CommandResult executeUndoableCommand() throws CommandException;
 
@@ -50,6 +54,10 @@ public abstract class UndoableCommand extends Command {
         ImportSession.getInstance().setSessionData(sessionData);
         model.resetJobView();
         model.resetJobDisplayPanel();
+
+        if(prevJobNumber != null) {
+            JobNumber.setNextJobNumber(prevJobNumber);
+        }
     }
 
     /**
@@ -63,6 +71,10 @@ public abstract class UndoableCommand extends Command {
         } catch (CommandException ce) {
             throw new AssertionError("The command has been successfully executed previously; "
                     + "it should not fail now");
+        }
+
+        if(prevJobNumber != null) {
+            JobNumber.setNextJobNumber(Integer.valueOf(prevJobNumber) + 1 + "");
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }

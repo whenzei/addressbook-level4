@@ -212,7 +212,7 @@ public class MainApp extends Application {
         logger.info("============================ [ Stopping Address Book ] =============================");
         ui.stop();
         try {
-            userPrefs.setNextJobNumber(JobNumber.getNextJobNumberForSaving());
+            userPrefs.setNextJobNumber(JobNumber.getNextJobNumber());
             storage.saveUserPrefs(userPrefs);
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));

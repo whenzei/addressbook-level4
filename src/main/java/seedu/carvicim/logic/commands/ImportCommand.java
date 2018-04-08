@@ -18,7 +18,7 @@ public class ImportCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports an excel file for reviewing. "
             + "Parameters: FILEPATH\n"
-            + "Example: " + COMMAND_WORD + "yourfile.xls";
+            + "Example: " + COMMAND_WORD + " yourfile.xls";
 
     public static final String MESSAGE_SUCCESS = "%s has been imported, with %d job entries!";
 
@@ -38,11 +38,8 @@ public class ImportCommand extends UndoableCommand {
         ImportSession importSession = ImportSession.getInstance();
         try {
             importSession.initializeSession(filePath);
-        } catch (FileAccessException e) {
+        } catch (FileAccessException | FileFormatException e) {
             throw new CommandException(e.getMessage());
-        } catch (FileFormatException e) {
-            throw new CommandException("Excel file first row headers are not defined properly. "
-                    + "Type 'help' to read more.");
         }
 
         if (!model.isViewingImportedJobs()) {

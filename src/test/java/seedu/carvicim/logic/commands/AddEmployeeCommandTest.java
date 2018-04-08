@@ -128,8 +128,7 @@ public class AddEmployeeCommandTest {
         }
 
         @Override public boolean isViewingImportedJobs() {
-            fail("This method should not be called.");
-            return false;
+            return true;
         }
 
         @Override public void switchJobView() {

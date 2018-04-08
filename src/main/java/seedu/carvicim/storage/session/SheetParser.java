@@ -45,7 +45,7 @@ public class SheetParser {
         CLIENT_NAME, CLIENT_PHONE, CLIENT_EMAIL, VEHICLE_NUMBER, EMPLOYEE_NAME, EMPLOYEE_PHONE, EMPLOYEE_EMAIL
     };
     public static final String[] JOB_ENTRY_OPTIONAL_FIELDS = { // ignore case when reading headings
-        STATUS, REMARKS
+        REMARKS
     };
     public static final String MESSAGE_SEPARATOR = ", ";
 

@@ -2,8 +2,7 @@ package seedu.carvicim.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import seedu.carvicim.commons.core.EventsCenter;
-import seedu.carvicim.commons.events.ui.JobDisplayPanelResetRequestEvent;
+import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.Carvicim;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.storage.session.ImportSession;
@@ -19,12 +18,13 @@ public class ClearCommand extends UndoableCommand {
 
 
     @Override
-    public CommandResult executeUndoableCommand() {
+    public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(model);
         model.resetData(new Carvicim(), new CommandWords());
+        model.resetJobView();
+        model.resetJobDisplayPanel();
         JobNumber.initialize("1");
         ImportSession.getInstance().setSessionData(new SessionData());
-        EventsCenter.getInstance().post(new JobDisplayPanelResetRequestEvent());
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

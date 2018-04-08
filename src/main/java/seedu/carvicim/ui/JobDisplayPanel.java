@@ -110,6 +110,7 @@ public class JobDisplayPanel extends UiPart<Region> {
     private void clearFxmlElements() {
         assignedEmployees.setVisible(false);
         remarks.setVisible(false);
+
         jobNumber.setText("");
         status.setText("");
         date.setText("");

@@ -26,8 +26,6 @@ public class JobEntry extends Job {
     private final int sheetNumber;
     private final int rowNumber;
 
-    private boolean reviewed;
-    private boolean approved;
     private final ArrayList<String> comments;
 
     public JobEntry (Person client, VehicleNumber vehicleNumber, JobNumber jobNumber, Date date,
@@ -38,7 +36,6 @@ public class JobEntry extends Job {
         this.rowNumber = rowNumber;
         comments = new ArrayList<>();
         addComment(importComment);
-        reviewed = false;
     }
 
     /**
@@ -51,21 +48,12 @@ public class JobEntry extends Job {
         }
     }
 
-    public boolean isReviewed() {
-        return reviewed;
-    }
-
-    public boolean isApproved() {
-        return approved;
-    }
-
     /**
      * Marks (@code JobEntry) as reviewed.
      * @param approved whether (@code JobEntry) is going to be added to Carvicim
      * @param comment feedback for (@code JobEntry) in String representation
      */
     public void review(boolean approved, String comment) {
-        this.approved = approved;
         addComment(comment);
     }
 

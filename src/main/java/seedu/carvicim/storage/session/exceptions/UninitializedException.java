@@ -4,8 +4,8 @@ package seedu.carvicim.storage.session.exceptions;
 /**
  * Represents an error when {@link seedu.carvicim.storage.session.SessionData} is not initialized.
  */
-public class UnitializedException extends Exception {
-    public UnitializedException(String message) {
+public class UninitializedException extends Exception {
+    public UninitializedException(String message) {
         super(message);
     }
 }

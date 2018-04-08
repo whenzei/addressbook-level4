@@ -17,6 +17,7 @@ import seedu.carvicim.commons.core.EventsCenter;
 import seedu.carvicim.commons.core.LogsCenter;
 import seedu.carvicim.commons.events.model.CarvicimChangedEvent;
 import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
+import seedu.carvicim.commons.events.ui.JobDisplayPanelResetRequestEvent;
 import seedu.carvicim.logic.commands.CommandWords;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
@@ -26,7 +27,6 @@ import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
-import seedu.carvicim.model.remark.Remark;
 import seedu.carvicim.storage.session.ImportSession;
 
 /**
@@ -85,6 +85,11 @@ public class ModelManager extends ComponentManager implements Model {
         }
         EventsCenter.getInstance().post(
                 new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(jobList)));
+    }
+
+    @Override
+    public void resetJobDisplayPanel() {
+        EventsCenter.getInstance().post(new JobDisplayPanelResetRequestEvent());
     }
 
     //@@author whenzei
@@ -167,8 +172,8 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public synchronized void addRemark(Job job, Remark remark) {
-        carvicim.addRemark(job, remark);
+    public synchronized void addRemark(Job target, Job updatedJob) {
+        carvicim.addRemark(target, updatedJob);
         updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         indicateAddressBookChanged();
     }
@@ -183,7 +188,7 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public void addJobs(List<Job> jobs) {
         for (Job job : jobs) {
-            addMissingEmployees(job.getAssignedEmployees());
+            addMissingEmployees(job.getAssignedEmployeesAsSet());
             addJob(job);
         }
     }

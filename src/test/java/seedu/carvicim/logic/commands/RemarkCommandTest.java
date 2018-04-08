@@ -50,10 +50,11 @@ public class RemarkCommandTest {
         RemarkCommand remarkCommand = prepareCommand("abc", "1");
         // Get first job
         Job targetJob = model.getFilteredJobList().get(0);
+        Job updatedJob = RemarkCommand.createUpdatedJob(targetJob, new Remark("abc"));
 
         String expectedMessage = String.format(RemarkCommand.MESSAGE_REMARK_SUCCESS, new Remark("abc"));
         ModelManager expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
-        expectedModel.addRemark(targetJob, new Remark("abc"));
+        expectedModel.addRemark(targetJob, updatedJob);
 
         assertCommandSuccess(remarkCommand, model, expectedMessage, expectedModel);
     }

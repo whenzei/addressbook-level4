@@ -1,9 +1,9 @@
 package seedu.carvicim.logic.commands;
 
 import seedu.carvicim.logic.commands.exceptions.CommandException;
+import seedu.carvicim.model.job.Job;
 import seedu.carvicim.storage.session.ImportSession;
-import seedu.carvicim.storage.session.exceptions.DataIndexOutOfBoundsException;
-import seedu.carvicim.storage.session.exceptions.InvalidDataException;
+import seedu.carvicim.storage.session.SessionData;
 
 //@@author yuhongherald
 
@@ -31,18 +31,13 @@ public class RejectCommand extends UndoableCommand {
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        ImportSession importSession = ImportSession.getInstance();
-        if (importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
+        SessionData sessionData = ImportSession.getInstance().getSessionData();
+        if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        try {
-            importSession.getSessionData().reviewJobEntryUsingJobNumber(jobNumber, false, "");
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException("Excel file has bad format. Try copying the cell values into a new excel file "
-                    + "before trying again");
-        } catch (InvalidDataException e) {
-            throw new CommandException(e.getMessage());
-        }
+        Job job = sessionData.reviewJobEntryUsingJobNumber(jobNumber, false, "");
+        model.addJob(job);
+
         if (!model.isViewingImportedJobs()) {
             model.switchJobView();
         }

@@ -23,7 +23,7 @@ public class ImportSessionTest {
         String path = classLoader.getResource(TEST_INPUT_FILE)
                 .getPath();
         importSession.initializeSession(path);
-        importSession.reviewAllRemainingJobEntries(true);
+        importSession.getSessionData().reviewAllRemainingJobEntries(true, "");
         importSession.closeSession();
         //deleteFile(OUTFILE_NAME);
     }

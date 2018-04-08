@@ -80,7 +80,7 @@ public class UserPrefs {
 
 
     public void setGuiSettingsDefault() {
-        this.setGuiSettings(500, 500, 0, 0);
+        this.setGuiSettings(1024, 768, 0, 0);
     }
 
     public String getCarvicimFilePath() {

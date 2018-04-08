@@ -92,7 +92,7 @@ public class XmlAdaptedJob {
         for (Employee employee : source.getAssignedEmployees()) {
             assignedEmployees.add(new XmlAdaptedEmployee(employee));
         }
-        for (Remark remark : source.getRemarks()) {
+        for (Remark remark : source.getRemarkList()) {
             remarks.add(new XmlAdaptedRemark(remark));
         }
     }

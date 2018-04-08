@@ -23,7 +23,6 @@ import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.UniqueEmployeeList;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
-import seedu.carvicim.model.remark.Remark;
 import seedu.carvicim.model.tag.Tag;
 import seedu.carvicim.model.tag.UniqueTagList;
 
@@ -124,15 +123,8 @@ public class Carvicim implements ReadOnlyCarvicim {
     /**
      * Adds a remark to a specified job in Carvicim
      */
-    public void addRemark(Job job, Remark remark) {
-        Iterator<Job> iterator = jobs.iterator();
-        while (iterator.hasNext()) {
-            Job currJob = iterator.next();
-            if (currJob.equals(job)) {
-                job.addRemark(remark);
-                break;
-            }
-        }
+    public void addRemark(Job target, Job updatedJob) {
+        jobs.replace(target, updatedJob);
     }
 
     //@@author richardson0694

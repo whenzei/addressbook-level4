@@ -18,17 +18,19 @@ public abstract class UndoableCommand extends Command {
     private ReadOnlyCarvicim previousAddressBook;
     private CommandWords previousCommandWords;
     private SessionData sessionData;
+    private boolean isViewingImportedJobs;
 
     protected abstract CommandResult executeUndoableCommand() throws CommandException;
 
     /**
      * Stores the current state of {@code model#carvicim}.
      */
-    private void saveAddressBookSnapshot() {
+    private void saveAddressBookSnapshot() throws CommandException {
         requireNonNull(model);
         this.previousAddressBook = new Carvicim(model.getCarvicim());
         this.previousCommandWords = new CommandWords(model.getCommandWords());
         this.sessionData = ImportSession.getInstance().getSessionData().createCopy();
+        isViewingImportedJobs = model.isViewingImportedJobs();
     }
 
     /**
@@ -42,13 +44,18 @@ public abstract class UndoableCommand extends Command {
      * was executed and updates the filtered employee list to
      * show all persons.
      */
-    protected final void undo() {
+    protected final void undo() throws CommandException {
         requireAllNonNull(model, previousAddressBook);
         model.resetData(previousAddressBook, previousCommandWords);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         model.updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         ImportSession.getInstance().setSessionData(sessionData);
+        sessionData = sessionData.createCopy();
+        if (model.isViewingImportedJobs() != isViewingImportedJobs) {
+            model.switchJobView();
+        }
         model.resetJobView();
+        model.resetJobDisplayPanel();
     }
 
     /**

@@ -59,10 +59,21 @@ public class JobList implements Iterable<Job> {
      *
      * @throws JobNotFoundException if no such job could be found in the list
      */
-    public boolean remove(Job toRemove) throws JobNotFoundException {
+    public boolean remove(Job toRemove) {
         requireNonNull(toRemove);
         final boolean jobFoundAndDeleted = internalList.remove(toRemove);
         return jobFoundAndDeleted;
+    }
+
+    /**
+     * Replaces the {@targetJob} with the {@updateJob}
+     *
+     * @throws JobNotFoundException if no {@targetJob} exists
+     */
+    public void replace(Job targetJob, Job updatedJob) {
+        requireAllNonNull(targetJob, updatedJob);
+        int targetIndex = internalList.indexOf(targetJob);
+        internalList.set(targetIndex, updatedJob);
     }
 
     /**

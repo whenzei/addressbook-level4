@@ -12,6 +12,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
+import seedu.carvicim.commons.events.ui.JobDisplayPanelResetRequestEvent;
 import seedu.carvicim.commons.events.ui.JobDisplayPanelUpdateRequestEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
@@ -60,9 +61,15 @@ public class JobDisplayPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    private void handlJobDisplayPanelUpdateRequest(JobDisplayPanelUpdateRequestEvent event) {
+    private void handlJobDisplayPanelUpdateRequestEvent(JobDisplayPanelUpdateRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         updateFxmlElements(event.getJob());
+    }
+
+    @Subscribe
+    private void handleJobDisplayPanelResetRequestEvent(JobDisplayPanelResetRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        clearFxmlElements();
     }
 
     /**
@@ -86,10 +93,25 @@ public class JobDisplayPanel extends UiPart<Region> {
         assignedEmployees.setItems(job.getAssignedEmployeesAsObservableList());
 
         int count = 1;
-        Iterator<Remark> remarkIterator = job.getRemarks().iterator();
+        Iterator<Remark> remarkIterator = job.getRemarkList().iterator();
         while (remarkIterator.hasNext()) {
             remarks.getChildren().add(new Label(count + ") " + remarkIterator.next().value));
             count++;
         }
+    }
+
+    /**
+     * Clear the FXML elements
+     */
+    private void clearFxmlElements() {
+        assignedEmployees.setVisible(false);
+        remarks.getChildren().clear();
+        jobNumber.setText("");
+        status.setText("");
+        date.setText("");
+        vehicleNumber.setText("");
+        name.setText("");
+        phone.setText("");
+        email.setText("");
     }
 }

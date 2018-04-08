@@ -17,6 +17,7 @@ import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.remark.Remark;
+import seedu.carvicim.model.remark.RemarkList;
 
 //@@author whenzei
 /**
@@ -36,6 +37,7 @@ public class RemarkCommand extends UndoableCommand {
     private final Remark remark;
 
     private Job target;
+    private Job updatedJob;
 
     /**
      * Creates a RemarkCommand to add the specified {@code Remark}
@@ -49,12 +51,13 @@ public class RemarkCommand extends UndoableCommand {
     @Override
     public CommandResult executeUndoableCommand() {
         requireNonNull(target);
+        requireNonNull(updatedJob);
         try {
-            model.addRemark(target, remark);
+            model.addRemark(target, updatedJob);
         } catch (JobNotFoundException jnfe) {
             throw new AssertionError("The target job cannot be missing");
         }
-        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(target));
+        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(updatedJob));
         return new CommandResult(String.format(MESSAGE_REMARK_SUCCESS, remark));
     }
 
@@ -67,6 +70,7 @@ public class RemarkCommand extends UndoableCommand {
             Job currentJob = jobIterator.next();
             if (currentJob.getJobNumber().equals(jobNumber)) {
                 target = currentJob;
+                updatedJob = createUpdatedJob(target, remark);
                 break;
             }
         }
@@ -83,5 +87,17 @@ public class RemarkCommand extends UndoableCommand {
                 && this.jobNumber.equals(((RemarkCommand) other).jobNumber)
                 && this.remark.equals(((RemarkCommand) other).remark)
                 && Objects.equals(this.target, ((RemarkCommand) other).target));
+    }
+
+    /**
+     * Creates and returns a new {@code Job} with a new remark added
+     */
+    public static Job createUpdatedJob(Job jobToEdit, Remark remark) {
+        assert jobToEdit != null;
+        RemarkList remarks = new RemarkList(jobToEdit.getRemarkList().getRemarks());
+        remarks.add(remark);
+
+        return new Job(jobToEdit.getClient(), jobToEdit.getVehicleNumber(), jobToEdit.getJobNumber(),
+                jobToEdit.getDate(), jobToEdit.getAssignedEmployees(), jobToEdit.getStatus(), remarks);
     }
 }

@@ -5,7 +5,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
@@ -14,12 +13,12 @@
 
 <!-- @@author whenzei -->
 
-<StackPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="681.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane fx:id="jobDisplay" prefHeight="608.0" prefWidth="647.0" stylesheets="@TealTheme.css">
+      <GridPane fx:id="jobDisplay" gridLinesVisible="true" prefHeight="681.0" prefWidth="863.0" stylesheets="@TealTheme.css">
         <columnConstraints>
-          <ColumnConstraints maxWidth="645.0" minWidth="10.0" prefWidth="194.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="451.0" />
+          <ColumnConstraints maxWidth="645.0" minWidth="10.0" prefWidth="200.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="608.0" minWidth="0.0" prefWidth="535.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="197.0" minHeight="0.0" prefHeight="36.0" valignment="TOP" vgrow="SOMETIMES" />
@@ -77,11 +76,20 @@
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <VBox prefHeight="98.0" prefWidth="576.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <Label fx:id="name" lineSpacing="2.0" styleClass="label-bright" />
-                  <Label fx:id="phone" lineSpacing="2.0" styleClass="label-bright" />
-                  <Label fx:id="email" lineSpacing="2.0" styleClass="label-bright" />
+                  <Label fx:id="name" lineSpacing="2.0" styleClass="label-bright">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <Label fx:id="phone" lineSpacing="2.0" styleClass="label-bright">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <Label fx:id="email" lineSpacing="2.0" styleClass="label-bright">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
                </children>
             </VBox>
             <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="151.0" styleClass="label-bright" text="Assigned Employees:" underline="true" GridPane.rowIndex="5">
@@ -100,12 +108,31 @@
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <FlowPane fx:id="remarks" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label fx:id="vehicleNumber" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="date" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="status" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="jobNumber" styleClass="label-bright" GridPane.columnIndex="1" />
-            <ListView fx:id="assignedEmployees" prefHeight="200.0" prefWidth="200.0" styleClass="list-cell" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="vehicleNumber" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <Label fx:id="date" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <Label fx:id="status" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <Label fx:id="jobNumber" styleClass="label-bright" GridPane.columnIndex="1">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <ListView fx:id="assignedEmployees" prefHeight="200.0" prefWidth="200.0" styleClass="label-bright" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </GridPane.margin></ListView>
+            <ListView fx:id="remarks" prefHeight="200.0" prefWidth="200.0" styleClass="list-cell" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets top="10.0" />
+               </GridPane.margin>
+            </ListView>
          </children>
          <effect>
             <Glow />

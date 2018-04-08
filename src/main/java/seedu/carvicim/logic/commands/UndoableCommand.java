@@ -2,13 +2,12 @@ package seedu.carvicim.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.carvicim.commons.util.CollectionUtil.requireAllNonNull;
-import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_JOBS;
 import static seedu.carvicim.model.Model.PREDICATE_SHOW_ALL_PERSONS;
+import static seedu.carvicim.model.Model.PREDICATE_SHOW_ONGOING_JOBS;
 
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.Carvicim;
 import seedu.carvicim.model.ReadOnlyCarvicim;
-import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.storage.session.ImportSession;
 import seedu.carvicim.storage.session.SessionData;
@@ -17,11 +16,12 @@ import seedu.carvicim.storage.session.SessionData;
  * Represents a command which can be undone and redone.
  */
 public abstract class UndoableCommand extends Command {
+    protected String prevJobNumber;
+
     private ReadOnlyCarvicim previousAddressBook;
     private CommandWords previousCommandWords;
     private SessionData sessionData;
 
-    protected String prevJobNumber;
 
     protected abstract CommandResult executeUndoableCommand() throws CommandException;
 
@@ -50,12 +50,12 @@ public abstract class UndoableCommand extends Command {
         requireAllNonNull(model, previousAddressBook);
         model.resetData(previousAddressBook, previousCommandWords);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        model.updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+        model.updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
         ImportSession.getInstance().setSessionData(sessionData);
         model.resetJobView();
         model.resetJobDisplayPanel();
 
-        if(prevJobNumber != null) {
+        if (prevJobNumber != null) {
             JobNumber.setNextJobNumber(prevJobNumber);
         }
     }
@@ -73,7 +73,7 @@ public abstract class UndoableCommand extends Command {
                     + "it should not fail now");
         }
 
-        if(prevJobNumber != null) {
+        if (prevJobNumber != null) {
             JobNumber.setNextJobNumber(Integer.valueOf(prevJobNumber) + 1 + "");
         }
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);

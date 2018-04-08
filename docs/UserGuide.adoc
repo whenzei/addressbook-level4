@@ -40,7 +40,7 @@ This icon represents a useful tip
 
 This section will show you how to setup the neccessary environment in order to run CarviciM on your desktop.
 
-.  Ensure you have link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java] version `1.8.0_60` or later installed in your Computer. 
+.  Ensure you have link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java] version `1.8.0_60` or later installed in your Computer.
 +
 [NOTE]
 Having any Java 8 version is not enough. +
@@ -89,17 +89,15 @@ Here are some example commands you can try:
 * **`deletee`**`3` : deletes the 3rd employee shown in the current list
 * *`exit`* : exits the app
 
-=== 
-*Command Format*
+=== Command Format
 
 Before reading more about commands, you should take note of the command format used in the user guide:
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `adde n/NAME`, `NAME` is a parameter which can be used as `adde n/John Doe`.
-* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`.
+* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`._
 * Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]...` can be used as `{nbsp}` (i.e. 0 times), `t/mechanic`, `t/technician` etc.
 * Items with `+` after them can be used multiple times but has to be used **at least once** e.g. `w/ASSIGNED_EMPLOYEE_INDEX+` can be used as `w/4`, `w/5` etc.
 * Parameters can be in any order e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-===
 
 For details of each command, you can refer to <<Features>>.
 

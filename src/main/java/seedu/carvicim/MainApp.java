@@ -25,6 +25,7 @@ import seedu.carvicim.model.Model;
 import seedu.carvicim.model.ModelManager;
 import seedu.carvicim.model.ReadOnlyCarvicim;
 import seedu.carvicim.model.UserPrefs;
+import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.util.SampleDataUtil;
 import seedu.carvicim.storage.ArchiveJobStorage;
 import seedu.carvicim.storage.CarvicimStorage;
@@ -70,7 +71,6 @@ public class MainApp extends Application {
         initLogging(config);
 
         model = initModelManager(storage, userPrefs);
-        model.initJobNumber();
 
         logic = new LogicManager(model);
 
@@ -96,6 +96,10 @@ public class MainApp extends Application {
             carvicimOptional = storage.readCarvicim();
             if (!carvicimOptional.isPresent()) {
                 logger.info("Data file not found. Will be starting with a sample Carvicim");
+                //Initialized to match the job number provided by the sample data
+                JobNumber.initialize("3");
+            } else {
+                JobNumber.initialize(userPrefs.getNextJobNumber());
             }
             initialData = carvicimOptional.orElseGet(SampleDataUtil::getSampleCarvicim);
         } catch (DataConversionException e) {
@@ -208,6 +212,7 @@ public class MainApp extends Application {
         logger.info("============================ [ Stopping Address Book ] =============================");
         ui.stop();
         try {
+            userPrefs.setNextJobNumber(JobNumber.getNextJobNumberForSaving());
             storage.saveUserPrefs(userPrefs);
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));

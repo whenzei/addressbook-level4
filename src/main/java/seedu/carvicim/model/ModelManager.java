@@ -92,25 +92,6 @@ public class ModelManager extends ComponentManager implements Model {
         EventsCenter.getInstance().post(new JobDisplayPanelResetRequestEvent());
     }
 
-    //@@author whenzei
-    /**
-     * Initializes the running job number based on the past job numbers.
-     */
-    @Override
-    public void initJobNumber() {
-        if (filteredJobs.isEmpty()) {
-            JobNumber.initialize(ONE_AS_STRING);
-            return;
-        }
-        int largest = filteredJobs.get(0).getJobNumber().asInteger();
-        for (Job job : filteredJobs) {
-            if (job.getJobNumber().asInteger() > largest) {
-                largest = job.getJobNumber().asInteger();
-            }
-        }
-        JobNumber.initialize(largest + 1);
-    }
-
     @Override
     public void resetData(ReadOnlyCarvicim newData, CommandWords newCommandWords) {
         carvicim.resetData(newData);

@@ -17,11 +17,13 @@ public class UserPrefs {
     private CommandWords commandWords;
     private String themeName;
     private String extensionName;
+    private String nextJobNumber;
 
     public UserPrefs() {
         setGuiSettingsDefault();
         setDefaultExtensionName();
         setDefaultThemeName();
+        setDefaultNextJobNumber();
         commandWords = new CommandWords();
     }
 
@@ -38,6 +40,10 @@ public class UserPrefs {
         commandWords.checkIntegrity();
     }
 
+    public String getNextJobNumber() {
+        return nextJobNumber;
+    }
+
     public CommandWords getCommandWords() {
         return commandWords == null ? new CommandWords() : commandWords;
     }
@@ -52,6 +58,10 @@ public class UserPrefs {
 
     public String getExtensionName() {
         return extensionName;
+    }
+
+    public void setNextJobNumber(String nextJobNumber) {
+        this.nextJobNumber = nextJobNumber;
     }
 
     public void setThemeName(String themeName) {
@@ -78,9 +88,12 @@ public class UserPrefs {
         this.extensionName = "ExtensionsDark";
     }
 
+    public void setDefaultNextJobNumber() {
+        this.nextJobNumber = "1";
+    }
 
     public void setGuiSettingsDefault() {
-        this.setGuiSettings(500, 500, 0, 0);
+        this.setGuiSettings(1000, 1000, 0, 0);
     }
 
     public String getCarvicimFilePath() {
@@ -122,7 +135,8 @@ public class UserPrefs {
                 && Objects.equals(carvicimFilePath, o.carvicimFilePath)
                 && Objects.equals(carvicimName, o.carvicimName)
                 && Objects.equals(themeName, o.themeName)
-                && Objects.equals(extensionName, o.extensionName);
+                && Objects.equals(extensionName, o.extensionName)
+                && Objects.equals(nextJobNumber, o.nextJobNumber);
     }
 
     @Override

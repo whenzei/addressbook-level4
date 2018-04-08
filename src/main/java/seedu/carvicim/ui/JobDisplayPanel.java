@@ -1,6 +1,5 @@
 package seedu.carvicim.ui;
 
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 import com.google.common.eventbus.Subscribe;
@@ -8,7 +7,6 @@ import com.google.common.eventbus.Subscribe;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
@@ -17,7 +15,6 @@ import seedu.carvicim.commons.events.ui.JobDisplayPanelUpdateRequestEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.Status;
-import seedu.carvicim.model.remark.Remark;
 
 //@@author whenzei
 /**

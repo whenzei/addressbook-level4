@@ -46,9 +46,6 @@ public interface Model {
     /** Returns the Carvicim */
     ReadOnlyCarvicim getCarvicim();
 
-    /** Initializes the job number based on the list of jobs */
-    void initJobNumber();
-
     /** Adds the given remark to the job */
     void addRemark(Job target, Job updatedJob) throws JobNotFoundException;
 

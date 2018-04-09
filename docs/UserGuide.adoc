@@ -143,13 +143,13 @@ You will see the job of number 2 have its status shown as "closed" in the job li
 
 === Adding remark to a job: `remark`
 
-To add remark or special note to an ongoing job entry, you can use this command.
+To add remark or special note to an ongoing job entry, you can use this command.+
 Format: `remark j/JOB_NUMBER r/YOUR_REMARK`
 
 Example:
 
 `remark j/2 r/An urgent work that should be completed asap` +
-This command will add the remark "An urgent work that should be completed asap" to a job entry of a job number "2". 
+This command will add the remark "An urgent work that should be completed asap" to a job entry of a job number "2". +
 You will see the message "Remark Added: An urgent work that should be completed asap" shown in the result display.
 
 
@@ -162,7 +162,7 @@ Format: `listj`
 * This command will show you all the jobs (closed and ongoing) in CarviciM .
 ====
 
-=== Locating employees by name: `findj`
+=== Locating jobs by keyword: `findj`
 
 To find jobs of specific details, you can use this command. +
 Format: `finde KEYWORD [MORE_KEYWORDS]`
@@ -179,10 +179,12 @@ Format: `finde KEYWORD [MORE_KEYWORDS]`
 Examples:
 
 * Example 1: +
+
 `findj John` +
 You will see all jobs with `john` as their client name (not case-sensitive), shown in the job list panel.
 
 * Example 2: +
+
 `findj Apr Feb` +
 You will see all jobs with `Apr` or `Feb` as their job detail (not case-sensitive), shown in the job list panel.
 
@@ -237,15 +239,17 @@ Format: `deletee INDEX`
 
 Examples:
 
-*Example 1: +
+* Example 1: +
 `liste` +
-You will see a list of employees displayed in the employee list panel.
+You will see a list of employees displayed in the employee list panel.+
+
 `deletee 2` +
 You will see an updated employee list panel which has the 2nd employee removed.
 
-*Example 2: +
+* Example 2: +
 `finde Betsy` +
-You will see the results of the `finde` command which shows all employees with matching keyword name, in the employee list panel.
+You will see the results of the `finde` command which shows all employees with matching keyword name, in the employee list panel. +
+
 `deletee 1` +
 You will see an updated employees list panel which has the 1st employee removed.
 
@@ -270,14 +274,18 @@ Format: `selecte INDEX`
 Examples:
 
 * Example 1: +
+
 `liste` +
-You will see a list of employees displayed in the employee list panel.
+You will see a list of employees displayed in the employee list panel. +
+
 `selecte 2` +
 You will see an updated job list panel which has the jobs of the 2nd employee.
 
 * Example 2: +
+
 `finde Betsy` +
-You will see the results of the `finde` command which shows all employees with matching keyword name.
+You will see the results of the `finde` command which shows all employees with matching keyword name. +
+
 `selecte 1` +
 You will see an updated job list panel which has the jobs of the 1st employee.
 
@@ -298,10 +306,12 @@ Format: `finde KEYWORD [MORE_KEYWORDS]`
 Examples:
 
 * Example 1: +
+
 `finde John` +
 You will see all employees with `john` as their name (not case-sensitive), shown in the employee list panel.
 
 * Example 2: +
+
 `finde Betsy Tim John` +
 You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
 
@@ -322,11 +332,13 @@ Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 Examples:
 
 * Example 1: +
+
 `set adde a` +
 Sets `adde` command word to `a` using default. +
 You will see "adde has been replaced with a!" in the result display.
 
 * Example 2: +
+
 `set deletee d` +
 Sets `deletee` command word to `d` using default. +
 You will see "deletee has been replaced with d!" in the result display.
@@ -363,12 +375,10 @@ equivalent to an <<import-command, `import`>>, <<acceptAll-command, `acceptAll`>
 [TIP]
 You can use this command to import all job entries from an excel file to save time.
 
-Examples:
+Example:
 
-** Example 1: +
-. `importAll excel.xlsx` +
-*** Imports file excel.xlsx, accepts all job entries and saves the reviewed job entries as
-an external excel file.
+`importAll excel.xlsx` +
+Imports file excel.xlsx, accepts all job entries and saves the reviewed job entries as an external excel file.
 
 ==== Switching views between unreviewed jobs and jobs in CarviciM: `switch`
 
@@ -388,7 +398,7 @@ You can use 4 commands when reviewing changes:
 To accept a job with job number `NUMBER` in the imported list, you can use this command.
 Format: `accept NUMBER`
 
-Examples:
+Example:
 
 `accept 1` +
 Accepts the job entry with job number 1 and removes it from imported list.
@@ -399,7 +409,7 @@ Accepts the job entry with job number 1 and removes it from imported list.
 To accept all remaining jobs, you can use this command.
 Format: `acceptAll`
 
-Examples:
+Example:
 
 `acceptAll` +
 Accepts all remaining job entries and clears the imported list.
@@ -409,7 +419,7 @@ Accepts all remaining job entries and clears the imported list.
 To reject a job with job number `NUMBER` in the imported list, you can use this command.
 Format: `reject NUMBER`
 
-Examples:
+Example:
 
 `reject 1` +
 Rejects job entry with job number 1 and removes it from imported list. It is not added to CarviciM.
@@ -419,7 +429,7 @@ Rejects job entry with job number 1 and removes it from imported list. It is not
 To reject all remaining jobs in the imported list, you can use this command.
 Format: `rejectAll`
 
-Examples:
+Example:
 
 `rejectAll` +
 Rejects all remaining job entries and clears the imported list.
@@ -436,18 +446,22 @@ You can type any alphanumeric sentence as a comment, as long as it is after the 
 Examples:
 
 * Example 1: +
+
 `accept 1` good job` +
 Accepts first job and attaches "good job" as a comment to the first job.
 
 * Example 2: +
+
 `acceptAll well done` +
 Accepts all remaining imported jobs and attaches "well done" as a comment to all the remaining imported jobs.
 
 * Example 3: +
+
 `reject 1 Speak to you during tomorrow's meeting.` +
 Rejects first job and attaches "Speak to you during tomorrow's meeting." as a comment to the first job.
 
 * Example 4: +
+
 `rejectAll Please check the customer details.` +
 Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
 
@@ -468,11 +482,10 @@ it is saved added to the end of the filename.
 Filepath: A text representation of the file location in the computer.
 ====
 
-Examples:
+Example:
 
-** Example 1: +
-. `export summary report` +
-*** Exports the feedback to "summary report.xls"
+`export summary report` +
+Exports the feedback to "summary report.xls"
 // end::importexport[]
 
 // tag::theme[]
@@ -490,7 +503,8 @@ Format: `theme INDEX`
 Example:
 
 `theme` +
-You will see the list of valid themes to choose from in the <<result-display,result display>>.
+You will see the list of valid themes to choose from in the result display. +
+
 `theme 1` +
 You will see the theme of the application set as the selected one.
 
@@ -520,19 +534,25 @@ Undoable commands: those commands that modify CarviciM's content (`addj, `closej
 Examples:
 
 * Example 1: +
+
 `deletee 1` +
-Deletes the first employee in CarviciM.+You will see that the first employee is no longer displayed in the employee list panel.
+Deletes the first employee in CarviciM.+You will see that the first employee is no longer displayed in the employee list panel. +
+
 `liste` +
 Shows all employees in CarviciM. +
-You will not see the deleted employee of index 1 in employee list panel.
+You will not see the deleted employee of index 1 in employee list panel. +
+
 `undo` (reverses the `delete 1` command) +
 You will see the deleted employee present in the employee list panel again.
 
 * Example 2: +
+
 `closej j/1` +
-You will see that job number 1 is removed from the job list panel.
+You will see that job number 1 is removed from the job list panel. +
+
 `undo` (reverses the `closej j/1` command) +
-You will see that job number 1 is added back into the job list panel.
+You will see that job number 1 is added back into the job list panel. +
+
 `undo` +
 The `undo` command fails as there are no undoable commands.
 
@@ -544,24 +564,33 @@ Format: `redo`
 Examples:
 
 * Example 1: +
+
 `deletee 1` +
-You will see that the first employee is removed from the employee list panel.
+You will see that the first employee is removed from the employee list panel. +
+
 `undo` (reverses the `deletee 1` command) +
-You will see that the deleted employee is added back into the employee list panel.
+You will see that the deleted employee is added back into the employee list panel. +
+
 `redo` (reapplies the `deletee 1` command) +
 You will see that the same employee is removed from the employee list panel again.
 
 * Example 2: +
+
 `closej j/1` +
-You will see that the job number 1 has its status changed to "closed" in the job list panel.
+You will see that the job number 1 has its status changed to "closed" in the job list panel. +
+
 `deletee 1` +
-You will see that the first employee is removed from the employee list panel.
-. `undo` (reverses the `deletee 1` command) +
-You will see that the deleted employee is added back into the employee list panel.
+You will see that the first employee is removed from the employee list panel. +
+
+`undo` (reverses the `deletee 1` command) +
+You will see that the deleted employee is added back into the employee list panel. +
+
 `undo` (reverses the `closej j/1` command) +
-You will see that the closed job number 1 has it status changed to "ongoing" in the job list panel.
+You will see that the closed job number 1 has it status changed to "ongoing" in the job list panel. +
+
 `redo` (reapplies the `closej j/1` command) +
-You will see that the job number 1 has its status changed back to "closed" again, in the job list panel.
+You will see that the job number 1 has its status changed back to "closed" again, in the job list panel. +
+
 `redo` (reapplies the `deletee 1` command) +
 You will see that the same employee is removed from the employee list panel.
 // end::undoredo[]

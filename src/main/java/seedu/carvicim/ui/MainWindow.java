@@ -24,7 +24,6 @@ import seedu.carvicim.commons.events.ui.ShowHelpRequestEvent;
 import seedu.carvicim.logic.Logic;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.UserPrefs;
-import seedu.carvicim.model.job.OngoingJobPredicate;
 
 /**
  * The Main Window. Provides the basic application layout containing

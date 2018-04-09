@@ -108,25 +108,26 @@ This section will explain to you how you can use the features of CarviciM.
 
 === Viewing help : `help`
 
-To bring out the help menu in CarviciM, you can use this command. +
+To find out more on using CarviciM, you can use this command to bring out the help menu. +
 Format: `help`
 
 === Adding a job entry: `addj`
 
-To add a new job entry into CarviciM for easy management, you can use this command. +
+To add a new job entry into CarviciM, you can use this command. +
 Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+`
 
-****
-* Adds a job with the given fields and assign employees based on specified `ASSIGNED_EMPLOYEE_INDEX`.
-* The index refers to the index number shown in the most recent listing.
+[NOTE]
+====
+* The `addj` command adds a job with the given fields, and assign employees based on specified `ASSIGNED_EMPLOYEE_INDEX`.
+* The index refers to the index number shown in the most recent employee listing.
 * The index *must be a positive integer* 1, 2, 3, ...
-****
+====
 
 Example:
 
 `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
 You will see "New job added: ... " in the result display. +
-The job list panel will be updated to display the newly added job
+The job list panel will be updated to display the newly added job.
 
 === Closing a job entry: `closej`
 
@@ -135,38 +136,74 @@ Format: `closej j/JOB_NUMBER`
 
 Example:
 
-`closej j/123` +
-This command closes the ongoing job of number 123 in CarviciM. +
-You will see "Closed Job: 123" in the result display. +
-You will not see job of number 123 in the job list panel.
+`closej j/2` +
+This command closes the ongoing job of number 2 in CarviciM. +
+You will see "Closed Job: 2" in the result display. +
+You will see the job of number 2 have its status shown as "closed" in the job list panel.
 
 === Adding remark to a job: `remark`
 
-To make remark or special note for an ongoing job entry, you can use this command.
+To add remark or special note to an ongoing job entry, you can use this command.
 Format: `remark j/JOB_NUMBER r/YOUR_REMARK`
 
 Example:
 
 `remark j/2 r/An urgent work that should be completed asap` +
-This command will add the remark "An urgent work that should be completed asap" to a job entry with a job number of "2". 
+This command will add the remark "An urgent work that should be completed asap" to a job entry of a job number "2". 
 You will see the message "Remark Added: An urgent work that should be completed asap" shown in the result display.
+
+
+=== Listing all jobs : `listj`
+To view a list of all jobs in CarviciM, you can use this command. +
+Format: `listj`
+
+[NOTE]
+====
+* This command will show you all the jobs (closed and ongoing) in CarviciM .
+====
+
+=== Locating employees by name: `findj`
+
+To find jobs of specific details, you can use this command. +
+Format: `finde KEYWORD [MORE_KEYWORDS]`
+
+[NOTE]
+====
+* The search is case insensitive. e.g `apr` will match `Apr`
+* The order of the keywords does not matter. e.g. `John Doe` will match `Doe John`
+* The *name*, *vehicle number*, *date* and *job number* will be searched.
+* Only full words will be matched e.g. `Joh` will not match `John`
+* Jobs details matching at least one keyword will be returned (i.e. `OR` search). e.g. `John Apr` will return jobs with client name `John Doe` and date `20 Apr 2019`.
+====
+
+Examples:
+
+* Example 1: +
+`findj John` +
+You will see all jobs with `john` as their client name (not case-sensitive), shown in the job list panel.
+
+* Example 2: +
+`findj Apr Feb` +
+You will see all jobs with `Apr` or `Feb` as their job detail (not case-sensitive), shown in the job list panel.
+
 
 === Archiving job entries: `archive`
 
 To archive job entries within a specified range in CarviciM, you can use this command. +
 Format: `archive sd/START_DATE ed/END_DATE`
 
-****
+[NOTE]
+====
 * Archives the job entries within the specified `START_DATE` and `END_DATE`.
 * The `START_DATE` *must be earlier than* the `END_DATE`.
 * Both dates should be in the form of *MMM DD YYYY*.
-****
+====
 
 Example:
 
 `archive sd/Mar 25 2018 ed/Apr 03 2018` +
 The command will save the job entries within the selected date range in CarviciM. +
-You will see "Archived Successfully" +
+You will see "Archived Successfully" in the result display. +
 You will see the newly created archive file.
 
 === Adding an employee: `adde`
@@ -183,97 +220,96 @@ You will see the newly added details of the employee in the employee list panel.
 
 === Listing all employees : `liste`
 
-To view a list of details belonging to the employees in CarviciM, you can use this command. +
+To view a list of employee details in CarviciM, you can use this command. +
 Format: `liste`
+
+=== Deleting an employee : `deletee`
+
+To remove the details of an employee from CarviciM, you can use this command. +
+Format: `deletee INDEX`
+
+[NOTE]
+====
+* This command deletes the employee details at the specified `INDEX`.
+* The index refers to the index number shown in the most recent listing.
+* The index *must be a positive integer* 1, 2, 3, ...
+====
+
+Examples:
+
+*Example 1: +
+`liste` +
+You will see a list of employees displayed in the employee list panel.
+`deletee 2` +
+You will see an updated employee list panel which has the 2nd employee removed.
+
+*Example 2: +
+`finde Betsy` +
+You will see the results of the `finde` command which shows all employees with matching keyword name, in the employee list panel.
+`deletee 1` +
+You will see an updated employees list panel which has the 1st employee removed.
+
 
 === Sorting all employees : `sort`
 
-You can use this command to sort the list of employees alphabetically in CarviciM. +
+To sort the list of employees alphabetically for easy viewing, you can use this command. +
 Format: `sort`
-
-=== Listing all jobs : `listj`
-
-You can use this command to view a list of all employees in CarviciM. +
-Format: `listj`
 
 === Selecting employees by list number: `selecte`
 
-You can use this command to select the specified employee from CarviciM to view jobs associated
-with the emlpoyee. +
+To select a specific employee from the employee list panel and display the assigned jobs, you can use this command. +
 Format: `selecte INDEX`
 
-****
-* Selects the employee at the specified `INDEX`.
+[NOTE]
+====
+* This command selects the employee at the specified `INDEX`.
 * The index refers to the index number shown in the most recent listing.
 * The index *must be a positive integer* 1, 2, 3, ...
-****
+====
+
 Examples:
 
-** Example 1: +
+* Example 1: +
 `liste` +
 You will see a list of employees displayed in the employee list panel.
 `selecte 2` +
 You will see an updated job list panel which has the jobs of the 2nd employee.
 
-** Example 2: +
-. `finde Betsy` +
-*** You will see the results of the `finde` command which shows all employees with matching keyword name.
-. `selecte 1` +
-*** You will see an updated job list panel which has the jobs of the 1st employee.
+* Example 2: +
+`finde Betsy` +
+You will see the results of the `finde` command which shows all employees with matching keyword name.
+`selecte 1` +
+You will see an updated job list panel which has the jobs of the 1st employee.
 
 === Locating employees by name: `finde`
 
-You can use this command to find employees, whose names contain any of the given keywords. +
+To search for employees whose names contain any of the given keywords, you can use this command. +
 Format: `finde KEYWORD [MORE_KEYWORDS]`
 
-****
+[NOTE]
+====
 * The search is case insensitive. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
 * Employees matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-****
+====
 
 Examples:
 
-** Example 1: +
-. `finde John` +
-*** You will see all employees with `john` as their name (not case-sensitive), shown in the employee list panel.
+* Example 1: +
+`finde John` +
+You will see all employees with `john` as their name (not case-sensitive), shown in the employee list panel.
 
-** Example 2: +
-. `finde Betsy Tim John` +
-*** You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
+* Example 2: +
+`finde Betsy Tim John` +
+You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
 
-
-=== Deleting an employee : `deletee`
-
-You can use this command to delete the specified employee from CarviciM. +
-Format: `deletee INDEX`
-
-****
-* Deletes the employee at the specified `INDEX`.
-* The index refers to the index number shown in the most recent listing.
-* The index *must be a positive integer* 1, 2, 3, ...
-****
-
-Examples:
-
-** Example 1: +
-. `liste` +
-*** You will see a list of employees displayed in the employee list panel.
-. `deletee 2` +
-*** You will see an updated employee list panel which has the 2nd employee removed.
-
-** Example 2: +
-. `finde Betsy` +
-*** You will see the results of the `finde` command which shows all employees with matching keyword name.
-. `deletee 1` +
-*** You will see an updated employees list panel which has the 1st employee removed.
 
 // tag::set[]
 === Changing a command word : `set`
 
-You can use this command to set an easy to use word in place of a default command word. +
+To set an easy to use word in place of a default command word, you can use this command. +
 Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
 [NOTE]
@@ -285,15 +321,15 @@ Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
 Examples:
 
-** Example 1: +
-. `set adde a` +
-*** Sets `adde` command word to `a` using default. +
-*** You will see "adde has been replaced with a!" in the result display.
+* Example 1: +
+`set adde a` +
+Sets `adde` command word to `a` using default. +
+You will see "adde has been replaced with a!" in the result display.
 
-** Example 2: +
-. `set deletee d` +
-*** Sets `deletee` command word to `d` using default. +
-*** You will see "deletee has been replaced with d!" in the result display.
+* Example 2: +
+`set deletee d` +
+Sets `deletee` command word to `d` using default. +
+You will see "deletee has been replaced with d!" in the result display.
 // end::set[]
 
 // tag::importexport[]
@@ -302,7 +338,7 @@ Examples:
 [[import-command]]
 ==== Importing a new excel file: `import`
 
-You can use this command to load your excel file by filename or filepath. +
+To load your excel file by filename or filepath that contains new job entries, you can use this command. +
 Format: `import FILE_PATH`
 
 [NOTE]
@@ -312,11 +348,10 @@ Format: `import FILE_PATH`
 ** The first row specifies the type of detail in the column.
 ====
 
-Examples:
+Example:
 
-** Example 1: +
-. `import excel.xlsx` +
-*** Imports file excel.xlsx.
+`import excel.xlsx` +
+Imports file excel.xlsx.
 
 ==== Importing and accepting all job entries in an excel file: `importAll`
 
@@ -350,48 +385,44 @@ You can use 4 commands when reviewing changes:
 
 ===== Accepting 1 job: `accept`
 
-Accepts a job with job number NUMBER in imported list.
+To accept a job with job number `NUMBER` in the imported list, you can use this command.
 Format: `accept NUMBER`
 
 Examples:
 
-** Example 1: +
-. `accept 1` +
-*** Accepts the job entry with job number 1 and removes it from imported list.
+`accept 1` +
+Accepts the job entry with job number 1 and removes it from imported list.
 
 [[acceptAll-command]]
 ===== Accepting all remaining imported jobs: `acceptAll`
 
-Accepts all remaining jobs.
+To accept all remaining jobs, you can use this command.
 Format: `acceptAll`
 
 Examples:
 
-** Example 1: +
-. `acceptAll` +
-*** Accepts all remaining job entries and clears the imported list.
+`acceptAll` +
+Accepts all remaining job entries and clears the imported list.
 
 ===== Rejecting 1 job: `reject`
 
-Rejects a job with job number NUMBER in imported list.
+To reject a job with job number `NUMBER` in the imported list, you can use this command.
 Format: `reject NUMBER`
 
 Examples:
 
-** Example 1: +
-. `reject 1` +
-*** Rejects job entry with job number 1 and removes it from imported list. It is not added to CarviciM.
+`reject 1` +
+Rejects job entry with job number 1 and removes it from imported list. It is not added to CarviciM.
 
 ===== Rejecting all remaining imported jobs: `rejectAll`
 
-Rejects all remaining jobs.
+To reject all remaining jobs in the imported list, you can use this command.
 Format: `rejectAll`
 
 Examples:
 
-** Example 1:
-. `rejectAll` +
-*** Rejects all remaining job entries and clears the imported list.
+`rejectAll` +
+Rejects all remaining job entries and clears the imported list.
 
 ==== Writing comments to your reviews #Coming in V1.5#
 
@@ -404,21 +435,21 @@ You can type any alphanumeric sentence as a comment, as long as it is after the 
 
 Examples:
 
-** Example 1: +
-. `accept 1` good job` +
-*** Accepts first job and attaches "good job" as a comment to the first job.
+* Example 1: +
+`accept 1` good job` +
+Accepts first job and attaches "good job" as a comment to the first job.
 
-** Example 2: +
-. `acceptAll well done` +
-*** Accepts all remaining imported jobs and attaches "well done" as a comment to all the remaining imported jobs.
+* Example 2: +
+`acceptAll well done` +
+Accepts all remaining imported jobs and attaches "well done" as a comment to all the remaining imported jobs.
 
-** Example 3: +
-. `reject 1 Speak to you during tomorrow's meeting.` +
-*** Rejects first job and attaches "Speak to you during tomorrow's meeting." as a comment to the first job.
+* Example 3: +
+`reject 1 Speak to you during tomorrow's meeting.` +
+Rejects first job and attaches "Speak to you during tomorrow's meeting." as a comment to the first job.
 
-** Example 4: +
-. `rejectAll Please check the customer details.` +
-*** Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
+* Example 4: +
+`rejectAll Please check the customer details.` +
+Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
 
 [[save-command]]
 ==== Sharing your feedback with your employees: `save`
@@ -447,7 +478,7 @@ Examples:
 // tag::theme[]
 === Setting a theme : `theme`
 
-You can use this command to set the theme of the application. +
+To set the theme of the application for a change of working environment, you can use this command. +
 Format: `theme INDEX`
 
 ****
@@ -456,19 +487,18 @@ Format: `theme INDEX`
 * The index *must be a positive integer* 1, 2, 3,...
 ****
 
-Examples:
+Example:
 
-** Example 1: +
-. `theme` +
-*** You will see the list of valid themes to choose from in the <<result-display,result display>>.
-. `theme 1` +
-*** You will see the theme of the application set as the selected one.
+`theme` +
+You will see the list of valid themes to choose from in the <<result-display,result display>>.
+`theme 1` +
+You will see the theme of the application set as the selected one.
 
 // end::theme[]
 
 === Listing entered commands : `history`
 
-Lists all the commands that you have entered in reverse chronological order. +
+To find out what commands that you have executed recently, you can use this command to list a history of executed commands in reverse chronological order. +
 Format: `history`
 
 [NOTE]
@@ -479,67 +509,66 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 // tag::undoredo[]
 === Undoing previous command : `undo`
 
-You can use this command to restore CarviciM to the state before the previous _undoable_ command was executed. +
+To reverse an undoable command that was executed by mistake, you can use this command to restore CarviciM to the state before the execution of that command. +
 Format: `undo`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde` and `deletee`).
+Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde`, `deletee` and `remarkj`).
 ====
 
 Examples:
 
-** Example 1: +
-. `deletee 1` +
-*** Deletes the first employee in CarviciM.+
-*** You will see that the first employee is no longer displayed in the employee list panel.
-. `liste` +
-*** Shows all employees in CarviciM. +
-*** You will not see the deleted employee of index 1 in employee list panel.
-. `undo` (reverses the `delete 1` command) +
-*** You will see the deleted employee present in the employee list panel again.
+* Example 1: +
+`deletee 1` +
+Deletes the first employee in CarviciM.+You will see that the first employee is no longer displayed in the employee list panel.
+`liste` +
+Shows all employees in CarviciM. +
+You will not see the deleted employee of index 1 in employee list panel.
+`undo` (reverses the `delete 1` command) +
+You will see the deleted employee present in the employee list panel again.
 
-** Example 2: +
-. `closej j/1` +
-*** You will see that job number 1 is removed from the job list panel.
-. `undo` (reverses the `closej j/1` command) +
-*** You will see that job number 1 is added back into the job list panel.
-. `undo` +
-*** The `undo` command fails as there are no undoable commands.
+* Example 2: +
+`closej j/1` +
+You will see that job number 1 is removed from the job list panel.
+`undo` (reverses the `closej j/1` command) +
+You will see that job number 1 is added back into the job list panel.
+`undo` +
+The `undo` command fails as there are no undoable commands.
 
 === Redoing the previously undone command : `redo`
 
-You can use this command to reverse the most recent `undo` command. +
+To reverse an unwanted undo command that was executed, you can use this command. +
 Format: `redo`
 
 Examples:
 
-** Example 1: +
-. `deletee 1` +
-*** You will see that the first employee is removed from the employee list panel.
-. `undo` (reverses the `deletee 1` command) +
-*** You will see that the deleted employee is added back into the employee list panel.
-. `redo` (reapplies the `deletee 1` command) +
-*** You will see that the same employee is removed from the employee list panel again.
+* Example 1: +
+`deletee 1` +
+You will see that the first employee is removed from the employee list panel.
+`undo` (reverses the `deletee 1` command) +
+You will see that the deleted employee is added back into the employee list panel.
+`redo` (reapplies the `deletee 1` command) +
+You will see that the same employee is removed from the employee list panel again.
 
-** Example 2: +
-. `closej j/1` +
-*** You will see that the job number 1 is removed from the job list panel.
-. `deletee 1` +
-*** You will see that the first employee is removed from the employee list panel.
+* Example 2: +
+`closej j/1` +
+You will see that the job number 1 has its status changed to "closed" in the job list panel.
+`deletee 1` +
+You will see that the first employee is removed from the employee list panel.
 . `undo` (reverses the `deletee 1` command) +
-*** You will see that the deleted employee is added back into the employee list panel.
-. `undo` (reverses the `closej j/1` command) +
-*** You will see that the closed job number 1 is added back into the job list panel.
-. `redo` (reapplies the `closej j/1` command) +
-*** You will see that the job number 1 is removed from the job list panel again.
-. `redo` (reapplies the `deletee 1` command) +
-*** You will see that the same employee is removed from the employee list panel.
+You will see that the deleted employee is added back into the employee list panel.
+`undo` (reverses the `closej j/1` command) +
+You will see that the closed job number 1 has it status changed to "ongoing" in the job list panel.
+`redo` (reapplies the `closej j/1` command) +
+You will see that the job number 1 has its status changed back to "closed" again, in the job list panel.
+`redo` (reapplies the `deletee 1` command) +
+You will see that the same employee is removed from the employee list panel.
 // end::undoredo[]
 
 === Clearing the application : `clear`
 
-You can use this command to clear everything on CarviciM. +
+To have an empty CarviciM app, you can use this command to clear everything in the app. +
 Format: `clear`
 
 [NOTE]
@@ -549,7 +578,7 @@ Format: `clear`
 
 === Exiting the program : `exit`
 
-You can use this command to exit the program. +
+To exit the program, you can use this command. +
 Format: `exit`
 
 === Saving the data

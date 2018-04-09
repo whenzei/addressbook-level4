@@ -15,7 +15,7 @@ We are a team based in the http://www.comp.nus.edu.sg[School of Computing, Natio
 image::whenzei.png[width="130", align="left"]
 {empty}[https://github.com/whenzei[github]] [<<whenzei#, portfolio>>]
 
-Role: Team Lead, Code Quality, Developer +
+Role: Team Lead, Code Quality, Developer, Integration +
 Responsibilities: Model
 
 '''

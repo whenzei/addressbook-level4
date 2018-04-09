@@ -108,12 +108,12 @@ This section will explain to you how you can use the features of CarviciM.
 
 === Viewing help : `help`
 
-You can use this command to bring up the help menu. +
+To bring out the help menu in CarviciM, you can use this command. +
 Format: `help`
 
 === Adding a job entry: `addj`
 
-You can use this command to add a job to CarviciM. +
+To add a new job entry into CarviciM for easy management, you can use this command. +
 Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+`
 
 ****
@@ -122,33 +122,38 @@ Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE
 * The index *must be a positive integer* 1, 2, 3, ...
 ****
 
-Examples:
+Example:
 
-** Example 1: +
-. `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
-*** You will see "New job added: ... " in the result display. +
-*** The job list panel will be updated to display the newly added job
+`addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
+You will see "New job added: ... " in the result display. +
+The job list panel will be updated to display the newly added job
 
 === Closing a job entry: `closej`
 
-You can use this command to close an ongoing job based on its job number. +
+To indicate that a job is completed in CarviciM, you can use this command. +
 Format: `closej j/JOB_NUMBER`
 
-Examples:
+Example:
 
-** Example 1: +
-. `closej j/123` +
-*** Closes the ongoing job of number 123 in CarviciM. +
-*** You will see "Closed Job: 123" in the result display. +
-*** You will not see job of number 123 in the job list panel.
+`closej j/123` +
+This command closes the ongoing job of number 123 in CarviciM. +
+You will see "Closed Job: 123" in the result display. +
+You will not see job of number 123 in the job list panel.
 
 === Adding remark to a job: `remark`
 
-=== Assigning/removing employees to/from an ongoing job: #Coming in V1.5#
+To make remark or special note for an ongoing job entry, you can use this command.
+Format: `remark j/JOB_NUMBER r/YOUR_REMARK`
+
+Example:
+
+`remark j/2 r/An urgent work that should be completed asap` +
+This command will add the remark "An urgent work that should be completed asap" to a job entry with a job number of "2". 
+You will see the message "Remark Added: An urgent work that should be completed asap" shown in the result display.
 
 === Archiving job entries: `archive`
 
-You can use this command to archive job entries. +
+To archive job entries within a specified range in CarviciM, you can use this command. +
 Format: `archive sd/START_DATE ed/END_DATE`
 
 ****
@@ -157,30 +162,28 @@ Format: `archive sd/START_DATE ed/END_DATE`
 * Both dates should be in the form of *MMM DD YYYY*.
 ****
 
-Examples:
+Example:
 
-** Example 1: +
-. `archive sd/Mar 25 2018 ed/Apr 03 2018` +
-*** Archive the job entries within the selected date range into CarviciM. +
-*** You will see "Archived Successfully" +
-*** You will see the newly created archive file.
+`archive sd/Mar 25 2018 ed/Apr 03 2018` +
+The command will save the job entries within the selected date range in CarviciM. +
+You will see "Archived Successfully" +
+You will see the newly created archive file.
 
 === Adding an employee: `adde`
 
-You can use this command to add an employee to CarviciM. +
+To add details of a new employee into CarviciM, you can use this command. +
 Format: `adde n/NAME p/PHONE_NUMBER e/EMAIL`
 
-Examples:
+Example:
 
-** Example 1: +
-. `adde n/John Doe p/98765432 e/johnd@example.com` +
-*** Add the details of the employee into CarviciM. +
-*** You will see "New employee added: ..." followed by details of the employee. +
-*** You will see the newly added employee in the employee list panel.
+`adde n/John Doe p/98765432 e/johnd@example.com` +
+The command will add the details of the new employee into CarviciM. +
+You will see "New employee added: ..." followed by details of the new employee. +
+You will see the newly added details of the employee in the employee list panel.
 
 === Listing all employees : `liste`
 
-You can use this command to view a list of all employees in CarviciM. +
+To view a list of details belonging to the employees in CarviciM, you can use this command. +
 Format: `liste`
 
 === Sorting all employees : `sort`
@@ -207,10 +210,10 @@ Format: `selecte INDEX`
 Examples:
 
 ** Example 1: +
-. `liste` +
-*** You will see a list of employees displayed in the employee list panel.
-. `selecte 2` +
-*** You will see an updated job list panel which has the jobs of the 2nd employee.
+`liste` +
+You will see a list of employees displayed in the employee list panel.
+`selecte 2` +
+You will see an updated job list panel which has the jobs of the 2nd employee.
 
 ** Example 2: +
 . `finde Betsy` +

@@ -29,7 +29,7 @@ public class XmlAdaptedRemark {
     }
 
     /**
-     * Converts a given Tag into this class for JAXB use.
+     * Converts a given Remark into this class for JAXB use.
      *
      * @param source future changes to this will not affect the created
      */
@@ -38,7 +38,7 @@ public class XmlAdaptedRemark {
     }
 
     /**
-     * Converts this jaxb-friendly adapted tag object into the model's Remark object.
+     * Converts this jaxb-friendly adapted remark object into the model's Remark object.
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted job
      */

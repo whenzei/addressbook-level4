@@ -100,10 +100,10 @@ public class TypicalEmployees {
         }
 
         Job firstJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_A),
-                new JobNumber("1"), new Date(), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
+                new JobNumber("1"), new Date("Apr 20 2019"), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
                 new RemarkList());
         Job secondJob = new Job(new ClientBuilder().build(), new VehicleNumber(VALID_VEHICLE_NUMBER_B),
-                new JobNumber("2"), new Date(), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
+                new JobNumber("2"), new Date("Apr 20 2019"), assignedEmployeeList, new Status(Status.STATUS_ONGOING),
                 new RemarkList());
 
         ab.addJob(firstJob);

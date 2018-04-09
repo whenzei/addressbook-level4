@@ -40,13 +40,14 @@ public class CloseJobCommandTest {
 
     @Test
     public void execute_closeJobSuccess_jobIsPresent() throws Exception {
-        Job jobToClose = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+        Job target = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+        Job updatedJob = CloseJobCommand.createUpdatedJob(target);
 
         CloseJobCommand closeJobCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
 
-        String expectedMessage = String.format(CloseJobCommand.MESSAGE_CLOSE_JOB_SUCCESS, jobToClose);
+        String expectedMessage = String.format(CloseJobCommand.MESSAGE_CLOSE_JOB_SUCCESS, updatedJob);
         ModelManager expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
-        expectedModel.closeJob(jobToClose);
+        expectedModel.closeJob(target, updatedJob);
 
         assertCommandSuccess(closeJobCommand, model, expectedMessage, expectedModel);
 
@@ -65,8 +66,8 @@ public class CloseJobCommandTest {
         CloseJobCommand closeJobCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
         Model expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
 
-        Job jobToClose = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
-
+        Job target = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+        Job updatedJob = CloseJobCommand.createUpdatedJob(target);
         // close -> closes the job number 1 which is the first job in the job list
         closeJobCommand.execute();
         undoRedoStack.push(closeJobCommand);
@@ -74,8 +75,8 @@ public class CloseJobCommandTest {
         // undo -> reverts Carvicim back to previous state
         assertCommandSuccess(undoCommand, model, UndoCommand.MESSAGE_SUCCESS, expectedModel);
 
-        expectedModel.closeJob(jobToClose);
-        assertNotEquals(jobToClose, model.getFilteredPersonList().get(INDEX_FIRST_JOB.getZeroBased()));
+        expectedModel.closeJob(target, updatedJob);
+        assertNotEquals(target, model.getFilteredPersonList().get(INDEX_FIRST_JOB.getZeroBased()));
         // redo -> closes same Job of job number 1
         assertCommandSuccess(redoCommand, model, RedoCommand.MESSAGE_SUCCESS, expectedModel);
 

@@ -34,12 +34,14 @@ import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.logic.commands.AddEmployeeCommand;
 import seedu.carvicim.logic.commands.AddJobCommand;
 import seedu.carvicim.logic.commands.ClearCommand;
+import seedu.carvicim.logic.commands.CloseJobCommand;
 import seedu.carvicim.logic.commands.DeleteEmployeeCommand;
 import seedu.carvicim.logic.commands.ExitCommand;
 import seedu.carvicim.logic.commands.FindEmployeeCommand;
 import seedu.carvicim.logic.commands.HelpCommand;
 import seedu.carvicim.logic.commands.HistoryCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
+import seedu.carvicim.logic.commands.ListJobCommand;
 import seedu.carvicim.logic.commands.RedoCommand;
 import seedu.carvicim.logic.commands.RemarkCommand;
 import seedu.carvicim.logic.commands.SelectEmployeeCommand;
@@ -116,9 +118,15 @@ public class CarvicimParserTest {
     }
 
     @Test
-    public void parseCommand_list() throws Exception {
+    public void parseCommand_listEmployee() throws Exception {
         assertTrue(parser.parseCommand(ListEmployeeCommand.COMMAND_WORD) instanceof ListEmployeeCommand);
         assertTrue(parser.parseCommand(ListEmployeeCommand.COMMAND_WORD + " 3") instanceof ListEmployeeCommand);
+    }
+
+    @Test
+    public void parseCommand_listJob() throws Exception {
+        assertTrue(parser.parseCommand(ListJobCommand.COMMAND_WORD) instanceof ListJobCommand);
+        assertTrue(parser.parseCommand(ListJobCommand.COMMAND_WORD + " 3") instanceof ListJobCommand);
     }
 
     @Test
@@ -157,6 +165,15 @@ public class CarvicimParserTest {
         targetIndices.add(Index.fromOneBased(1));
 
         assertEquals(new AddJobCommand(client, vehicleNumber, targetIndices), command);
+    }
+
+    @Test
+    public void parseCommand_closeJob() throws Exception {
+        CloseJobCommand command = (CloseJobCommand) parser.parseCommand(CloseJobCommand.COMMAND_WORD + " "
+                + JOB_NUMBER_DESC_A);
+
+        JobNumber jobNumber = new JobNumber(VALID_JOB_NUMBER_ONE);
+        assertEquals(new CloseJobCommand(jobNumber), command);
     }
 
     @Test

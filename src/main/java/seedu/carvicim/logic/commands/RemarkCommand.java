@@ -15,6 +15,7 @@ import seedu.carvicim.commons.events.ui.JobDisplayPanelUpdateRequestEvent;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobNumber;
+import seedu.carvicim.model.job.Status;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.remark.Remark;
 import seedu.carvicim.model.remark.RemarkList;
@@ -68,7 +69,8 @@ public class RemarkCommand extends UndoableCommand {
 
         while (jobIterator.hasNext()) {
             Job currentJob = jobIterator.next();
-            if (currentJob.getJobNumber().equals(jobNumber)) {
+            if (currentJob.getJobNumber().equals(jobNumber)
+                    && (currentJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
                 target = currentJob;
                 updatedJob = createUpdatedJob(target, remark);
                 break;

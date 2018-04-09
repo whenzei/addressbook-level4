@@ -86,6 +86,12 @@ If you plan to develop this as a separate product (i.e. instead of contributing 
 
 Set up Travis to perform Continuous Integration (CI) for your fork. See <<UsingTravis#, UsingTravis.adoc>> to learn how to set it up.
 
+==== Editing JavaFX
+
+To edit the JavaFX scenes, download the `.jar` snapshot from
+https://ci.appveyor.com/project/damithc/scenebuilder/build/1.0.9/artifacts.
+Run the `.jar` file to get started.
+
 ****
 *Optional*
 
@@ -467,12 +473,8 @@ image::SessionReviewSequenceDiagram.png[width="800"]
 
 ===== Saving feedback from an `ImportSession`
 
-* Figure 16 below shows the process of saving a session. On the `save` command, `importSession` writes the
-modified excel sheets from `sheetWithHeaderFields` to the same path as the imported excel file, with
-a timestamp added to the back of the filename.
-
-.Sequence Digram of `ImportSession` when saving feedback to a file
-image::SessionCloseSequenceDiagram.png[width="800"]
+`SessionData` autosaves the comments to an excel file with -comments.xls or -comments.xlsx appended,
+in the same directory.
 
 ==== Design Considerations
 ===== Aspect: Supporting UndoableCommand

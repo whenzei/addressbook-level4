@@ -127,6 +127,11 @@ public class AddJobCommandTest {
         }
 
         @Override
+        public void showOngoingJobs() {
+            fail("This method should not be called.");
+        }
+
+        @Override
         public void resetJobDisplayPanel() {
             fail("This method should not be called");
         }
@@ -140,11 +145,6 @@ public class AddJobCommandTest {
         public CommandWords getCommandWords() {
             fail("This method should never be called");
             return null;
-        }
-
-        @Override
-        public void initJobNumber() {
-            fail("This method should never be called");
         }
 
         @Override public String appendCommandKeyToMessage(String message) {
@@ -164,7 +164,7 @@ public class AddJobCommandTest {
         }
 
         @Override
-        public void closeJob(Job target) throws JobNotFoundException {
+        public void closeJob(Job target, Job updatedJob) throws JobNotFoundException {
             fail("This method should not be called.");
         }
 

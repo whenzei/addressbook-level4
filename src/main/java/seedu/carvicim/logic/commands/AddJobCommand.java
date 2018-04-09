@@ -86,6 +86,7 @@ public class AddJobCommand extends UndoableCommand {
             }
             toAdd = new Job(client, vehicleNumber, new JobNumber(), new Date(), assignedEmployees,
                     new Status(Status.STATUS_ONGOING), new RemarkList());
+            prevJobNumber = toAdd.getJobNumber().value;
         } catch (DuplicateEmployeeException e) {
             throw new CommandException("Duplicate employee index");
         }

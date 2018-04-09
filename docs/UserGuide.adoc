@@ -17,7 +17,7 @@ By: `Team W09-B1`      Since: `Feb 2018`      Licence: `MIT`
 
 == Introduction
 
-Welcome to CarviciM! CarviciM (short for Car Servicing Manager) is a desktop application for *car servicing managers* to *manage car servicing jobs with convenience and ease*. You can use Carvicim to add jobs, close ongoing jobs, import large number of job entries, manage employees for job assignment and notify employees of jobs through email. CarviciM is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CarviciM can get your management of servicing jobs done faster than traditional GUI apps. Interested to speed up your car servicing job allocation process? Jump to the <<Quick Start>> to get started. Enjoy!
+Welcome to CarviciM! CarviciM (short for Car Servicing Manager) is a desktop application for *car servicing managers* to *manage car servicing jobs with convenience and ease*. You can use Carvicim to add jobs, close ongoing jobs, import large number of job entries, manage employees for job assignment and notify employees of jobs through email. CarviciM is *optimized for those who prefer to work with a Command Line Interface* (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CarviciM can get your management of servicing jobs done faster than traditional GUI apps. Interested to speed up your car servicing job allocation process? Jump to the <<Setting Up CarviciM>> to get started. Enjoy!
 
 == About This User Guide
 
@@ -27,23 +27,20 @@ This user guide shows you how to get started using the CarviciM. It shows you ho
 *Legend*
 
 [NOTE]
-...
-
-* represents something noteworthy
+This icon represents something noteworthy
 
 [TIP]
-...
+This icon represents a useful tip
 
-* represents a useful tip
+`This represents an input command`
 
-`............`
-
-* represents an input command
 ====
 
-== Quick Start
+== Setting Up CarviciM
 
-.  Ensure you have Java version `1.8.0_60` or later installed in your Computer.
+This section will show you how to setup the neccessary environment in order to run CarviciM on your desktop.
+
+.  Ensure you have link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java] version `1.8.0_60` or later installed in your Computer.
 +
 [NOTE]
 Having any Java 8 version is not enough. +
@@ -51,37 +48,65 @@ This app will not work with earlier versions of Java 8.
 +
 .  You can download the latest `CarviciM.jar` link:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your CarviciM.
-.  Double-click the file to start the app. You should see the Graphical User Interface (GUI) in a few seconds.
+.  Double-click the file to start the app. You should see the Graphical User Interface (GUI) as shown in the image below.
 +
 image::Ui.png[width="790"]
 +
-.  Type the command in the <<command-box,command box>> and press kbd:[Enter] to execute it. +
+
+You are all set to use CarviciM now! You can read the next section to find out more on how to use CarviciM.
+
+== Quick Start
+
+This section will cover the basics you need to know for using the guide and the application.
+
+=== Various Regions In The GUI
+
+The GUI is made up of various regions as shown in the image below.
+
+image::UI_Orientation.PNG[width="900"]
+
+Command Box::
+A region on the User Interface which allows you to type in commands.
+
+Job List Panel::
+A region on the User Interface where you can view the list of jobs.
+
+Employee List Panel::
+A region on the User Interface where you can view the list of employees.
+
+Job Display Panel::
+A region on the User Interface which shows you the details of a selected job.
+
+Result Display::
+A region on the User Interface which you can see the feedback to a command, entered in the command box.
+
+=== Executing Your First Command In CarviciM
+
+You can execute a command by typing it in the command box and press kbd:[Enter]. +
 e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
-.  Some example commands you can try:
+Here are some example commands you can try:
 
 * *`liste`* : lists all employees' contacts
 * **`adde`**`n/John Doe p/98765432 e/johnd@example.com` : adds an employee named `John Doe` to CarviciM.
 * **`deletee`**`3` : deletes the 3rd employee shown in the current list
 * *`exit`* : exits the app
 
-.  For details of each command, you can refer to <<Features>>.
+=== Command Format
+
+Before reading more about commands, you should take note of the command format used in the user guide:
+
+* Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `adde n/NAME`, `NAME` is a parameter which can be used as `adde n/John Doe`.
+* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`._
+* Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]...` can be used as `{nbsp}` (i.e. 0 times), `t/mechanic`, `t/technician` etc.
+* Items with `+` after them can be used multiple times but has to be used **at least once** e.g. `w/ASSIGNED_EMPLOYEE_INDEX+` can be used as `w/4`, `w/5` etc.
+* Parameters can be in any order e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+
+For details of each command, you can refer to <<Features>>.
 
 [[Features]]
 == Features
 
 This section will explain to you how you can use the features of CarviciM.
-
-====
-*Command Format*
-
-These are the command format for the user guide:
-
-* Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `adde n/NAME`, `NAME` is a parameter which can be used as `adde n/John Doe`.
-* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`.
-* Items with `…`​ after them can be used multiple times including zero times e.g. `[t/TAG]...` can be used as `{nbsp}` (i.e. 0 times), `t/mechanic`, `t/technician` etc.
-* Items with `+` after them can be used multiple times but has to be used **at least once** e.g. `w/ASSIGNED_EMPLOYEE_INDEX+` can be used as `w/4`, `w/5` etc.
-* Parameters can be in any order e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-====
 
 === Viewing help : `help`
 
@@ -103,8 +128,8 @@ Examples:
 
 ** Example 1: +
 . `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
-*** You will see "New job added: ... " in the <<result-display,result display>>. +
-*** The <<jobs-ui-panel ,jobs UI panel>> will be updated to display the newly added job
+*** You will see "New job added: ... " in the result display. +
+*** The job list panel will be updated to display the newly added job
 
 === Closing a job entry: `closej`
 
@@ -116,10 +141,10 @@ Examples:
 ** Example 1: +
 . `closej j/123` +
 *** Closes the ongoing job of number 123 in CarviciM. +
-*** You will see "Closed Job: 123" in the <<result-display,result display>>. +
-*** You will not see job of number 123 in the <<jobs-ui-panel,jobs UI panel>>.
+*** You will see "Closed Job: 123" in the result display. +
+*** You will not see job of number 123 in the job list panel.
 
-=== Adding remark to a job: #Coming in V1.5#
+=== Adding remark to a job: `remark`
 
 === Assigning/removing employees to/from an ongoing job: #Coming in V1.5#
 
@@ -153,7 +178,7 @@ Examples:
 . `adde n/John Doe p/98765432 e/johnd@example.com` +
 *** Add the details of the employee into CarviciM. +
 *** You will see "New employee added: ..." followed by details of the employee. +
-*** You will see the newly added employee in the <employees-ui-panel,employees ui panel>>.
+*** You will see the newly added employee in the employee list panel.
 
 === Listing all employees : `liste`
 
@@ -185,15 +210,15 @@ Examples:
 
 ** Example 1: +
 . `liste` +
-*** You will see a list of employees displayed in the UI panel.
+*** You will see a list of employees displayed in the employee list panel.
 . `selecte 2` +
-*** You will see an updated <<job-display-panel,job display panel>> which has the jobs of the 2nd employee.
+*** You will see an updated job list panel which has the jobs of the 2nd employee.
 
 ** Example 2: +
 . `finde Betsy` +
 *** You will see the results of the `finde` command which shows all employees with matching keyword name.
 . `selecte 1` +
-*** You will see an updated <<job-display-panel,job display panel>> which has the jobs of the 1st employee.
+*** You will see an updated job list panel which has the jobs of the 1st employee.
 
 === Locating employees by name: `finde`
 
@@ -212,11 +237,11 @@ Examples:
 
 ** Example 1: +
 . `finde John` +
-*** You will see all employees with `john` as their name (not case-sensitive), shown in the <<employees-ui-panel,employee UI panel>>.
+*** You will see all employees with `john` as their name (not case-sensitive), shown in the employee list panel.
 
 ** Example 2: +
 . `finde Betsy Tim John` +
-*** You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees UI panel.
+*** You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
 
 
 === Deleting an employee : `deletee`
@@ -234,20 +259,20 @@ Examples:
 
 ** Example 1: +
 . `liste` +
-*** You will see a list of employees displayed in the UI panel.
+*** You will see a list of employees displayed in the employee list panel.
 . `deletee 2` +
-*** You will see an updated <<employees-ui-panel,employee UI panel>> which has the 2nd employee removed.
+*** You will see an updated employee list panel which has the 2nd employee removed.
 
 ** Example 2: +
 . `finde Betsy` +
 *** You will see the results of the `finde` command which shows all employees with matching keyword name.
 . `deletee 1` +
-*** You will see an updated employees UI panel which has the 1st employee removed.
+*** You will see an updated employees list panel which has the 1st employee removed.
 
 // tag::set[]
 === Changing a command word : `set`
 
-You can use this command to set an easy to use word in place of a default <<command-word,command word>>. +
+You can use this command to set an easy to use word in place of a default command word. +
 Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
 [NOTE]
@@ -262,7 +287,7 @@ Examples:
 ** Example 1: +
 . `set adde a` +
 *** Sets `adde` command word to `a` using default. +
-*** You will see "adde has been replaced with a!" in the <<result-display,result display>>.
+*** You will see "adde has been replaced with a!" in the result display.
 
 ** Example 2: +
 . `set deletee d` +
@@ -373,7 +398,8 @@ While accepting or rejecting changes, you can enter your comments behind the com
 
 [TIP]
 ====
-You can type any alphanumeric sentence as a comment, as long as it is after the command.
+You can type any sentence as a comment, as long as it is separated from the last argument with a
+spacebar character.
 ====
 
 Examples:
@@ -395,27 +421,10 @@ Examples:
 *** Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
 
 [[save-command]]
-==== Sharing your feedback with your employees: `save`
+==== Sharing your feedback with your employees:
 
-If you want to share your feedback, you can save it as an excel file, reflecting accept/reject with comments.
-Format: `save`
-
-[TIP]
-====
-* You can find it in the same directory as the imported excel file, with the time
-it is saved added to the end of the filename.
-====
-
-[NOTE]
-====
-Filepath: A text representation of the file location in the computer.
-====
-
-Examples:
-
-** Example 1: +
-. `export summary report` +
-*** Exports the feedback to "summary report.xls"
+CarviciM autosaves your comments to an excel file with -comments.xls or -comments.xlsx appended,
+in the same directory.
 // end::importexport[]
 
 // tag::theme[]
@@ -466,18 +475,18 @@ Examples:
 ** Example 1: +
 . `deletee 1` +
 *** Deletes the first employee in CarviciM.+
-*** You will see that the first employee is no longer displayed in the <<employees-ui-panel,employees UI panel>>.
+*** You will see that the first employee is no longer displayed in the employee list panel.
 . `liste` +
 *** Shows all employees in CarviciM. +
-*** You will not see the deleted employee of index 1 in employees UI panel.
+*** You will not see the deleted employee of index 1 in employee list panel.
 . `undo` (reverses the `delete 1` command) +
-*** You will see the deleted employee present in the employees UI panel again.
+*** You will see the deleted employee present in the employee list panel again.
 
 ** Example 2: +
-. `closej p/1` +
-*** You will see that job number 1 is removed from the <<jobs-ui-panel,jobs UI panel>>.
-. `undo` (reverses the `closej p/1` command) +
-*** You will see that job number 1 is added back into the jobs UI panel.
+. `closej j/1` +
+*** You will see that job number 1 is removed from the job list panel.
+. `undo` (reverses the `closej j/1` command) +
+*** You will see that job number 1 is added back into the job list panel.
 . `undo` +
 *** The `undo` command fails as there are no undoable commands.
 
@@ -490,25 +499,25 @@ Examples:
 
 ** Example 1: +
 . `deletee 1` +
-*** You will see that the first employee is removed from the <<employees-ui-panel,employees UI panel>>.
+*** You will see that the first employee is removed from the employee list panel.
 . `undo` (reverses the `deletee 1` command) +
-*** You will see that the deleted employee is added back into the employees UI panel.
+*** You will see that the deleted employee is added back into the employee list panel.
 . `redo` (reapplies the `deletee 1` command) +
-*** You will see that the same employee is removed from the employees UI panel again.
+*** You will see that the same employee is removed from the employee list panel again.
 
 ** Example 2: +
-. `closej p/1` +
-*** You will see that the job number 1 is removed from the <<jobs-ui-panel,jobs UI panel>>.
+. `closej j/1` +
+*** You will see that the job number 1 is removed from the job list panel.
 . `deletee 1` +
-*** You will see that the first employee is removed from the employees UI panel.
+*** You will see that the first employee is removed from the employee list panel.
 . `undo` (reverses the `deletee 1` command) +
-*** You will see that the deleted employee is added back into the employees UI panel.
-. `undo` (reverses the `closej p/1` command) +
-*** You will see that the closed job number 1 is added back into the jobs UI panel.
-. `redo` (reapplies the `closej p/1` command) +
-*** You will see that the job number 1 is removed from the jobs UI panel again.
+*** You will see that the deleted employee is added back into the employee list panel.
+. `undo` (reverses the `closej j/1` command) +
+*** You will see that the closed job number 1 is added back into the job list panel.
+. `redo` (reapplies the `closej j/1` command) +
+*** You will see that the job number 1 is removed from the job list panel again.
 . `redo` (reapplies the `deletee 1` command) +
-*** You will see that the same employee is removed from the employees UI panel.
+*** You will see that the same employee is removed from the employee list panel.
 // end::undoredo[]
 
 === Clearing the application : `clear`
@@ -518,7 +527,7 @@ Format: `clear`
 
 [NOTE]
 ===
-`clear` command will remove all job entries and employees in CarviciM.
+`clear` command will remove all job entries and employees in CarviciM. Job number will start from 1.
 ===
 
 === Exiting the program : `exit`
@@ -558,7 +567,7 @@ _{explain how the user can enable/disable data encryption}_
 
 * *Add Job* `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
 e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
-* *Close Job* `closej p/JOB_NUMBER` +
+* *Close Job* `closej j/JOB_NUMBER` +
 e.g. `closej j/1232`
 * *Archive job entries* `archive sd/START_DATE ed/END_DATE` +
 e.g. `archive sd/Mar 25 2018 ed/Apr 03 2018`
@@ -596,21 +605,3 @@ e.g. `set adde a`
 e.g. `theme 1`
 * *Clear entire CarviciM* : `clear`
 
-== Glossary
-[[command-box]] Command Box::
-A region on the User Interface which allows the user to type in.
-
-[[jobs-ui-panel]] Jobs UI Panel::
-A region on the User Interface which displays the list of jobs.
-
-[[employees-ui-panel]] Employees UI Panel::
-A region on the User Interface which displays the list of employees.
-
-[[job-display-panel]] Job Display Panel::
-A region on the User Interface which display the details of a job.
-
-[[result-display]] Result Display::
-A region on the User Interface which displays the result of executed commands.
-
-[[command-word]] Command Word::
-A text that the application recognises for performing an operation.

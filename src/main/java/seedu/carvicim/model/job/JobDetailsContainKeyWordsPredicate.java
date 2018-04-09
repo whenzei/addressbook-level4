@@ -22,8 +22,10 @@ public class JobDetailsContainKeyWordsPredicate implements Predicate<Job> {
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getClient().getName().fullName, keyword))
                  || keywords.stream()
                         .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getDate().value, keyword))
-                 ||  keywords.stream()
-                        .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getJobNumber().value, keyword));
+                 || keywords.stream()
+                        .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getJobNumber().value, keyword))
+                 || keywords.stream()
+                        .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getVehicleNumber().value, keyword));
     }
 
     @Override

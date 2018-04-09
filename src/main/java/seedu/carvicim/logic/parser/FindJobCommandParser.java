@@ -11,7 +11,7 @@ import seedu.carvicim.model.job.JobDetailsContainKeyWordsPredicate;
 /**
  * Parses input arguments and creates a new FindJobCommand object
  */
-public class FindJobCommandParser {
+public class FindJobCommandParser implements Parser<FindJobCommand> {
     /**
      * Parses the given {@code String} of arguments in the context of the FindJobCommand
      * and returns an FindJobCommand object for execution.

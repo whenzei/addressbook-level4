@@ -10,7 +10,8 @@ public class FindJobCommand extends Command {
     public static final String COMMAND_WORD = "findj";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all ongoing jobs whose client name, date"
-            + ", and job number contain any of the specified keywords (case-sensitive) and displays them as a list.\n"
+            + ", vehicle and job number contain any of the specified keywords (case-sensitive) and displays"
+            + " them as a list.\n"
             + "Parameters: KEYWORD [MORE_KEYWORDS]...\n"
             + "Example: " + COMMAND_WORD + " APR John";
 

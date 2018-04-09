@@ -604,9 +604,9 @@ To have an empty CarviciM app, you can use this command to clear everything in t
 Format: `clear`
 
 [NOTE]
-===
+====
 `clear` command will remove all job entries and employees in CarviciM. Job number will start from 1.
-===
+====
 
 === Exiting the program : `exit`
 

@@ -179,15 +179,14 @@ Format: `finde KEYWORD [MORE_KEYWORDS]`
 Examples:
 
 * Example 1: +
-
+[none] +
 `findj John` +
 You will see all jobs with `john` as their client name (not case-sensitive), shown in the job list panel.
 
 * Example 2: +
-
+[none] +
 `findj Apr Feb` +
 You will see all jobs with `Apr` or `Feb` as their job detail (not case-sensitive), shown in the job list panel.
-
 
 === Archiving job entries: `archive`
 
@@ -242,7 +241,6 @@ Examples:
 * Example 1: +
 `liste` +
 You will see a list of employees displayed in the employee list panel.+
-
 `deletee 2` +
 You will see an updated employee list panel which has the 2nd employee removed.
 

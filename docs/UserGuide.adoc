@@ -239,15 +239,17 @@ Format: `deletee INDEX`
 Examples:
 
 * Example 1: +
++
 `liste` +
 You will see a list of employees displayed in the employee list panel.+
++
 `deletee 2` +
 You will see an updated employee list panel which has the 2nd employee removed.
 
 * Example 2: +
 `finde Betsy` +
 You will see the results of the `finde` command which shows all employees with matching keyword name, in the employee list panel. +
-
++
 `deletee 1` +
 You will see an updated employees list panel which has the 1st employee removed.
 
@@ -272,18 +274,18 @@ Format: `selecte INDEX`
 Examples:
 
 * Example 1: +
-
++
 `liste` +
 You will see a list of employees displayed in the employee list panel. +
-
++
 `selecte 2` +
 You will see an updated job list panel which has the jobs of the 2nd employee.
 
 * Example 2: +
-
++
 `finde Betsy` +
 You will see the results of the `finde` command which shows all employees with matching keyword name. +
-
++
 `selecte 1` +
 You will see an updated job list panel which has the jobs of the 1st employee.
 
@@ -304,12 +306,12 @@ Format: `finde KEYWORD [MORE_KEYWORDS]`
 Examples:
 
 * Example 1: +
-
++
 `finde John` +
 You will see all employees with `john` as their name (not case-sensitive), shown in the employee list panel.
 
 * Example 2: +
-
++
 `finde Betsy Tim John` +
 You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
 
@@ -330,13 +332,13 @@ Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 Examples:
 
 * Example 1: +
-
++
 `set adde a` +
 Sets `adde` command word to `a` using default. +
 You will see "adde has been replaced with a!" in the result display.
 
 * Example 2: +
-
++
 `set deletee d` +
 Sets `deletee` command word to `d` using default. +
 You will see "deletee has been replaced with d!" in the result display.
@@ -444,22 +446,22 @@ You can type any alphanumeric sentence as a comment, as long as it is after the 
 Examples:
 
 * Example 1: +
-
++
 `accept 1` good job` +
 Accepts first job and attaches "good job" as a comment to the first job.
 
 * Example 2: +
-
++
 `acceptAll well done` +
 Accepts all remaining imported jobs and attaches "well done" as a comment to all the remaining imported jobs.
 
 * Example 3: +
-
++
 `reject 1 Speak to you during tomorrow's meeting.` +
 Rejects first job and attaches "Speak to you during tomorrow's meeting." as a comment to the first job.
 
 * Example 4: +
-
++
 `rejectAll Please check the customer details.` +
 Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
 
@@ -502,7 +504,7 @@ Example:
 
 `theme` +
 You will see the list of valid themes to choose from in the result display. +
-
++
 `theme 1` +
 You will see the theme of the application set as the selected one.
 
@@ -532,14 +534,14 @@ Undoable commands: those commands that modify CarviciM's content (`addj, `closej
 Examples:
 
 * Example 1: +
-
++
 `deletee 1` +
 Deletes the first employee in CarviciM.+You will see that the first employee is no longer displayed in the employee list panel. +
-
++
 `liste` +
 Shows all employees in CarviciM. +
 You will not see the deleted employee of index 1 in employee list panel. +
-
++
 `undo` (reverses the `delete 1` command) +
 You will see the deleted employee present in the employee list panel again.
 
@@ -547,10 +549,10 @@ You will see the deleted employee present in the employee list panel again.
 
 `closej j/1` +
 You will see that job number 1 is removed from the job list panel. +
-
++
 `undo` (reverses the `closej j/1` command) +
 You will see that job number 1 is added back into the job list panel. +
-
++
 `undo` +
 The `undo` command fails as there are no undoable commands.
 
@@ -565,30 +567,30 @@ Examples:
 
 `deletee 1` +
 You will see that the first employee is removed from the employee list panel. +
-
++
 `undo` (reverses the `deletee 1` command) +
 You will see that the deleted employee is added back into the employee list panel. +
-
++
 `redo` (reapplies the `deletee 1` command) +
 You will see that the same employee is removed from the employee list panel again.
 
 * Example 2: +
-
++
 `closej j/1` +
 You will see that the job number 1 has its status changed to "closed" in the job list panel. +
-
++
 `deletee 1` +
 You will see that the first employee is removed from the employee list panel. +
-
++
 `undo` (reverses the `deletee 1` command) +
 You will see that the deleted employee is added back into the employee list panel. +
-
++
 `undo` (reverses the `closej j/1` command) +
 You will see that the closed job number 1 has it status changed to "ongoing" in the job list panel. +
-
++
 `redo` (reapplies the `closej j/1` command) +
 You will see that the job number 1 has its status changed back to "closed" again, in the job list panel. +
-
++
 `redo` (reapplies the `deletee 1` command) +
 You will see that the same employee is removed from the employee list panel.
 // end::undoredo[]

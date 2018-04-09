@@ -53,7 +53,7 @@ public class CloseJobCommand extends UndoableCommand {
 
     @Override
     protected void preprocessUndoableCommand() throws CommandException {
-        List<Job> lastShownJobList = model.getCarvicim().getJobList();
+        List<Job> lastShownJobList = model.getFilteredJobList();
         Iterator<Job> jobIterator = lastShownJobList.iterator();
 
         while (jobIterator.hasNext()) {

@@ -351,6 +351,12 @@ If the parameters are invalid, `addj` command will return an invalid message, wh
     }
 ----
 
+The following sequence diagram shows how the `AddJobCommand` determines if a `Job` object can be created and added into the list of jobs if it is valid:
+
+image::AddJobCommand_preprocess_SeqDiag.PNG[width="1000"]
+
+image::AddJobCommand_execute_SeqDiag.PNG[width="500"]
+
 The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
 
 ==== Design Considerations

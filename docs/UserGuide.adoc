@@ -179,12 +179,12 @@ Format: `finde KEYWORD [MORE_KEYWORDS]`
 Examples:
 
 * Example 1: +
-[none] +
++
 `findj John` +
 You will see all jobs with `john` as their client name (not case-sensitive), shown in the job list panel.
 
 * Example 2: +
-[none] +
++
 `findj Apr Feb` +
 You will see all jobs with `Apr` or `Feb` as their job detail (not case-sensitive), shown in the job list panel.
 

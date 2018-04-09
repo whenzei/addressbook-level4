@@ -80,10 +80,18 @@ public class ModelManager extends ComponentManager implements Model {
             jobList = FXCollections.observableList(
                     ImportSession.getInstance().getSessionData().getUnreviewedJobEntries());
         } else {
+            updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
             jobList = getFilteredJobList();
         }
         EventsCenter.getInstance().post(
                 new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(jobList)));
+    }
+
+    @Override
+    public void showOngoingJobs() {
+        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
+        EventsCenter.getInstance().post(
+                new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(getFilteredJobList())));
     }
 
     @Override
@@ -124,14 +132,14 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void addJob(Job job) {
         carvicim.addJob(job);
-        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
+        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         indicateAddressBookChanged();
     }
 
     @Override
     public synchronized void closeJob(Job target, Job updatedJob) throws JobNotFoundException {
         carvicim.updateJob(target, updatedJob);
-        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
+        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         indicateAddressBookChanged();
     }
 
@@ -154,7 +162,7 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void addRemark(Job target, Job updatedJob) {
         carvicim.updateJob(target, updatedJob);
-        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
+        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         indicateAddressBookChanged();
     }
 

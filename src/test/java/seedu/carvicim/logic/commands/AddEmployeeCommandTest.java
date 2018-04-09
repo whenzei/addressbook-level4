@@ -140,6 +140,11 @@ public class AddEmployeeCommandTest {
         }
 
         @Override
+        public void showOngoingJobs() {
+            fail("This method should not be called.");
+        }
+
+        @Override
         public void resetJobDisplayPanel() {
             fail("This method should not be called.");
         }

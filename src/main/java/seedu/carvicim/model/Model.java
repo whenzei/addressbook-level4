@@ -34,6 +34,8 @@ public interface Model {
 
     void resetJobView();
 
+    void showOngoingJobs();
+
     void resetJobDisplayPanel();
 
     /** Clears existing backing model and replaces with the provided new data. */

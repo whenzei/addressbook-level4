@@ -378,6 +378,15 @@ The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
 * _Alternative:_ Allow `ParserUtil` to hold employee list.
 ** Pros: `AddJobCommandParser` determines if the employee indices point to valid employees, and creates the `Job` object.
 ** Cons: Allowing `ParserUtil` to hold the list of employees introduce more coupling among the classes.
+
+===== Aspect: Ensuring job number generation is consistent
+
+* **Current choice:** Store the next job number as a user preference.
+** Pros: Easy to implement and initialization of job number is faster.
+** Cons: Deletion of the user preference file will cause the job number to reset.
+* _Alternative:_ Going through all jobs at initialization and finding the largest job number.
+** Pros: Does not need to depend on data stored in other files to initialize job number.
+** Cons: May be very slow when the number of jobs in the application is large.
 // end::addJob[]
 
 // tag::set[]

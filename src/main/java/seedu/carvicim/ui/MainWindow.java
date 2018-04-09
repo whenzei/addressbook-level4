@@ -133,7 +133,7 @@ public class MainWindow extends UiPart<Stage> {
         personListPanel = new PersonListPanel(logic.getFilteredPersonList());
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
-        jobListPanel = new JobListPanel(logic.getFilteredJobList().filtered(new OngoingJobPredicate()));
+        jobListPanel = new JobListPanel(logic.getFilteredJobList());
         jobListPanelPlaceholder.getChildren().add(jobListPanel.getRoot());
 
         ResultDisplay resultDisplay = new ResultDisplay();

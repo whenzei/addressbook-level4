@@ -11,6 +11,7 @@ import seedu.carvicim.commons.core.Messages;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobNumber;
+import seedu.carvicim.model.job.Status;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 
 //@@author whenzei
@@ -30,7 +31,8 @@ public class CloseJobCommand extends UndoableCommand {
 
     private final JobNumber targetJobNumber;
 
-    private Job jobToClose;
+    private Job target;
+    private Job updatedJob;
 
     public CloseJobCommand(JobNumber targetJobNumber) {
         this.targetJobNumber = targetJobNumber;
@@ -38,30 +40,33 @@ public class CloseJobCommand extends UndoableCommand {
 
     @Override
     public CommandResult executeUndoableCommand() {
-        requireNonNull(jobToClose);
+        requireNonNull(target);
+        requireNonNull(updatedJob);
         try {
-            model.closeJob(jobToClose);
+            model.closeJob(target, updatedJob);
         } catch (JobNotFoundException jnfe) {
             throw new AssertionError("The target job cannot be missing");
         }
 
-        return new CommandResult(String.format(MESSAGE_CLOSE_JOB_SUCCESS, jobToClose));
+        return new CommandResult(String.format(MESSAGE_CLOSE_JOB_SUCCESS, updatedJob));
     }
 
     @Override
     protected void preprocessUndoableCommand() throws CommandException {
-        List<Job> lastShownJobList = model.getCarvicim().getJobList();
+        List<Job> lastShownJobList = model.getFilteredJobList();
         Iterator<Job> jobIterator = lastShownJobList.iterator();
 
         while (jobIterator.hasNext()) {
             Job currJob = jobIterator.next();
-            if (currJob.getJobNumber().equals(this.targetJobNumber)) {
-                jobToClose = currJob;
+            if (currJob.getJobNumber().equals(this.targetJobNumber)
+                    && (currJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
+                target = currJob;
+                updatedJob = createUpdatedJob(currJob);
                 break;
             }
         }
 
-        if (jobToClose == null) {
+        if (target == null) {
             throw new CommandException(Messages.MESSAGE_JOB_NOT_FOUND);
         }
     }
@@ -71,7 +76,17 @@ public class CloseJobCommand extends UndoableCommand {
         return other == this // short circuit if same object
                 || (other instanceof CloseJobCommand // instanceof handles nulls
                 && this.targetJobNumber.equals(((CloseJobCommand) other).targetJobNumber) // state check
-                && Objects.equals(this.jobToClose, ((CloseJobCommand) other).jobToClose));
+                && Objects.equals(this.target, ((CloseJobCommand) other).target));
     }
 
+    /**
+     * Creates and returns a new {@code Job} with a closed status
+     */
+    public static Job createUpdatedJob(Job jobToEdit) {
+        assert jobToEdit != null;
+
+        return new Job(jobToEdit.getClient(), jobToEdit.getVehicleNumber(), jobToEdit.getJobNumber(),
+                jobToEdit.getDate(), jobToEdit.getAssignedEmployees(),
+                new Status(Status.STATUS_CLOSED), jobToEdit.getRemarkList());
+    }
 }

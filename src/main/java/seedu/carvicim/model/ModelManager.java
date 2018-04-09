@@ -22,7 +22,6 @@ import seedu.carvicim.logic.commands.CommandWords;
 import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
 import seedu.carvicim.model.job.JobList;
-import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.exceptions.JobNotFoundException;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
@@ -81,6 +80,7 @@ public class ModelManager extends ComponentManager implements Model {
             jobList = FXCollections.observableList(
                     ImportSession.getInstance().getSessionData().getUnreviewedJobEntries());
         } else {
+            updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
             jobList = getFilteredJobList();
         }
         EventsCenter.getInstance().post(
@@ -88,27 +88,15 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public void resetJobDisplayPanel() {
-        EventsCenter.getInstance().post(new JobDisplayPanelResetRequestEvent());
+    public void showOngoingJobs() {
+        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
+        EventsCenter.getInstance().post(
+                new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(getFilteredJobList())));
     }
 
-    //@@author whenzei
-    /**
-     * Initializes the running job number based on the past job numbers.
-     */
     @Override
-    public void initJobNumber() {
-        if (filteredJobs.isEmpty()) {
-            JobNumber.initialize(ONE_AS_STRING);
-            return;
-        }
-        int largest = filteredJobs.get(0).getJobNumber().asInteger();
-        for (Job job : filteredJobs) {
-            if (job.getJobNumber().asInteger() > largest) {
-                largest = job.getJobNumber().asInteger();
-            }
-        }
-        JobNumber.initialize(largest + 1);
+    public void resetJobDisplayPanel() {
+        EventsCenter.getInstance().post(new JobDisplayPanelResetRequestEvent());
     }
 
     @Override
@@ -149,8 +137,8 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public synchronized void closeJob(Job target) throws JobNotFoundException {
-        carvicim.closeJob(target);
+    public synchronized void closeJob(Job target, Job updatedJob) throws JobNotFoundException {
+        carvicim.updateJob(target, updatedJob);
         updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         indicateAddressBookChanged();
     }
@@ -173,7 +161,7 @@ public class ModelManager extends ComponentManager implements Model {
 
     @Override
     public synchronized void addRemark(Job target, Job updatedJob) {
-        carvicim.addRemark(target, updatedJob);
+        carvicim.updateJob(target, updatedJob);
         updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
         indicateAddressBookChanged();
     }

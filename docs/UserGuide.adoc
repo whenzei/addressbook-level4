@@ -55,13 +55,15 @@ image::Ui.png[width="790"]
 
 You are all set to use CarviciM now! You can read the next section to find out more on how to use CarviciM.
 
-== How To Use CarviciM
+== Quick Start
 
-This section will show you the basics of working around in the application.
+This section will cover the basics you need to know for using the guide and the application.
 
 === Various Regions In The GUI
 
 The GUI is made up of various regions as shown in the image below.
+
+image::UI_Orientation.PNG[width="900"]
 
 Command Box::
 A region on the User Interface which allows you to type in commands.
@@ -316,7 +318,6 @@ You will see all employees with `john` as their name (not case-sensitive), shown
 `finde Betsy Tim John` +
 You will see all employees with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
 
-
 // tag::set[]
 === Changing a command word : `set`
 
@@ -441,7 +442,8 @@ While accepting or rejecting changes, you can enter your comments behind the com
 
 [TIP]
 ====
-You can type any alphanumeric sentence as a comment, as long as it is after the command.
+You can type any sentence as a comment, as long as it is separated from the last argument with a
+spacebar character.
 ====
 
 Examples:
@@ -467,16 +469,7 @@ Rejects first job and attaches "Speak to you during tomorrow's meeting." as a co
 Rejects all remaining imported jobs and attaches "Please check the customer details." as a comment to all the remaining imported jobs.
 
 [[save-command]]
-==== Sharing your feedback with your employees: `save`
-
-If you want to share your feedback, you can save it as an excel file, reflecting accept/reject with comments.
-Format: `save`
-
-[TIP]
-====
-* You can find it in the same directory as the imported excel file, with the time
-it is saved added to the end of the filename.
-====
+==== Sharing your feedback with your employees:
 
 [NOTE]
 ====

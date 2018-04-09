@@ -31,8 +31,16 @@ public class JobNumber {
         nextJobNumber = arg;
     }
 
-    public static void incrementNextJobNumber() {
+    public void incrementNextJobNumber() {
         nextJobNumber++;
+    }
+
+    public static String getNextJobNumber() {
+        return nextJobNumber + "";
+    }
+
+    public static void setNextJobNumber(String arg) {
+        nextJobNumber = Integer.parseInt(arg);
     }
 
     /**

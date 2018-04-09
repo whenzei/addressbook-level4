@@ -12,30 +12,25 @@ import seedu.carvicim.model.Model;
 import seedu.carvicim.model.ModelManager;
 import seedu.carvicim.model.UserPrefs;
 
-//@@author whenzei
 /**
- * Contains integration tests (interaction with the Model) and unit tests for ListJobCommand.
+ * Contains integration tests and unit tests for ListOngoingJobCommand
  */
-public class ListJobCommandTest {
-
+public class ListOngoingJobCommandTest {
     private Model model;
     private Model expectedModel;
-    private ListJobCommand listJobCommand;
+    private ListOngoingJobCommand listOngoingJobCommand;
 
     @Before
     public void setUp() {
         model = new ModelManager(getTypicalCarvicimWithAssignedJobs(), new UserPrefs());
         expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
 
-        listJobCommand = new ListJobCommand();
-        listJobCommand.setData(model, new CommandHistory(), new UndoRedoStack());
+        listOngoingJobCommand = new ListOngoingJobCommand();
+        listOngoingJobCommand.setData(model, new CommandHistory(), new UndoRedoStack());
     }
 
     @Test
-    public void execute_listIsNotFiltered_showSameList() {
-        assertCommandSuccess(listJobCommand, model, ListJobCommand.MESSAGE_SUCCESS, expectedModel);
+    public void execute_listIsNotFiltered_showsSameList() {
+        assertCommandSuccess(listOngoingJobCommand, model, ListOngoingJobCommand.MESSAGE_SUCCESS, expectedModel);
     }
-
-
-
 }

@@ -172,12 +172,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
             if (approvalStatus.equals(APPROVAL_STATUS_ACCEPTED) || approvalStatus.equals(APPROVAL_STATUS_REJECTED)) {
                 continue;
             }
-            employeeList = new UniqueEmployeeList();
-            try {
-                employeeList.add(employee);
-            } catch (DuplicateEmployeeException e) {
-                throw new RuntimeException(e.getMessage()); // should not happen
-            }
+            employeeList = createSingleEmployeeList(employee);
             remarkList = getRemarks(i);
             return new JobEntry(client, vehicleNumber, new JobNumber(), new Date(), employeeList,
                 new Status(Status.STATUS_ONGOING), remarkList, getSheetIndex(), i, "");
@@ -258,7 +253,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
     /**
      * Retrieves the job at (@code rowNumber), and missing details from those in first job entry.
-     * Adds missing detail in remarks.
+     * Adds missing fields in remarks.
      */
     private JobEntry getJobEntryAt(int rowNumber, JobEntry previousEntry) {
         Person client = getClient(rowNumber);
@@ -268,7 +263,6 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
         if (client == null || vehicleNumber == null || employee == null) {
             importMessage = getCorruptedFieldsMessage(client, vehicleNumber, employee);
         }
-        // commentJobEntry(rowNumber, importMessage); moved to SessionData when reviewing
         if (client == null) {
             client = previousEntry.getClient();
         }
@@ -278,17 +272,24 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
         if (employee == null) {
             employee = previousEntry.getAssignedEmployees().iterator().next();
         }
-
-        UniqueEmployeeList employeeList = new UniqueEmployeeList();
-        try {
-            employeeList.add(employee);
-        } catch (DuplicateEmployeeException e) {
-            e.printStackTrace(); // should not happen
-        }
+        UniqueEmployeeList employeeList = createSingleEmployeeList(employee);
         RemarkList remarkList = getRemarks(rowNumber);
         return new JobEntry(client, vehicleNumber, new JobNumber(), new Date(), employeeList,
                 new Status(Status.STATUS_ONGOING), remarkList, sheet.getWorkbook().getSheetIndex(sheet), rowNumber,
                 importMessage);
+    }
+
+    /**
+     * Creates an (@code UniqueEmployeeList) containing (@code Employee)
+     */
+    private UniqueEmployeeList createSingleEmployeeList(Employee employee) {
+        UniqueEmployeeList employeeList = new UniqueEmployeeList();
+        try {
+            employeeList.add(employee);
+        } catch (DuplicateEmployeeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return employeeList;
     }
 
     @Override

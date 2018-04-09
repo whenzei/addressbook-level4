@@ -247,6 +247,7 @@ You will see a list of employees displayed in the employee list panel.+
 You will see an updated employee list panel which has the 2nd employee removed.
 
 * Example 2: +
++
 `finde Betsy` +
 You will see the results of the `finde` command which shows all employees with matching keyword name, in the employee list panel. +
 +
@@ -494,17 +495,18 @@ Exports the feedback to "summary report.xls"
 To set the theme of the application for a change of working environment, you can use this command. +
 Format: `theme INDEX`
 
-****
+[NOTE]
+====
 * Sets the theme based on the specified 'INDEX'
 * The index refers to the index number shown in the most recent listing
 * The index *must be a positive integer* 1, 2, 3,...
-****
+====
 
 Example:
 
 `theme` +
 You will see the list of valid themes to choose from in the result display. +
-+
+
 `theme 1` +
 You will see the theme of the application set as the selected one.
 
@@ -546,7 +548,7 @@ You will not see the deleted employee of index 1 in employee list panel. +
 You will see the deleted employee present in the employee list panel again.
 
 * Example 2: +
-
++
 `closej j/1` +
 You will see that job number 1 is removed from the job list panel. +
 +
@@ -564,7 +566,7 @@ Format: `redo`
 Examples:
 
 * Example 1: +
-
++
 `deletee 1` +
 You will see that the first employee is removed from the employee list panel. +
 +
@@ -674,7 +676,7 @@ e.g. `save`
 * *Redo* : `redo`
 * *Email Assigned Employees Of A Job* : `email JOB_NUMBER` +
 e.g. `email 123`
-* *Change <<command-word,Command Word>>* : `set` +
+* *Change Command Word* : `set` +
 e.g. `set adde a`
 * *Theme* : `theme INDEX` +
 e.g. `theme 1`

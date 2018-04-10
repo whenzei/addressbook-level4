@@ -43,6 +43,7 @@ public class MainWindow extends UiPart<Stage> {
     private JobDisplayPanel jobDisplayPanel;
     private PersonListPanel personListPanel;
     private JobListPanel jobListPanel;
+    private JobListIndicator jobListIndicator;
     private Config config;
     private UserPrefs prefs;
 
@@ -63,6 +64,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane resultDisplayPlaceholder;
+
+    @FXML
+    private StackPane jobListIndicatorPlaceholder;
 
     @FXML
     private StackPane statusbarPlaceholder;
@@ -137,6 +141,9 @@ public class MainWindow extends UiPart<Stage> {
 
         ResultDisplay resultDisplay = new ResultDisplay();
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
+
+        jobListIndicator = new JobListIndicator();
+        jobListIndicatorPlaceholder.getChildren().add(jobListIndicator.getRoot());
 
         StatusBarFooter statusBarFooter = new StatusBarFooter(prefs.getCarvicimFilePath());
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());

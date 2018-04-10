@@ -34,7 +34,7 @@ public class AddJobCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "addj";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a job to the Carvicim. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a job to the Carvicim.\n"
             + "Parameters: "
             + PREFIX_NAME + "CLIENT_NAME "
             + PREFIX_PHONE + "PHONE "

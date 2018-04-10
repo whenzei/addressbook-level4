@@ -152,7 +152,7 @@ public class SessionData {
         } catch (IOException e) {
             throw new FileFormatException(ERROR_MESSAGE_IO_EXCEPTION);
         }
-        //initializeSessionData();
+        initializeSessionData();
     }
 
     /**

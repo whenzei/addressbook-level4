@@ -123,10 +123,6 @@ task(nonGuiTests)
 guiTests.dependsOn test
 nonGuiTests.dependsOn test
 
-task filepermission(type: Exec) {
-    commandLine 'chmod', '777', '.'
-}
-
 task(allTests)
 
 // `allTests` implies both `guiTests` and `nonGuiTests`
@@ -166,16 +162,12 @@ test {
 
         if (runGuiTests) {
             test.include 'systemtests/**'
-            test.include 'seedu/carvicim/ui/**'
+            test.include 'seedu/carvicim/**'
         }
 
         if (!runGuiTests) {
             test.exclude 'seedu/carvicim/ui/**'
         }
-    }
-
-    doLast {
-        filepermission.execute();
     }
 }
 

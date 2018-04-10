@@ -2,37 +2,74 @@
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== PROJECT: Car Servicing Manager
-
----
+= Project: CarviciM
 
 == Overview
 
-Coming in v2.0
+image::../images/CarviciM_logo.PNG[width="150", align="left"]
+
+CarviciM is a car servicing management application built on the
+link:https://github.com/nus-cs2103-AY1718S2/addressbook-level4[AddressBook - Level 4] project,
+which is used for teaching Software Engineering principles.
+The user interacts with it using a CLI, and it has a GUI created with JavaFX.
+It is written in Java, and has about 10 kLoC.
 
 == Summary of contributions
 
 * *Major enhancement*: added *the ability to import job entries from an excel file*
-** What it does: allows the user to undo all previous commands one at a time. Preceding undo commands can be reversed by using the redo command.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
-** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+** What it does: allows the user to collate job entries from different people in the form of excel files.
+Also allows discrete accepting and rejecting of job entries, with comments written to another excel file.
+** Justification: A significant improvement to CarviciM by simplifying collation of job entries
+from different sources, which managers often do from admins, hence saving time and effort.
+** Highlights: This enhancement supports autosave feature and handles IOException thoroughly. Job entries with empty
+fields will inherit their empty fields from the previous entry. Column headers can be added if necessary,
+and does not enforce strict order.
+** Credits: Apache POI and Commons library are used to support exccel file handling.
+* *Minor enhancement*: added a set command that allows the user to have a customized set of keywords as an
+alternative to the original.
 
-* *Minor enhancement*: added a set command that allows the user to use a custom keyword in place of the default keyword.
-
-* *Code contributed*: [https://github.com[Functional code]] [https://github.com[Test code]] _{give links to collated code files}_
+* *Code contributed*:
+ [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/yuhongherald.md[Functional code]]
+ [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/yuhongherald.md[Test code]]
 
 * *Other contributions*:
 
 ** Project management:
-*** Helped to edit PRs for merging for v1.2- (Pull requests https://github.com[#40], https://github.com[#48])
+*** Helped to edit PRs for merging
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/40[#40]
 ** Enhancements to existing features:
-*** Added JobListPanel to support displaying jobs (Pull requests https://github.com[#53])
-** Documentation:
-** Community:
-** Tools:
+*** Resized the UI Panels and applization window so that they fit nicely
 
-_{you can add/remove categories in the list above}_
+** Documentation:
+*** Added section on editing JavaFX https://github.com/CS2103JAN2018-W09-B1/main/pull/154[#154]
+*** Added section on keeping working directory clean https://github.com/CS2103JAN2018-W09-B1/main/pull/161[#161]
+*** Added missing details in User Guide and Developer Guide
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/4[#4]
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/29[#29]
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/4[#30]
+
+** Community:
+*** Added JobListPanel to support displaying jobs
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/53[#53]
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/65[#65]
+*** PRs reviewed (with non-trivial review comments):
+ https://github.com/CS2103JAN2018-W09-B1/main/pull/73[#73]
+
+*** Reported bugs and suggestions for other teams in the class
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/133[#133]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/134[#134]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/135[#135]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/140[#140]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/145[#145]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/147[#147]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/148[#148]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/151[#151]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/153[#153]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/155[#155]
+ https://github.com/CS2103JAN2018-F14-B1/main/issues/159[#159]
+
+** Tools:
+*** Integrated 2 third party libraries (Apache POI, Apache Commons) to the project
 
 == Contributions to the User Guide
 

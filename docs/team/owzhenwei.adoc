@@ -14,7 +14,7 @@ CarviciM is a car servicing management application built on the link:https://git
 * *Major enhancement*: added *the ability to manage jobs*
 ** What it does: allows the user to add new job entries with employees assignment for each job, close an ongoing job entry in the application, and add remark to ongoing jobs.
 ** Justification: This set of features are the basis of the application for managing job entries.
-** Highlights: This enhancement requires the morphing of the _AddressBook - Level 4_ project and requires substantial changes to the codebase. The implementation required changes to existing commands so that the newly added commands would work properly. Most changes were made in the Model componenet.
+** Highlights: This enhancement requires the morphing of the _AddressBook - Level 4_ project and require substantial changes to the codebase. The implementation required changes to existing commands so that the newly added commands would work properly. Most changes were made in the Model component.
 
 * *Minor enhancement*: added a theme command that allows the user to select theme from a list of themes provided.
 * *Code contributed*: [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/whenzei.md[Functional code]] [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/whenzei.md[Test Code]]

@@ -274,7 +274,7 @@ Classes used by multiple components are in the `seedu.addressbook.commons` packa
 
 This section describes some noteworthy details on how certain features are implemented.
 
-// tag::addJob[]
+// tag::addjob[]
 === Add job feature
 ==== Current Implementation
 
@@ -387,7 +387,90 @@ The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
 * _Alternative:_ Going through all jobs at initialization and finding the largest job number.
 ** Pros: Does not need to depend on data stored in other files to initialize job number.
 ** Cons: May be very slow when the number of jobs in the application is large.
-// end::addJob[]
+// end::addjob[]
+
+// tag::closejob[]
+=== Close job feature
+==== Current Implementation
+The close job mechanisim is facilitated by a `CloseJobCommand`. `CloseJobCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `JOB_NUMBER` input, and creates the `CloseJobCommand` object which closes the job. A job that has been closed will have its status changed from "ongoing" to "closed".
+
+Since `CloseJobCommand` is an undoable command, it overrides the `preprocessUndoableCommand` method of `UndoableCommand`, to check if the specified job can be closed.
+
+[NOTE}
+====
+If the provided `JOB_NUMBER` belongs to a closed job or does not match any job in the job list, `CloseJobCommand` will return an invalid message. `CloseJobCommand` creates a copy of the job if it is found, and sets the status of the duplicate job to be "closed". This is to complement the undo feature.
+====
+
+`preprocessUndoableCommand` method code snippet in `CloseJobCommand`, which checks for the respective job for closing:
+[source,java]
+----
+    protected void preprocessUndoableCommand() throws CommandException {
+        List<Job> lastShownJobList = model.getFilteredJobList();
+        Iterator<Job> jobIterator = lastShownJobList.iterator();
+
+        while (jobIterator.hasNext()) {
+            Job currJob = jobIterator.next();
+            if (currJob.getJobNumber().equals(this.targetJobNumber)
+                    && (currJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
+                target = currJob;
+                updatedJob = createUpdatedJob(currJob);
+                break;
+            }
+        }
+
+        if (target == null) {
+            throw new CommandException(Messages.MESSAGE_JOB_NOT_FOUND);
+        }
+    }
+----
+
+'createUpdatedJob` method code snippet in `CloseJobCommand`, which creates a copy of the respective job with the status set as "closed":
+[source,java]
+----
+    public static Job createUpdatedJob(Job jobToEdit) {
+        assert jobToEdit != null;
+
+        return new Job(jobToEdit.getClient(), jobToEdit.getVehicleNumber(), jobToEdit.getJobNumber(),
+                jobToEdit.getDate(), jobToEdit.getAssignedEmployees(),
+                new Status(Status.STATUS_CLOSED), jobToEdit.getRemarkList());
+    }
+----
+
+`executeUndoableCommand` method code snippet in `CloseJobCommand`, which updates the job list with the job copy created:
+[source,java]
+----
+    public CommandResult executeUndoableCommand() {
+        requireNonNull(target);
+        requireNonNull(updatedJob);
+        try {
+            model.closeJob(target, updatedJob);
+        } catch (JobNotFoundException jnfe) {
+            throw new AssertionError("The target job cannot be missing");
+        }
+
+        return new CommandResult(String.format(MESSAGE_CLOSE_JOB_SUCCESS, updatedJob));
+    }
+----
+
+The following sequence diagram show how the `preprocessUndoableCommand` method in the `CloseJobCommand` works:
+
+image::CloseJobCommand_preprocess_SeqDiag.png[width="700"]
+
+The following diagram shows how the `executeUndoableCommand` method in the `CloseJobCommand` works:
+
+image::CloseJobCommand_execute_SeqDiag.png[width="400"]
+
+==== Design Considerations
+
+===== Aspect: Where to hold the closed jobs
+
+* **Current choice:** Closed jobs and ongoing jobs are stored in the same list
+** Pros: No need to add and maintain additional list for closed jobs.
+** Cons: Requires iterating through all jobs to search for a particular job. Requires the usage of `Predicates` to filter out "ongoing" and "closed" jobs for displaying to user.
+* _Alternative:_ Add an additional list for closed jobs in the `ModelManager`
+** Pros: Jobs are stored in dedicated lists of either "ongoing" or "closed", and searching for jobs of a specific status only requires calling one list.
+** Cons: More attributes to manage, and may cause duplicate or missing jobs if it is not managed properly.
+// end:closejob[]
 
 // tag::set[]
 === Set command feature

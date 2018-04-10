@@ -10,6 +10,7 @@ import seedu.carvicim.commons.core.Messages;
 import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.model.job.Job;
+import seedu.carvicim.model.job.Status;
 import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
 
@@ -61,7 +62,8 @@ public class DeleteEmployeeCommand extends UndoableCommand {
         employeeToDelete = lastShownEmployeeList.get(targetIndex.getZeroBased());
 
         while (jobIterator.hasNext()) {
-            if (jobIterator.next().hasEmployee(employeeToDelete)) {
+            Job currJob = jobIterator.next();
+            if (currJob.hasEmployee(employeeToDelete) && (currJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
                 throw new CommandException(Messages.MESSAGE_EMPLOYEE_IS_ASSIGNED);
             }
         }

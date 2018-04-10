@@ -107,6 +107,22 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
+     * Unreviews job entry in the event of failure to write to file
+     */
+    public void unreviewJobEntry(int row) {
+        int index = commentFields.get(COMMENTS).getStartIndex();
+        Cell cell = sheet.getRow(row).getCell(index);
+        if (cell != null) {
+            sheet.getRow(row).removeCell(cell);
+        }
+        index = commentFields.get(APPROVAL_STATUS).getStartIndex();
+        cell = sheet.getRow(row).getCell(index);
+        if (cell != null) {
+            sheet.getRow(row).removeCell(cell);
+        }
+    }
+
+    /**
      * Appends a comment for job at (@oode row)
      */
     public void commentJobEntry(int row, String comment) {

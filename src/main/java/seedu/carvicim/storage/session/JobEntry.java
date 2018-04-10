@@ -1,7 +1,5 @@
 package seedu.carvicim.storage.session;
 
-import static seedu.carvicim.model.remark.Remark.isValidRemark;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,16 +33,9 @@ public class JobEntry extends Job {
         this.sheetNumber = sheetNumber;
         this.rowNumber = rowNumber;
         comments = new ArrayList<>();
-        addComment(importComment);
-    }
-
-    /**
-     * Adds a non-empty comment to both remarks and comments.
-     */
-    private void addComment(String comment) {
-        if (comment != null && isValidRemark(comment)) {
-            remarks.add(new Remark(comment));
-            comments.add(comment);
+        if (importComment != null &&  !importComment.isEmpty()) {
+            comments.add(importComment);
+            remarks.add(new Remark(importComment));
         }
     }
 
@@ -54,7 +45,29 @@ public class JobEntry extends Job {
      * @param comment feedback for (@code JobEntry) in String representation
      */
     public void review(boolean approved, String comment) {
-        addComment(comment);
+        comments.add(comment);
+    }
+
+    /**
+     * Removes last comment from comments and remarks in the event that it cannot be saved to disk
+     */
+    public void unreviewLastComment() {
+        if (comments.isEmpty()) {
+            return;
+        }
+        comments.remove(comments.size() - 1);
+    }
+
+    /**
+     * Adds all comments into remarks
+     */
+    public void confirmLastReview() {
+        if (comments.isEmpty()) {
+            return;
+        }
+        if (!comments.get(comments.size() - 1).isEmpty()) {
+            remarks.add(new Remark(comments.get(comments.size() - 1)));
+        }
     }
 
     public List<String> getComments() {

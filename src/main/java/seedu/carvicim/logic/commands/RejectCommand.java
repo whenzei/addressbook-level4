@@ -8,21 +8,23 @@ import seedu.carvicim.storage.session.SessionData;
 //@@author yuhongherald
 
 /**
- * Rejects an unreviewed job entry using job number
+ * Rejects an unreviewed job entry using job number, adding comment into remarksList
  */
 public class RejectCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "reject";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Rejects job entry using job number. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Rejects job entry using job index. "
             + "Example: " + COMMAND_WORD + " JOB_NUMBER";
 
     public static final String MESSAGE_SUCCESS = "Job #%d rejected!";
 
-    private int jobNumber;
+    private final int jobNumber;
+    private final String comment;
 
-    public RejectCommand(int jobNumber) {
+    public RejectCommand(int jobNumber, String comment) {
         this.jobNumber = jobNumber;
+        this.comment = comment;
     }
 
     public String getMessageSuccess() {
@@ -35,7 +37,7 @@ public class RejectCommand extends UndoableCommand {
         if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        Job job = sessionData.reviewJobEntryUsingJobNumber(jobNumber, false, "");
+        Job job = sessionData.reviewJobEntryUsingJobIndex(jobNumber, false, comment);
         model.addJob(job);
 
         if (!model.isViewingImportedJobs()) {
@@ -48,7 +50,9 @@ public class RejectCommand extends UndoableCommand {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof RejectCommand); // instanceof handles nulls
+                || (other instanceof RejectCommand) // instanceof handles nulls
+                && jobNumber == ((RejectCommand) other).jobNumber
+                && comment.equals(((RejectCommand) other).comment);
     }
 
 }

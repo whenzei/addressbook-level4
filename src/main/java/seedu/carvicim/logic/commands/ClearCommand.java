@@ -21,6 +21,9 @@ public class ClearCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(model);
         model.resetData(new Carvicim(), new CommandWords());
+        if (model.isViewingImportedJobs()) {
+            model.switchJobView();
+        }
         model.resetJobView();
         model.resetJobDisplayPanel();
         JobNumber.initialize("1");

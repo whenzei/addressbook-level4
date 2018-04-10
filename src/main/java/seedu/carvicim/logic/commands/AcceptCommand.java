@@ -8,21 +8,23 @@ import seedu.carvicim.storage.session.SessionData;
 //@@author yuhongherald
 
 /**
- * Accepts an unreviewed job entry using job number and adds into servicing manager
+ * Accepts an unreviewed job entry using job number and adds into servicing manager, adding comment into remarksList
  */
 public class AcceptCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "accept";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Accepts job entry using job number. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Accepts job entry using index. "
             + "Example: " + COMMAND_WORD + " JOB_NUMBER";
 
     public static final String MESSAGE_SUCCESS = "Job #%d accepted!";
 
-    private int jobNumber;
+    private final int jobNumber;
+    private final String comment;
 
-    public AcceptCommand(int jobNumber) {
+    public AcceptCommand(int jobNumber, String comment) {
         this.jobNumber = jobNumber;
+        this.comment = comment;
     }
 
     public String getMessageSuccess() {
@@ -35,7 +37,7 @@ public class AcceptCommand extends UndoableCommand {
         if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        Job job = sessionData.reviewJobEntryUsingJobNumber(jobNumber, true, "");
+        Job job = sessionData.reviewJobEntryUsingJobIndex(jobNumber, true, comment);
         model.addJob(job);
 
         if (!model.isViewingImportedJobs()) {
@@ -48,7 +50,9 @@ public class AcceptCommand extends UndoableCommand {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof AcceptCommand); // instanceof handles nulls
+                || (other instanceof AcceptCommand) // instanceof handles nulls
+                && jobNumber == ((AcceptCommand) other).jobNumber
+                && comment.equals(((AcceptCommand) other).comment);
     }
 
 }

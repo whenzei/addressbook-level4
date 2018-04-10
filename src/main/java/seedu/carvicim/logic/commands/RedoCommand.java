@@ -24,7 +24,13 @@ public class RedoCommand extends Command {
             throw new CommandException(MESSAGE_FAILURE);
         }
 
-        undoRedoStack.popRedo().redo();
+        UndoableCommand command = undoRedoStack.popRedo();
+        try {
+            command.redo();
+        } catch (CommandException e) {
+            undoRedoStack.popUndo();
+            throw e;
+        }
         return new CommandResult(MESSAGE_SUCCESS);
     }
 

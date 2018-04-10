@@ -23,8 +23,13 @@ public class UndoCommand extends Command {
         if (!undoRedoStack.canUndo()) {
             throw new CommandException(MESSAGE_FAILURE);
         }
-
-        undoRedoStack.popUndo().undo();
+        UndoableCommand command = undoRedoStack.popUndo();
+        try {
+            command.undo();
+        } catch (CommandException e) {
+            undoRedoStack.popRedo();
+            throw e;
+        }
         return new CommandResult(MESSAGE_SUCCESS);
     }
 

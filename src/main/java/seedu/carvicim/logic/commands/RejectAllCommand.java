@@ -11,7 +11,7 @@ import seedu.carvicim.storage.session.SessionData;
 //@@author yuhongherald
 
 /**
- * Rejects all remaining unreviewed job entries into Servicing Manager
+ * Rejects all remaining unreviewed job entries into Servicing Manager with (@code comment)
  */
 public class RejectAllCommand extends UndoableCommand {
 
@@ -21,6 +21,12 @@ public class RejectAllCommand extends UndoableCommand {
             + "Example: " + COMMAND_WORD;
 
     public static final String MESSAGE_SUCCESS = "%d job entries rejected!";
+
+    private final String comment;
+
+    public RejectAllCommand(String comment) {
+        this.comment = comment;
+    }
 
     public String getMessageSuccess(int entries) {
         return String.format(MESSAGE_SUCCESS, entries);
@@ -32,7 +38,7 @@ public class RejectAllCommand extends UndoableCommand {
         if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        List<Job> jobs = new ArrayList<>(sessionData.reviewAllRemainingJobEntries(false, ""));
+        List<Job> jobs = new ArrayList<>(sessionData.reviewAllRemainingJobEntries(false, comment));
         model.addJobs(jobs);
         return new CommandResult(getMessageSuccess(jobs.size()));
     }
@@ -40,7 +46,8 @@ public class RejectAllCommand extends UndoableCommand {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof RejectAllCommand); // instanceof handles nulls
+                || (other instanceof RejectAllCommand) // instanceof handles nulls
+                && comment.equals(((RejectAllCommand) other).comment);
     }
 
 }

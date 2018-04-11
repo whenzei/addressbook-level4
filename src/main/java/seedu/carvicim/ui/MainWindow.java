@@ -34,7 +34,7 @@ public class MainWindow extends UiPart<Stage> {
     private static final String FXML = "MainWindow.fxml";
 
     private final Logger logger = LogsCenter.getLogger(this.getClass());
-    private final String[] themes = {"Teal", "Dark"};
+    private final String[] themes = {"Mauve", "Dark", "Light"};
 
     private Stage primaryStage;
     private Logic logic;

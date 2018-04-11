@@ -13,14 +13,15 @@ import seedu.carvicim.logic.commands.exceptions.CommandException;
 public class ThemeCommand extends Command {
     public static final String COMMAND_WORD = "theme";
 
-    public static final int NUMBER_OF_THEMES = 2;
+    public static final int NUMBER_OF_THEMES = 3;
 
     public static final String MESSAGE_THEME_CHANGE_SUCCESS = "Theme updated: %1$s";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Applies selected theme\n"
-            + "1. Teal theme\n"
+            + "1. Mauve theme\n"
             + "2. Dark theme\n"
+            + "3. Light theme\n"
             + "Parameters: INDEX (positive integer)\n"
             + "Example: " + COMMAND_WORD + " 2";
 

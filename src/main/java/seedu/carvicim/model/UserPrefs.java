@@ -81,11 +81,11 @@ public class UserPrefs {
     }
 
     public void setDefaultThemeName() {
-        this.themeName = "DarkTheme";
+        this.themeName = "MauveTheme";
     }
 
     public void setDefaultExtensionName() {
-        this.extensionName = "ExtensionsDark";
+        this.extensionName = "ExtensionsMauve";
     }
 
     public void setDefaultNextJobNumber() {

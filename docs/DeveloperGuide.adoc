@@ -742,51 +742,81 @@ image::SortSequenceDiagram.png[width="800"]
 === Archive feature
 ==== Current Implementation
 
-...
+The `ArchiveCommand` is facilitated by a `AddJobCommandParser`, which is responsible for parsing the input starting `Date` and ending `Date`.
 
 The `ArchiveCommand` is implemented this way to ensure that the specified starting date is earlier than the ending date:
 [source,java]
 ----
-public CommandResult executeUndoableCommand() throws CommandException {
+public CommandResult execute() throws CommandException {
     if (toArchive.compareTo(toArchive.getStartDate(), toArchive.getEndDate()) > 0) {
         throw new CommandException(MESSAGE_INVALID_DATERANGE);
     }
     requireNonNull(model);
-    model.archiveJob(toArchive);
-    return new CommandResult(MESSAGE_SUCCESS);
+    archiveCount = model.archiveJob(toArchive);
+    if (archiveCount != 0) {
+        return new CommandResult(MESSAGE_SUCCESS);
+    }
+    return new CommandResult(MESSAGE_UNSUCCESS);
 }
 ----
 
 `Carvicim` code snippet that extracts the job entries within the selected date range:
 [source,java]
 ----
-public void archiveJob(DateRange dateRange) {
+public int archiveJob(DateRange dateRange) {
+    int archiveJobCount = 0;
     archiveJobs = new JobList();
+    Date startDate = dateRange.getStartDate();
+    Date endDate = dateRange.getEndDate();
+    Status closed = new Status("closed");
     Iterator<Job> iterator = jobs.iterator();
     while (iterator.hasNext()) {
         Job job = iterator.next();
         Date date = job.getDate();
-        Date startDate = dateRange.getStartDate();
-        Date endDate = dateRange.getEndDate();
-        if (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0) {
+        date = new Date(date.toString());
+        Status status = job.getStatus();
+        boolean withinRange = (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0)
+                ? true
+                : false;
+        boolean isClosed = (status.equals(closed))
+                ? true
+                : false;
+        if (withinRange && isClosed) {
             archiveJobs.add(job);
+            archiveJobCount++;
         }
     }
+    return archiveJobCount;
 }
 ----
 
-`StorageManager` code snippet that handles CarvicimChangedEvent to archive the job entries:
+New classes has been added to the storage component to allow Carvicim to archive closed job entries within the specified date range.
+
+.`ArchiveCommand` Storage Component Diagram
+image::ArchiveStorageComponentDiagram.png[width="800"]
+
+As seen from Figure 17, `XmlSerializableArchiveJob` is used to serialize the archive job entries into a xml format based on `XmlAdaptedJob`.
+The access of information to the archive job xml file is control by `XmlArchiveJobStorage`.
+The `StorageManager` manages both the storage of Carvicim and archive data.
+
+`StorageManager` code snippet that handles ArchiveEvent to archive the job entries:
 [source,java]
 ----
-public void handleArchiveEvent(CarvicimChangedEvent event) {
+public void handleArchiveEvent(ArchiveEvent event) {
     logger.info(LogsCenter.getEventHandlingLogMessage(event, "Archiving data, saving to file"));
     try {
         saveArchiveJob(event.data);
+        saveCarvicim(event.data);
     } catch (IOException e) {
         raise(new DataSavingExceptionEvent(e));
     }
 }
 ----
+
+The following sequence diagram shows how the archive operation works:
+
+.`ArchiveCommand` sequence diagram
+image::ArchiveSequenceDiagram.png[width="800"]
 
 ==== Design Considerations
 
@@ -799,13 +829,81 @@ public void handleArchiveEvent(CarvicimChangedEvent event) {
 ** Cons: We cannot select the range of job entries that we will like to archive.
 
 ===== Aspect: How `ArchiveCommand` saves data +
-* **Current choice:** Overwrites the existing archive file.
-** Pros: Will use less memory.
-** Cons: We cannot archive multiple files.
-* _Alternative:_ Creates a new archive file.
+* **Current choice:** Creates a new archive file.
 ** Pros: We get to archive multiple files with different selected date range.
 ** Cons: May have performance issues in terms of memory usage.
+* _Alternative:_ Overwrites the existing archive file.
+** Pros: Will use less memory.
+** Cons: We cannot archive multiple files.
 // end::archive[]
+
+// tag::analyse[]
+=== Analyse feature
+==== Current Implementation
+
+The `AnalyseCommand` is facilitated by a `HashMap`, which is responsible for keeping track of
+the number of jobs assigned to each employee.
+
+The `HashMap` is initialized this way:
+[source,java]
+----
+private HashMap<Name, Integer> analyse = new HashMap<Name, Integer>();
+
+public void initEmployeeJobCount(UniqueEmployeeList employeeList) {
+    Iterator<Employee> iteratorEmployee = employeeList.iterator();
+    while (iteratorEmployee.hasNext()) {
+        Employee employee = iteratorEmployee.next();
+        analyse.put(employee.getName(), 0);
+    }
+}
+----
+
+The `HashMap` is updated this way:
+[source,java]
+----
+public void updateEmployeeJobCount(Job job) {
+    Iterator<Employee> iteratorEmployee = job.getAssignedEmployees().iterator();
+    while (iteratorEmployee.hasNext()) {
+        Employee employee = iteratorEmployee.next();
+        int jobCount = analyse.get(employee.getName());
+        analyse.put(employee.getName(), jobCount + 1);
+    }
+}
+----
+
+`JobList` code snippet that formats the analyse result:
+[source,java]
+----
+public String getAnalyseResult() {
+    final StringBuilder builder = new StringBuilder();
+    builder.append("Number of Jobs: ")
+            .append(jobCount)
+            .append(" Number of Ongoing: ")
+            .append(ongoingCount)
+            .append(" Number of Closed: ")
+            .append(closedCount)
+            .append("\n");
+    Set set = analyse.entrySet();
+    builder.append(set);
+    return builder.toString();
+}
+----
+
+The following sequence diagram shows how the analyse operation works:
+
+.`AnalyseCommand` sequence diagram
+image::AnalyseSequenceDiagram.png[width="800"]
+
+==== Design Considerations
+
+===== Aspect: How `AnalyseCommand` executes +
+* **Current choice:** Analyses job entries within the current month.
+** Pros: We get to decide who should be assigned more jobs based on the analyse result.
+** Cons: Harder to implement.
+* _Alternative:_ Analyses all job entries.
+** Pros: Easy to implement.
+** Cons: The analyse result would be less helpful for job assignment.
+// end::analyse[]
 
 // tag::undoredo[]
 === Undo/Redo feature
@@ -1563,8 +1661,8 @@ See this https://github.com/se-edu/addressbook-level4/pull/599[PR] for the step-
 As a Car Servicing Manager::
 * has a need to manage a significant number of car servicing jobs
 * has a need to assign employees to jobs with ease
-* has a need to keep an archive of completed job entries
-* has a need to monitor employee’s performance
+* has a need to keep an archive of closed job entries
+* has a need to monitor employee’s workload
 
 For optimal use::
 * prefer desktop apps over other types

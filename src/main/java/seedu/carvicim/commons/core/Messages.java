@@ -15,4 +15,5 @@ public class Messages {
     public static final String MESSAGE_EMPLOYEE_IS_ASSIGNED = "Employee is currently assigned to a job";
     public static final String MESSAGE_JOB_NOT_FOUND = "Job not found";
     public static final String MESSAGE_INVALID_DATERANGE = "The specified start date is later than the end date";
+    public static final String MESSAGE_INVALID_JOB_NUMBER = "The job number provided is invalid";
 }

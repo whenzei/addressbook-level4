@@ -1,0 +1,58 @@
+= Wee Jia Sheng Richardson - Project Portfolio
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== PROJECT: CarviciM
+
+---
+
+== Overview
+
+CarviciM is a desktop car servicing application used for job management purpose. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+
+== Summary of contributions
+
+* *Major enhancement*: added *the ability to archive closed job entries* and *the ability to analyse job entries*
+** What it does: allows the user to archive closed job entries within the specified date range and analyse the job entries within the current month.
+** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
+** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
+
+* *Minor enhancement*: sorting the employee list alphabetically according to their names.
+
+* *Code contributed*: [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/richardson0694.md[Functional code]] [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/richardson0694.md[Test code]]
+
+* *Other contributions*:
+
+** Project management:
+*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+** Enhancements to existing features:
+*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
+*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+** Documentation:
+*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+** Community:
+*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com/CS2103JAN2018-W15-B2/main/issues/169, https://github.com/CS2103JAN2018-W15-B2/main/issues/178, https://github.com/CS2103JAN2018-W15-B2/main/issues/174)
+
+== Contributions to the User Guide
+
+|===
+|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|===
+
+include::../UserGuide.adoc[tag=archive]
+
+include::../UserGuide.adoc[tag=analyse]
+
+include::../UserGuide.adoc[tag=sort]
+
+== Contributions to the Developer Guide
+
+|===
+|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|===
+
+include::../DeveloperGuide.adoc[tag=archive]
+
+include::../DeveloperGuide.adoc[tag=analyse]
+
+include::../DeveloperGuide.adoc[tag=sort]

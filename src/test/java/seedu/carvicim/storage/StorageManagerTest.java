@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import seedu.carvicim.commons.events.model.ArchiveEvent;
 import seedu.carvicim.commons.events.model.CarvicimChangedEvent;
 import seedu.carvicim.commons.events.storage.DataSavingExceptionEvent;
 import seedu.carvicim.model.Carvicim;
@@ -69,8 +70,26 @@ public class StorageManagerTest {
     }
 
     @Test
+    public void archiveReadSave() throws Exception {
+        /*
+         * Note: This is an integration test that verifies the StorageManager is properly wired to the
+         * {@link XmlArchiveJobStorage} class.
+         * More extensive testing of UserPref saving/reading is done in {@link XmlArchiveJobStorageTest} class.
+         */
+        Carvicim original = new Carvicim();
+        storageManager.saveArchiveJob(original);
+        ReadOnlyCarvicim retrieved = storageManager.readArchiveJob().get();
+        assertEquals(original, new Carvicim(retrieved));
+    }
+
+    @Test
     public void getAddressBookFilePath() {
         assertNotNull(storageManager.getAddressBookFilePath());
+    }
+
+    @Test
+    public void getArchiveJobFilePath() {
+        assertNotNull(storageManager.getArchiveJobFilePath());
     }
 
     @Test
@@ -80,6 +99,16 @@ public class StorageManagerTest {
                                              new JsonUserPrefsStorage("dummy"),
                 new XmlArchiveJobStorageExceptionThrowingStub("dummy"));
         storage.handleAddressBookChangedEvent(new CarvicimChangedEvent(new Carvicim()));
+        assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof DataSavingExceptionEvent);
+    }
+
+    @Test
+    public void handleArchiveEvent_exceptionThrown_eventRaised() {
+        // Create a StorageManager while injecting a stub that  throws an exception when the save method is called
+        Storage storage = new StorageManager(new XmlCarvicimStorageExceptionThrowingStub("dummy"),
+                new JsonUserPrefsStorage("dummy"),
+                new XmlArchiveJobStorageExceptionThrowingStub("dummy"));
+        storage.handleArchiveEvent(new ArchiveEvent(new Carvicim()));
         assertTrue(eventsCollectorRule.eventsCollector.getMostRecent() instanceof DataSavingExceptionEvent);
     }
 

@@ -1,0 +1,64 @@
+= Charmaine Lee - Project Portfolio
+:imagesDir: ../images
+:stylesDir: ../stylesheets
+
+== PROJECT: CarviciM
+
+---
+
+== Overview
+
+CarviciM is a desktop car servicing management application, morphed from AddressBook - Level 4, which is used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+
+== Summary of contributions
+
+* *Major enhancement*: added *the ability to send out auto-generated emails containing job details*
+** What it does: allows the user to send out auto-generated emails about the job details to all the assigned employees of the job.
+** Justification: This feature improves the product significantly because a user can so conveniently inform their employees about the job that will be doing. The user no longer have to call or type out the emails themselves.
+** Highlights: This enhancement required an in-depth analysis of design alternatives. The implementation too was challenging as it required being able to connect to Gmail in order to send out emails to all employees assigned to the job with the specific job details as the content.
+** Credits: _{mention here if you reused any code/ideas from elsewhere or if a third-party library is heavily used in the feature so that a reader can make a more accurate judgement of how much effort went into the feature}_
+
+* *Minor enhancement*: added a history command that allows the user to navigate to previous commands using up/down keys.
+
+* *Code contributed*: [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/charmaineleehc.md[Functional code]] [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/charmaineleehc.md[Test Code]]
+
+* *Other contributions*:
+
+** Project management:
+*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
+*** Used GitHub Issues tracker to keep track of issues that arise throughout the development process
+** Enhancements to existing features:
+*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
+*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+** Documentation:
+*** Updated User Guide with the features implemented: https://github.com[#14]
+*** Updated Developer Guide with the features implemented
+*** Made changes to both User and Developer Guide to make them more reader-friendly
+***
+** Community:
+*** PRs reviewed (with non-trivial review comments): https://github.com[#12], https://github.com[#32], https://github.com[#19], https://github.com[#42]
+*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com[1], https://github.com[2], https://github.com[3])
+** Tools:
+
+_{you can add/remove categories in the list above}_
+
+== Contributions to the User Guide
+
+
+|===
+|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|===
+
+include::../UserGuide.adoc[tag=undoredo]
+
+include::../UserGuide.adoc[tag=dataencryption]
+
+== Contributions to the Developer Guide
+
+|===
+|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|===
+
+include::../DeveloperGuide.adoc[tag=undoredo]
+
+include::../DeveloperGuide.adoc[tag=dataencryption]

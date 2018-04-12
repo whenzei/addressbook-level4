@@ -32,13 +32,20 @@ public class FileUtil {
      * Creates a file if it does not exist along with its missing parent directories.
      * @throws IOException if the file or directory cannot be created.
      */
-    public static void createEvenIfExist(File file) throws IOException {
-        if (isFileExists(file)) {
-            file.delete();
+    public static File createIfMissingAndNewIfExist (String filePath) throws IOException {
+        int fileNum = 0;
+        File file = new File(filePath);
+        if (!isFileExists(file)) {
             createFile(file);
         } else {
+            file = new File("data/archivejob" + fileNum + ".xml");
+            while (isFileExists(file)) {
+                fileNum++;
+                file = new File("data/archivejob" + fileNum + ".xml");
+            }
             createFile(file);
         }
+        return file;
     }
 
     /**

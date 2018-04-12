@@ -8,6 +8,7 @@ import com.google.common.eventbus.Subscribe;
 
 import seedu.carvicim.commons.core.ComponentManager;
 import seedu.carvicim.commons.core.LogsCenter;
+import seedu.carvicim.commons.events.model.ArchiveEvent;
 import seedu.carvicim.commons.events.model.CarvicimChangedEvent;
 import seedu.carvicim.commons.events.storage.DataSavingExceptionEvent;
 import seedu.carvicim.commons.exceptions.DataConversionException;
@@ -123,10 +124,11 @@ public class StorageManager extends ComponentManager implements Storage {
 
     @Override
     @Subscribe
-    public void handleArchiveEvent(CarvicimChangedEvent event) {
+    public void handleArchiveEvent(ArchiveEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event, "Archiving data, saving to file"));
         try {
             saveArchiveJob(event.data);
+            saveCarvicim(event.data);
         } catch (IOException e) {
             raise(new DataSavingExceptionEvent(e));
         }

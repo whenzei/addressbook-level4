@@ -3,6 +3,7 @@ package seedu.carvicim.storage;
 import java.io.IOException;
 import java.util.Optional;
 
+import seedu.carvicim.commons.events.model.ArchiveEvent;
 import seedu.carvicim.commons.events.model.CarvicimChangedEvent;
 import seedu.carvicim.commons.events.storage.DataSavingExceptionEvent;
 import seedu.carvicim.commons.exceptions.DataConversionException;
@@ -50,5 +51,5 @@ public interface Storage extends CarvicimStorage, UserPrefsStorage, ArchiveJobSt
      *   Creates the data file if it is missing.
      * Raises {@link DataSavingExceptionEvent} if there was an error during saving.
      */
-    void handleArchiveEvent(CarvicimChangedEvent abce);
+    void handleArchiveEvent(ArchiveEvent abce);
 }

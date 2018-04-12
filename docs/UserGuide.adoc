@@ -193,14 +193,15 @@ You will see all jobs with `john` as their client name (not case-sensitive), sho
 `findj Apr Feb` +
 You will see all jobs with `Apr` or `Feb` as their job detail (not case-sensitive), shown in the job list panel.
 
+// tag::archive[]
 === Archiving job entries: `archive`
 
-To archive job entries within a specified range in CarviciM, you can use this command. +
+To archive closed job entries within a specified range in CarviciM, you can use this command. +
 Format: `archive sd/START_DATE ed/END_DATE`
 
 [NOTE]
 ====
-* Archives the job entries within the specified `START_DATE` and `END_DATE`.
+* Archives the closed job entries within the specified `START_DATE` and `END_DATE`.
 * The `START_DATE` *must be earlier than* the `END_DATE`.
 * Both dates should be in the form of *MMM DD YYYY*.
 ====
@@ -208,9 +209,24 @@ Format: `archive sd/START_DATE ed/END_DATE`
 Example:
 
 `archive sd/Mar 25 2018 ed/Apr 03 2018` +
-The command will save the job entries within the selected date range in CarviciM. +
+The command will save the closed job entries within the selected date range in CarviciM. +
 You will see "Archived Successfully" in the result display. +
 You will see the newly created archive file.
+// end::archive[]
+
+// tag::analyse[]
+=== Analysing job entries: `analyse`
+
+To analyse job entries within the current month in CarviciM, you can use this command. +
+Format: `analyse`
+
+Example:
+
+`analyse` +
+The command will analyse the job entries within the current month in CarviciM. +
+You will see "Result: Number of Jobs: ... Number of Ongoing: ... Number of Closed: ..."
+followed by the number of jobs assigned to each employee. +
+// end::analyse[]
 
 === Adding an employee: `adde`
 
@@ -259,11 +275,12 @@ You will see the results of the `finde` command which shows all employees with m
 `deletee 1` +
 You will see an updated employees list panel which has the 1st employee removed.
 
-
+// tag::sort[]
 === Sorting all employees : `sort`
 
 To sort the list of employees alphabetically for easy viewing, you can use this command. +
 Format: `sort`
+// end::sort[]
 
 === Selecting employees by list number: `selecte`
 
@@ -638,6 +655,8 @@ e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 e.g. `closej j/1232`
 * *Archive job entries* `archive sd/START_DATE ed/END_DATE` +
 e.g. `archive sd/Mar 25 2018 ed/Apr 03 2018`
+* *Analyse job entries* `analyse` +
+e.g. `analyse`
 * *Add Employee* `adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` +
 e.g. `adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
 * *Delete Employee* : `deletee INDEX` +

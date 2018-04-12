@@ -23,7 +23,7 @@ public class ArchiveCommand extends Command {
             + PREFIX_START_DATE + "Mar 03 2018 "
             + PREFIX_END_DATE + "Mar 25 2018";
 
-    public static final String MESSAGE_SUCCESS = "Archived successfully to \"archivejob.xml\"";
+    public static final String MESSAGE_SUCCESS = "Archived successfully";
     public static final String MESSAGE_UNSUCCESS = "No jobs within selected range";
 
     private final DateRange toArchive;

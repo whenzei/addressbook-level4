@@ -52,7 +52,7 @@ public class XmlFileStorage {
 
     //@@author richardson0694
     /**
-     * Returns archive job in the file or an empty carvicim book
+     * Returns archive job in the file.
      */
     public static XmlSerializableArchiveJob loadDataFromArchiveFile(File file) throws DataConversionException,
             FileNotFoundException {

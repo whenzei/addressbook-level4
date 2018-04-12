@@ -18,7 +18,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 
 import com.google.api.services.gmail.Gmail;
 
-//@@author charmaineleehc-reused
+//@@author charmaineleehc
 /**
  * Allow for Gmail authentication process to take place
  */

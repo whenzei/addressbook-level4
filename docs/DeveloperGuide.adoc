@@ -278,7 +278,7 @@ This section describes some noteworthy details on how certain features are imple
 === Add job feature
 ==== Current Implementation
 
-`Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` (figure 11).
+To implement the job management feature, new classes are added to the `Model` component. `Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` as shown below.
 
 .Class Diagram of Model component
 image::ModelClassDiagram.png[width="800"]
@@ -363,7 +363,7 @@ The successful execution of `AddJobCommand` adds the `Job` to CarviciM.
 
 ===== Aspect: Modelling jobs in CarviciM
 
-* **Current choice:** Adding a list to keep track of all jobs in CarviciM, and adding an attribute for keeping a list of assigned employees in `Job` class.
+* **Current choice:** Adding a list in `Carvicim` class to keep track of all jobs, and adding an attribute for keeping a list of assigned employees in `Job` class.
 ** Pros: Finding assigned employees of a job, requires only going through the assigned employee list of the job. Removal of a job is done easily by removing it from the list of jobs.
 ** Cons: Additional list to maintain, other than the list of employees. Changes to an employee needs to be updated for all jobs that contains the respective employee.
 * _Alternative:_ Add a new attribute in `Employee` class to keep a list of jobs.
@@ -470,7 +470,109 @@ image::CloseJobCommand_execute_SeqDiag.png[width="400"]
 * _Alternative:_ Add an additional list for closed jobs in the `ModelManager`
 ** Pros: Jobs are stored in dedicated lists of either "ongoing" or "closed", and searching for jobs of a specific status only requires calling one list.
 ** Cons: More attributes to manage, and may cause duplicate or missing jobs if it is not managed properly.
-// end:closejob[]
+// end::closejob[]
+
+// tag::remark[]
+=== Job remark feature
+==== Current Implementation
+
+The remark feature is facilitated by `RemarkCommand` which is an `UndoableCommand`. `RemarkCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `JOB_NUMBER` and `REMARK` input, and creates the `RemarkCommand` object.
+
+Similar to the `CloseJobCommand`, the `RemarkCommand` is also an undoable command which overrides the `preprocessUndoableCommand` method of `UndoableCommand`. It checks if the specified job can have a remark added.
+[NOTE]
+====
+If the paramters are invalid, `remark` command will return an invalid message, which shows the usage information to the user.
+====
+
+`RemarkCommandParser` code snippet to validate the parameters, `JOB_NUMBER` and `REMARK`, which returns `RemarkCommand` object if valid, and invalid message otherwise:
+[source,java]
+----
+    public RemarkCommand parse(String args) throws ParseException {
+        ArgumentMultimap argMultimap =
+                ArgumentTokenizer.tokenize(args, PREFIX_JOB_NUMBER, PREFIX_REMARK);
+
+        if (!arePrefixesPresent(argMultimap, PREFIX_JOB_NUMBER, PREFIX_REMARK)
+                || !argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
+        }
+
+        try {
+            Remark remark = ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARK)).get();
+            JobNumber jobNumber = ParserUtil.parseJobNumber(argMultimap.getValue(PREFIX_JOB_NUMBER)).get();
+
+            return new RemarkCommand(remark, jobNumber);
+        } catch (IllegalValueException ive) {
+            throw new ParseException(ive.getMessage(), ive);
+        }
+    }
+----
+
+`preprocessUndoableCommand` method code snippet in `RemarkCommand`, which checks if the job exists and if it has a valid job status:
+[source,java]
+----
+    protected void preprocessUndoableCommand() throws CommandException {
+        List<Job> lastShownJobList = model.getFilteredJobList();
+        Iterator<Job> jobIterator = lastShownJobList.iterator();
+
+        while (jobIterator.hasNext()) {
+            Job currentJob = jobIterator.next();
+            if (currentJob.getJobNumber().equals(jobNumber)
+                    && (currentJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
+                target = currentJob;
+                updatedJob = createUpdatedJob(target, remark);
+                break;
+            }
+        }
+
+        if (target == null) {
+            throw new CommandException(Messages.MESSAGE_JOB_NOT_FOUND);
+        }
+    }
+----
+
+`createUpdatedJob` method code snippet in `CloseJobCommand`, which creates a copy of the respective job with new remark added into its list of remarks.
+[source,java]
+----
+    public static Job createUpdatedJob(Job jobToEdit, Remark remark) {
+        assert jobToEdit != null;
+        RemarkList remarks = new RemarkList(jobToEdit.getRemarkList().getRemarks());
+        remarks.add(remark);
+
+        return new Job(jobToEdit.getClient(), jobToEdit.getVehicleNumber(), jobToEdit.getJobNumber(),
+                jobToEdit.getDate(), jobToEdit.getAssignedEmployees(), jobToEdit.getStatus(), remarks);
+    }
+----
+
+`executeUndoableCommand` method code snippet in `RemarkCommand`, which updates the job list with the job copy created and posts an `JobDisplayPanelUpdateRequestEvent`:
+[source,java]
+----
+    public CommandResult executeUndoableCommand() {
+        requireNonNull(target);
+        requireNonNull(updatedJob);
+        try {
+            model.addRemark(target, updatedJob);
+        } catch (JobNotFoundException jnfe) {
+            throw new AssertionError("The target job cannot be missing");
+        }
+        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(updatedJob));
+        return new CommandResult(String.format(MESSAGE_REMARK_SUCCESS, remark));
+    }
+----
+
+The following sequence diagram shows how the `preprocessUndoableCommand` method in `RemarkCommand` works:
+
+image::RemarkCommand_preprocess_SeqDiag.png[width="700"]
+
+The following sequence diagram shows how the `executeUndoableCommand` method in `RemarkCommand` works:
+
+image::RemarkCommand_execute_SeqDiag.png[width="400"]
+
+==== Design Considerations
+
+===== Aspect: Checking if given `JOB_NUMBER` input points to a valid job in CarviciM
+* **Current choice:** Perform check in the `preprocessUndoableCommand` method in `RemarkCommand`, by going through the list of jobs.
+** Pros: Does not introduce more coupling.
+** Cons: May take some time if job list has many entries.
 
 // tag::set[]
 === Set command feature

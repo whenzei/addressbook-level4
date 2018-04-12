@@ -7,16 +7,20 @@
 
 == Overview
 
-CarviciM is a car servicing management application built on the link:https://github.com/nus-cs2103-AY1718S2/addressbook-level4[AddressBook - Level 4] project, which is used for teaching Software Engineering principles. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
+CarviciM is an efficient and systematic application for car servicing managers to manage their servicing jobs and employee assignment. It is a Command Line Interface (CLI) application which is optimized for users who are adpet at using the keyboard.
+CarviciM is built on the link:https://github.com/nus-cs2103-AY1718S2/addressbook-level4[AddressBook - Level 4] project (used for teaching Software Engineering principles). It is written in Java, and has about 10 kLoC.
+
+This portfolio summarize my contributions for the development of CarviciM. It showcases the software engineering knowledge that i have learned and applied throughout the project.
 
 == Summary of contributions
 
 * *Major enhancement*: added *the ability to manage jobs*
 ** What it does: allows the user to add new job entries with employees assignment for each job, close an ongoing job entry in the application, and add remark to ongoing jobs.
-** Justification: This set of features are the basis of the application for managing job entries.
-** Highlights: This enhancement requires the morphing of the _AddressBook - Level 4_ project and require substantial changes to the codebase. The implementation required changes to existing commands so that the newly added commands would work properly. Most changes were made in the Model component.
+** Justification: Car servicing managers need to manage huge numbers of job entries, and keep track of the employees that are assigned to them. These set of features give them a systematic and convenient way to manage the servicing jobs.
+** Highlights: This enhancement requires the morphing of the _AddressBook - Level 4_ project and require substantial changes to the codebase. As the added features interact with the 'management of contacts' feature from the addressbook application, changes were to be made to the existing commands so that the newly added commands would work properly. Most changes were made in the Model component.
 
 * *Minor enhancement*: added a theme command that allows the user to select theme from a list of themes provided.
+** Justification: The default application only supports one theme and users would prefer to have more control over how the application looks . They may prefer to use different themes under certain circumstances (e.g. A brighter look would be prefered when working in a different environment, as it is more pleasing to the eyes.)
 * *Code contributed*: [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/whenzei.md[Functional code]] [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/whenzei.md[Test Code]]
 
 * *Other contributions*:
@@ -26,7 +30,8 @@ CarviciM is a car servicing management application built on the link:https://git
 ** Enhancements to existing features:
 *** Added JobDisplayPanel to support the displaying of job details (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/94[#94], https://github.com/CS2103JAN2018-W09-B1/main/pull/152[#152])
 ** Documentation:
-*** Worked on the formatting of the User Guide to improve user readability
+*** Worked on the formatting of the User Guide to improve readability.
+*** Made User Guide more user-friendly by adding screenshots.
 
 
 == Contributions to the User Guide

@@ -7,7 +7,6 @@ import org.fxmisc.easybind.EasyBind;
 import com.google.common.eventbus.Subscribe;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -16,10 +15,8 @@ import javafx.scene.layout.Region;
 import seedu.carvicim.commons.core.LogsCenter;
 import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
 import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
-import seedu.carvicim.commons.events.ui.PersonPanelSelectionChangedEvent;
+import seedu.carvicim.commons.events.ui.JumpToJobListRequestEvent;
 import seedu.carvicim.model.job.Job;
-import seedu.carvicim.model.job.JobList;
-import seedu.carvicim.model.person.Employee;
 
 //@@author yuhongherald
 /**
@@ -88,22 +85,17 @@ public class JobListPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    private void handlePersonPanelSelectionChangedEvent(PersonPanelSelectionChangedEvent event) {
-        logger.info(LogsCenter.getEventHandlingLogMessage(event));
-        updateList(event.getNewSelection().employee);
-    }
-
-    @Subscribe
     private void handleDisplayAllJobsEvent(DisplayAllJobsEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         jobList = event.getJobList();
         setConnections(jobList);
     }
 
-    private void updateList(Employee employee) {
-        ObservableList<Job> filteredList = FXCollections.unmodifiableObservableList(
-                jobList.filtered(JobList.filterByEmployee(jobList, employee)));
-        setConnections(filteredList);
+    @Subscribe
+    private void handleJumpToJobListRequestEvent(JumpToJobListRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        scrollTo(event.targetIndex);
     }
+
 
 }

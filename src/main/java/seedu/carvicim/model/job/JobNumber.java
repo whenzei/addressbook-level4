@@ -1,11 +1,17 @@
 package seedu.carvicim.model.job;
 
 //@@author whenzei
+
+import static java.util.Objects.requireNonNull;
+import static seedu.carvicim.commons.util.AppUtil.checkArgument;
+
 /**
  * Represent a job number in the servicing manager
  */
 public class JobNumber {
     public static final String MESSAGE_JOB_NUMBER_CONSTRAINTS = "Job number should be a positive number (non-zero)";
+
+    public static final String JOB_NUMBER_VALIDATION_REGEX = "[0-9]+";
 
     private static int nextJobNumber;
 
@@ -17,6 +23,8 @@ public class JobNumber {
     }
 
     public JobNumber(String jobNumber) {
+        requireNonNull(jobNumber);
+        checkArgument(isValidJobNumber(jobNumber), MESSAGE_JOB_NUMBER_CONSTRAINTS);
         value = jobNumber;
     }
 
@@ -47,9 +55,7 @@ public class JobNumber {
      * Returns true if a given string is a valid job number.
      */
     public static boolean isValidJobNumber(String jobNumber) {
-        int value = Integer.parseInt(jobNumber);
-        return (value > 0);
-
+        return jobNumber.matches(JOB_NUMBER_VALIDATION_REGEX);
     }
 
     public int asInteger() {

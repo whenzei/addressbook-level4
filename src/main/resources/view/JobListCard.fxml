@@ -11,21 +11,21 @@
 
 <!-- @@author yuhongherald -->
 
-<HBox id="cardPane" fx:id="jobCardPane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox id="cardPane" fx:id="jobCardPane" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
   <GridPane HBox.hgrow="ALWAYS">
     <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
     </columnConstraints>
-    <VBox alignment="CENTER_LEFT" minHeight="105" GridPane.columnIndex="0">
+    <VBox alignment="CENTER_LEFT" minHeight="105" prefHeight="105.0" prefWidth="156.0" GridPane.columnIndex="0">
       <padding>
         <Insets bottom="5" left="15" right="5" top="5" />
       </padding>
-         <HBox prefHeight="18.0" prefWidth="130.0">
+         <HBox prefHeight="18.0" prefWidth="135.0">
             <children>
             <Label fx:id="startDate" styleClass="cell_small_label" text="\$startDate" />
                <Label fx:id="status" alignment="BOTTOM_RIGHT" text="\$status">
                   <HBox.margin>
-                     <Insets left="200.0" />
+                     <Insets left="100.0" />
                   </HBox.margin>
                </Label>
             </children>

@@ -2162,7 +2162,7 @@ _{More to be added}_
 *  Should respond to user command within 2 seconds.
 *  Should be usable by a novice who has never used an electronic job management app before.
 *  User interface should be intuitive enough for users who are not IT-savvy.
-*  View should fit the screen of any computer with minimum screen size of 1024 by 768 pixels.
+*  View should fit the screen of any computer with minimum screen size of 1366 by 768 pixels.
 
 _{More to be added}_
 

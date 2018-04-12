@@ -40,17 +40,21 @@ import seedu.carvicim.logic.commands.DeleteEmployeeCommand;
 import seedu.carvicim.logic.commands.ExitCommand;
 import seedu.carvicim.logic.commands.FindByTagCommand;
 import seedu.carvicim.logic.commands.FindEmployeeCommand;
+import seedu.carvicim.logic.commands.FindJobCommand;
 import seedu.carvicim.logic.commands.HelpCommand;
 import seedu.carvicim.logic.commands.HistoryCommand;
 import seedu.carvicim.logic.commands.ListEmployeeCommand;
 import seedu.carvicim.logic.commands.ListJobCommand;
+import seedu.carvicim.logic.commands.ListOngoingJobCommand;
 import seedu.carvicim.logic.commands.RedoCommand;
 import seedu.carvicim.logic.commands.RemarkCommand;
 import seedu.carvicim.logic.commands.SelectEmployeeCommand;
+import seedu.carvicim.logic.commands.SelectJobCommand;
 import seedu.carvicim.logic.commands.SortCommand;
 import seedu.carvicim.logic.commands.ThemeCommand;
 import seedu.carvicim.logic.commands.UndoCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
+import seedu.carvicim.model.job.JobDetailsContainKeyWordsPredicate;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.VehicleNumber;
 import seedu.carvicim.model.person.Employee;
@@ -69,7 +73,7 @@ public class CarvicimParserTest {
     private final CarvicimParser parser = new CarvicimParser();
 
     @Test
-    public void parseCommand_add() throws Exception {
+    public void parseCommand_addEmployee() throws Exception {
         Employee employee = new EmployeeBuilder().build();
         AddEmployeeCommand command = (AddEmployeeCommand) parser.parseCommand(PersonUtil.getAddCommand(employee));
         assertEquals(new AddEmployeeCommand(employee), command);
@@ -105,7 +109,16 @@ public class CarvicimParserTest {
     }
 
     @Test
-    public void parseCommand_find() throws Exception {
+    public void parseCommand_findJob() throws Exception {
+        List<String> keywords = Arrays.asList("Apr", "Tom");
+        FindJobCommand command = (FindJobCommand) parser.parseCommand(
+                FindJobCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+        assertEquals(new FindJobCommand(new JobDetailsContainKeyWordsPredicate(keywords)), command);
+
+    }
+
+    @Test
+    public void parseCommand_findEmployee() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         FindEmployeeCommand command = (FindEmployeeCommand) parser.parseCommand(
                 FindEmployeeCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
@@ -146,6 +159,12 @@ public class CarvicimParserTest {
     }
 
     @Test
+    public void parseCommand_listOngoingJob() throws Exception {
+        assertTrue(parser.parseCommand(ListOngoingJobCommand.COMMAND_WORD) instanceof  ListOngoingJobCommand);
+        assertTrue(parser.parseCommand(ListOngoingJobCommand.COMMAND_WORD + " 3") instanceof  ListOngoingJobCommand);
+    }
+
+    @Test
     public void parseCommand_listJob() throws Exception {
         assertTrue(parser.parseCommand(ListJobCommand.COMMAND_WORD) instanceof ListJobCommand);
         assertTrue(parser.parseCommand(ListJobCommand.COMMAND_WORD + " 3") instanceof ListJobCommand);
@@ -156,6 +175,14 @@ public class CarvicimParserTest {
         SelectEmployeeCommand command = (SelectEmployeeCommand) parser.parseCommand(
                 SelectEmployeeCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased());
         assertEquals(new SelectEmployeeCommand(INDEX_FIRST_PERSON), command);
+    }
+
+    @Test
+    public void parseCommand_selectJob() throws Exception {
+        SelectJobCommand command = (SelectJobCommand) parser.parseCommand(
+                SelectJobCommand.COMMAND_WORD + " " + JOB_NUMBER_DESC_A);
+
+        assertEquals(new SelectJobCommand(new JobNumber(VALID_JOB_NUMBER_ONE)), command);
     }
 
     @Test

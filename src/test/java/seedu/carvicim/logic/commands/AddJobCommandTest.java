@@ -3,38 +3,26 @@ package seedu.carvicim.logic.commands;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.fail;
 import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicim;
 import static seedu.carvicim.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.carvicim.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import javafx.collections.ObservableList;
 import seedu.carvicim.commons.core.index.Index;
 import seedu.carvicim.logic.CommandHistory;
 import seedu.carvicim.logic.UndoRedoStack;
 import seedu.carvicim.model.Model;
 import seedu.carvicim.model.ModelManager;
-import seedu.carvicim.model.ReadOnlyCarvicim;
 import seedu.carvicim.model.UserPrefs;
-import seedu.carvicim.model.job.DateRange;
 import seedu.carvicim.model.job.Job;
-import seedu.carvicim.model.job.JobList;
 import seedu.carvicim.model.job.JobNumber;
 import seedu.carvicim.model.job.VehicleNumber;
-import seedu.carvicim.model.job.exceptions.JobNotFoundException;
-import seedu.carvicim.model.person.Employee;
 import seedu.carvicim.model.person.Person;
-import seedu.carvicim.model.person.exceptions.DuplicateEmployeeException;
-import seedu.carvicim.model.person.exceptions.EmployeeNotFoundException;
 import seedu.carvicim.testutil.ClientBuilder;
 import seedu.carvicim.testutil.JobBuilder;
 

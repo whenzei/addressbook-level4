@@ -20,11 +20,31 @@ public class DisplayAllJobsEvent extends BaseEvent {
     }
 }
 ```
+###### \java\seedu\carvicim\commons\events\ui\JobListSwitchEvent.java
+``` java
+/**
+ * Indicates that there is a change in job list.
+ */
+public class JobListSwitchEvent extends BaseEvent {
+
+    public final String message;
+
+    public JobListSwitchEvent(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+}
+```
 ###### \java\seedu\carvicim\logic\commands\AcceptAllCommand.java
 ``` java
 
 /**
- * Accepts all remaining unreviewed job entries into Servicing Manager
+ * Accepts all remaining unreviewed job entries into Servicing Manager with (@code comment)
  */
 public class AcceptAllCommand extends UndoableCommand {
 
@@ -35,36 +55,33 @@ public class AcceptAllCommand extends UndoableCommand {
 
     public static final String MESSAGE_SUCCESS = "%d job entries accepted!";
 
+    private final String comment;
+
+    public AcceptAllCommand(String comment) {
+        this.comment = comment;
+    }
+
     public String getMessageSuccess(int entries) {
         return String.format(MESSAGE_SUCCESS, entries);
     }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        ImportSession importSession = ImportSession.getInstance();
-        if (importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
+        SessionData sessionData = ImportSession.getInstance().getSessionData();
+        if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        try {
-            importSession.reviewAllRemainingJobEntries(true);
-            List<Job> jobs = new ArrayList<>(importSession.getSessionData().getReviewedJobEntries());
-            model.addJobs(jobs);
-            importSession.closeSession();
-            return new CommandResult(getMessageSuccess(jobs.size()));
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException("Excel file has bad format. Try copying the cell values into a new excel file "
-                    + "before trying again");
-        } catch (IOException e) {
-            throw new CommandException("Unable to export file. Please close the application and try again.");
-        } catch (UnitializedException e) {
-            throw new CommandException(e.getMessage());
-        }
+        List<Job> jobs = new ArrayList<>(sessionData
+                .reviewAllRemainingJobEntries(true, comment));
+        model.addJobs(jobs);
+        return new CommandResult(getMessageSuccess(jobs.size()));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof AcceptAllCommand); // instanceof handles nulls
+                || (other instanceof AcceptAllCommand) // instanceof handles nulls
+                && comment.equals(((AcceptAllCommand) other).comment);
     }
 
 }
@@ -73,21 +90,23 @@ public class AcceptAllCommand extends UndoableCommand {
 ``` java
 
 /**
- * Accepts an unreviewed job entry using job number and adds into servicing manager
+ * Accepts an unreviewed job entry using job number and adds into servicing manager, adding comment into remarksList
  */
 public class AcceptCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "accept";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Accepts job entry using job number. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Accepts job entry using index. "
             + "Example: " + COMMAND_WORD + " JOB_NUMBER";
 
     public static final String MESSAGE_SUCCESS = "Job #%d accepted!";
 
-    private int jobNumber;
+    private final int jobNumber;
+    private final String comment;
 
-    public AcceptCommand(int jobNumber) {
+    public AcceptCommand(int jobNumber, String comment) {
         this.jobNumber = jobNumber;
+        this.comment = comment;
     }
 
     public String getMessageSuccess() {
@@ -96,19 +115,13 @@ public class AcceptCommand extends UndoableCommand {
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        ImportSession importSession = ImportSession.getInstance();
-        if (importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
+        SessionData sessionData = ImportSession.getInstance().getSessionData();
+        if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        try {
-            importSession.getSessionData().reviewJobEntryUsingJobNumber(jobNumber, true, "");
+        Job job = sessionData.reviewJobEntryUsingJobIndex(jobNumber, true, comment);
+        model.addJob(job);
 
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException("Excel file has bad format. Try copying the cell values into a new excel file "
-                    + "before trying again");
-        } catch (InvalidDataException e) {
-            throw new CommandException(e.getMessage());
-        }
         if (!model.isViewingImportedJobs()) {
             model.switchJobView();
         }
@@ -119,7 +132,9 @@ public class AcceptCommand extends UndoableCommand {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof AcceptCommand); // instanceof handles nulls
+                || (other instanceof AcceptCommand) // instanceof handles nulls
+                && jobNumber == ((AcceptCommand) other).jobNumber
+                && comment.equals(((AcceptCommand) other).comment);
     }
 
 }
@@ -147,7 +162,6 @@ public class CommandWords implements Serializable {
         FindEmployeeCommand.COMMAND_WORD,
         HelpCommand.COMMAND_WORD,
         HistoryCommand.COMMAND_WORD,
-        ImportAllCommand.COMMAND_WORD,
         ListEmployeeCommand.COMMAND_WORD,
         RedoCommand.COMMAND_WORD,
         SelectEmployeeCommand.COMMAND_WORD,
@@ -156,7 +170,6 @@ public class CommandWords implements Serializable {
         ThemeCommand.COMMAND_WORD,
         SortCommand.COMMAND_WORD,
         ImportCommand.COMMAND_WORD,
-        SaveCommand.COMMAND_WORD,
         ListJobCommand.COMMAND_WORD,
         SwitchCommand.COMMAND_WORD,
         AcceptAllCommand.COMMAND_WORD,
@@ -385,7 +398,7 @@ public class ImportAllCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports job entries from from an excel file. "
             + "Parameters: FILEPATH\n"
-            + "Example: " + COMMAND_WORD + "yourfile.xls";
+            + "Example: " + COMMAND_WORD + " yourfile.xls";
 
     public static final String MESSAGE_SUCCESS = "%s has been imported, with %d job entries!";
 
@@ -405,26 +418,14 @@ public class ImportAllCommand extends UndoableCommand {
         ImportSession importSession = ImportSession.getInstance();
         try {
             importSession.initializeSession(filePath);
-        } catch (FileAccessException e) {
-            throw new CommandException(e.getMessage());
-        } catch (FileFormatException e) {
-            throw new CommandException("Excel file first row headers are not defined properly. "
-                    + "Type 'help' to read more.");
-        }
-        try {
-            importSession.reviewAllRemainingJobEntries(true);
-            List<Job> jobs = new ArrayList<>(importSession.getSessionData().getReviewedJobEntries());
-            model.addJobs(jobs);
-            importSession.closeSession();
-            return new CommandResult(getMessageSuccess(jobs.size()));
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException("Excel file has bad format. Try copying the cell values into a new excel file "
-                    + "before trying again");
-        } catch (IOException e) {
-            throw new CommandException("Unable to export file. Please close the application and try again.");
-        } catch (UnitializedException e) {
+        } catch (FileAccessException | FileFormatException e) {
             throw new CommandException(e.getMessage());
         }
+        List<Job> jobs = new ArrayList<>(importSession.getSessionData()
+                .reviewAllRemainingJobEntries(true, ""));
+        model.addJobs(jobs);
+        importSession.closeSession();
+        return new CommandResult(getMessageSuccess(jobs.size()));
     }
 
     @Override
@@ -448,7 +449,7 @@ public class ImportCommand extends UndoableCommand {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Imports an excel file for reviewing. "
             + "Parameters: FILEPATH\n"
-            + "Example: " + COMMAND_WORD + "yourfile.xls";
+            + "Example: " + COMMAND_WORD + " yourfile.xls";
 
     public static final String MESSAGE_SUCCESS = "%s has been imported, with %d job entries!";
 
@@ -468,11 +469,8 @@ public class ImportCommand extends UndoableCommand {
         ImportSession importSession = ImportSession.getInstance();
         try {
             importSession.initializeSession(filePath);
-        } catch (FileAccessException e) {
+        } catch (FileAccessException | FileFormatException e) {
             throw new CommandException(e.getMessage());
-        } catch (FileFormatException e) {
-            throw new CommandException("Excel file first row headers are not defined properly. "
-                    + "Type 'help' to read more.");
         }
 
         if (!model.isViewingImportedJobs()) {
@@ -512,7 +510,7 @@ public class ListJobCommand extends Command {
 ``` java
 
 /**
- * Rejects all remaining unreviewed job entries into Servicing Manager
+ * Rejects all remaining unreviewed job entries into Servicing Manager with (@code comment)
  */
 public class RejectAllCommand extends UndoableCommand {
 
@@ -523,36 +521,32 @@ public class RejectAllCommand extends UndoableCommand {
 
     public static final String MESSAGE_SUCCESS = "%d job entries rejected!";
 
+    private final String comment;
+
+    public RejectAllCommand(String comment) {
+        this.comment = comment;
+    }
+
     public String getMessageSuccess(int entries) {
         return String.format(MESSAGE_SUCCESS, entries);
     }
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        ImportSession importSession = ImportSession.getInstance();
-        if (importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
+        SessionData sessionData = ImportSession.getInstance().getSessionData();
+        if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        try {
-            importSession.reviewAllRemainingJobEntries(false);
-            List<Job> jobs = new ArrayList<>(importSession.getSessionData().getReviewedJobEntries());
-            model.addJobs(jobs);
-            importSession.closeSession();
-            return new CommandResult(getMessageSuccess(jobs.size()));
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException("Excel file has bad format. Try copying the cell values into a new excel file "
-                    + "before trying again");
-        } catch (IOException e) {
-            throw new CommandException("Unable to export file. Please close the application and try again.");
-        } catch (UnitializedException e) {
-            throw new CommandException(e.getMessage());
-        }
+        List<Job> jobs = new ArrayList<>(sessionData.reviewAllRemainingJobEntries(false, comment));
+        model.addJobs(jobs);
+        return new CommandResult(getMessageSuccess(jobs.size()));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof RejectAllCommand); // instanceof handles nulls
+                || (other instanceof RejectAllCommand) // instanceof handles nulls
+                && comment.equals(((RejectAllCommand) other).comment);
     }
 
 }
@@ -561,21 +555,23 @@ public class RejectAllCommand extends UndoableCommand {
 ``` java
 
 /**
- * Rejects an unreviewed job entry using job number
+ * Rejects an unreviewed job entry using job number, adding comment into remarksList
  */
 public class RejectCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "reject";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Rejects job entry using job number. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Rejects job entry using job index. "
             + "Example: " + COMMAND_WORD + " JOB_NUMBER";
 
     public static final String MESSAGE_SUCCESS = "Job #%d rejected!";
 
-    private int jobNumber;
+    private final int jobNumber;
+    private final String comment;
 
-    public RejectCommand(int jobNumber) {
+    public RejectCommand(int jobNumber, String comment) {
         this.jobNumber = jobNumber;
+        this.comment = comment;
     }
 
     public String getMessageSuccess() {
@@ -584,18 +580,13 @@ public class RejectCommand extends UndoableCommand {
 
     @Override
     public CommandResult executeUndoableCommand() throws CommandException {
-        ImportSession importSession = ImportSession.getInstance();
-        if (importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
+        SessionData sessionData = ImportSession.getInstance().getSessionData();
+        if (sessionData.getUnreviewedJobEntries().isEmpty()) {
             throw new CommandException("There are no job entries to review!");
         }
-        try {
-            importSession.getSessionData().reviewJobEntryUsingJobNumber(jobNumber, false, "");
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException("Excel file has bad format. Try copying the cell values into a new excel file "
-                    + "before trying again");
-        } catch (InvalidDataException e) {
-            throw new CommandException(e.getMessage());
-        }
+        Job job = sessionData.reviewJobEntryUsingJobIndex(jobNumber, false, comment);
+        model.addJob(job);
+
         if (!model.isViewingImportedJobs()) {
             model.switchJobView();
         }
@@ -606,61 +597,9 @@ public class RejectCommand extends UndoableCommand {
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
-                || (other instanceof RejectCommand); // instanceof handles nulls
-    }
-
-}
-```
-###### \java\seedu\carvicim\logic\commands\SaveCommand.java
-``` java
-
-/**
- * Attempts to write reviewed jobs with feedback into an excel file
- */
-public class SaveCommand extends UndoableCommand {
-
-    public static final String COMMAND_WORD = "save";
-
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Saves your reviewed job entries as an excel file.\n"
-            + "Example: " + COMMAND_WORD;
-
-    public static final String MESSAGE_SUCCESS = "Your reviewed job entries have been saved to %s!";
-
-    public String getMessageSuccess(String filePath) {
-        return String.format(MESSAGE_SUCCESS, filePath);
-    }
-
-    @Override
-    public CommandResult executeUndoableCommand() throws CommandException {
-        ImportSession importSession = ImportSession.getInstance();
-        String message;
-        if (!importSession.getSessionData().getUnreviewedJobEntries().isEmpty()) {
-            throw new CommandException("Please review all remaining job entries before saving!");
-        }
-        try {
-            importSession.reviewAllRemainingJobEntries(true);
-            List<Job> jobs = new ArrayList<>(importSession.getSessionData().getReviewedJobEntries());
-            model.addJobs(jobs);
-            message = importSession.closeSession();
-        } catch (IOException e) {
-            throw new CommandException("Unable to export file. Please close the application and try again.");
-        } catch (UnitializedException e) {
-            throw new CommandException(e.getMessage());
-        } catch (DataIndexOutOfBoundsException e) {
-            throw new CommandException((e.getMessage()));
-        }
-        ObservableList<Job> jobList = model.getFilteredJobList();
-        if (model.isViewingImportedJobs()) {
-            model.switchJobView();
-        }
-        model.resetJobView();
-        return new CommandResult(getMessageSuccess(message));
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof SaveCommand); // instanceof handles nulls
+                || (other instanceof RejectCommand) // instanceof handles nulls
+                && jobNumber == ((RejectCommand) other).jobNumber
+                && comment.equals(((RejectCommand) other).comment);
     }
 
 }
@@ -725,7 +664,7 @@ public class SetCommand extends UndoableCommand {
 ```
 ###### \java\seedu\carvicim\logic\commands\SwitchCommand.java
 ``` java
-public class SwitchCommand extends Command {
+public class SwitchCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "switch";
 
@@ -733,32 +672,61 @@ public class SwitchCommand extends Command {
 
 
     @Override
-    public CommandResult execute() {
+    public CommandResult executeUndoableCommand() {
         model.switchJobView();
         model.resetJobView();
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }
 ```
+###### \java\seedu\carvicim\logic\parser\AcceptAllCommandParser.java
+``` java
+
+/**
+ * Parses input arguments and creates a new AcceptAllCommand object
+ */
+public class AcceptAllCommandParser implements Parser<AcceptAllCommand> {
+
+    /**
+     * Parses the given {@code String} of arg
+     * uments in the context of the AcceptAllCommand
+     * and returns an AcceptAllCommand object for execution.
+     */
+    public AcceptAllCommand parse(String args) {
+        String comment = args.trim();
+        return new AcceptAllCommand(comment);
+    }
+
+}
+```
 ###### \java\seedu\carvicim\logic\parser\AcceptCommandParser.java
 ``` java
 
 /**
- * Parses input arguments and creates a new ImporatAllCommand object
+ * Parses input arguments and creates a new AcceptCommand object
  */
 public class AcceptCommandParser implements Parser<AcceptCommand> {
 
     /**
      * Parses the given {@code String} of arg
-     * uments in the context of the ImportAllCommand
-     * and returns an ImportAllCommand object for execution.
+     * uments in the context of the AcceptCommand
+     * and returns an AcceptCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     public AcceptCommand parse(String args) throws ParseException {
+        String[] arguments = args.trim().split(" ", 2);
+        String comment = "";
+        if (arguments.length == 2) {
+            comment = arguments[1].trim();
+        }
         try {
-            int jobNumber = parseInteger(args);
-            return new AcceptCommand(jobNumber);
+            int jobNumber = parseInteger(arguments[0]);
+            return new AcceptCommand(jobNumber, comment);
         } catch (IllegalValueException ive) {
+            for (String a : arguments) {
+                System.out.println(a);
+            }
+            System.out.println(args);
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AcceptCommand.MESSAGE_USAGE));
         }
     }
@@ -815,24 +783,49 @@ public class ImportCommandParser implements Parser<ImportCommand> {
 
 }
 ```
+###### \java\seedu\carvicim\logic\parser\RejectAllCommandParser.java
+``` java
+
+/**
+ * Parses input arguments and creates a new RejectAllCommand object
+ */
+public class RejectAllCommandParser implements Parser<RejectAllCommand> {
+
+    /**
+     * Parses the given {@code String} of arg
+     * uments in the context of the RejectAllCommand
+     * and returns a RejectAllCommand object for execution.
+     */
+    public RejectAllCommand parse(String args) {
+        String comment = args.trim();
+        return new RejectAllCommand(comment);
+    }
+
+}
+```
 ###### \java\seedu\carvicim\logic\parser\RejectCommandParser.java
 ``` java
 
 /**
- * Parses input arguments and creates a new ImporatAllCommand object
+ * Parses input arguments and creates a new RejectCommand object
  */
 public class RejectCommandParser implements Parser<RejectCommand> {
 
     /**
      * Parses the given {@code String} of arg
-     * uments in the context of the ImportAllCommand
-     * and returns an ImportAllCommand object for execution.
+     * uments in the context of the RejectCommand
+     * and returns a RejectCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     public RejectCommand parse(String args) throws ParseException {
+        String[] arguments = args.split(" ", 2);
+        String comment = "";
+        if (arguments.length == 2) {
+            comment = arguments[1].trim();
+        }
         try {
-            int jobNumber = parseInteger(args);
-            return new RejectCommand(jobNumber);
+            int jobNumber = parseInteger(arguments[0]);
+            return new RejectCommand(jobNumber, comment);
         } catch (IllegalValueException ive) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RejectCommand.MESSAGE_USAGE));
         }
@@ -877,6 +870,52 @@ public class SetCommandParser implements Parser<SetCommand> {
             }
         };
         return predicate;
+    }
+
+```
+###### \java\seedu\carvicim\model\ModelManager.java
+``` java
+    @Override
+    public boolean isViewingImportedJobs() {
+        return isViewingImportedJobs;
+    }
+
+    @Override
+    public void switchJobView() {
+        isViewingImportedJobs = !isViewingImportedJobs;
+        if (isViewingImportedJobs) {
+            EventsCenter.getInstance().post(
+                    new JobListSwitchEvent(JobListIndicator.IMPORTED));
+        } else {
+            EventsCenter.getInstance().post(
+                    new JobListSwitchEvent(JobListIndicator.SAVED));
+        }
+    }
+
+    @Override
+    public void resetJobView() {
+        ObservableList<Job> jobList;
+        if (isViewingImportedJobs) {
+            jobList = FXCollections.observableList(
+                    ImportSession.getInstance().getSessionData().getUnreviewedJobEntries());
+        } else {
+            updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
+            jobList = getFilteredJobList();
+        }
+        EventsCenter.getInstance().post(
+                new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(jobList)));
+    }
+
+    @Override
+    public void showOngoingJobs() {
+        updateFilteredJobList(PREDICATE_SHOW_ONGOING_JOBS);
+        EventsCenter.getInstance().post(
+                new DisplayAllJobsEvent(FXCollections.unmodifiableObservableList(getFilteredJobList())));
+    }
+
+    @Override
+    public void resetJobDisplayPanel() {
+        EventsCenter.getInstance().post(new JobDisplayPanelResetRequestEvent());
     }
 
 ```
@@ -926,13 +965,13 @@ public class InvalidDataException extends Exception {
     }
 }
 ```
-###### \java\seedu\carvicim\storage\session\exceptions\UnitializedException.java
+###### \java\seedu\carvicim\storage\session\exceptions\UninitializedException.java
 ``` java
 /**
  * Represents an error when {@link seedu.carvicim.storage.session.SessionData} is not initialized.
  */
-public class UnitializedException extends Exception {
-    public UnitializedException(String message) {
+public class UninitializedException extends Exception {
+    public UninitializedException(String message) {
         super(message);
     }
 }
@@ -945,6 +984,8 @@ public class UnitializedException extends Exception {
  */
 public class ImportSession {
 
+    public static final String ERROR_MESSAGE_EXPORT =
+            "Unable to export file. Please close the application and try again.";
     private static ImportSession importSession;
 
     private SessionData sessionData;
@@ -960,9 +1001,16 @@ public class ImportSession {
         return importSession;
     }
 
-    public void setSessionData(SessionData sessionData) {
+    public void setSessionData(SessionData sessionData) throws CommandException {
         requireNonNull(sessionData);
-        this.sessionData = sessionData;
+        try {
+            this.sessionData.closeWorkBook();
+            sessionData.loadTempWorkBook();
+            this.sessionData = sessionData;
+        } catch (FileAccessException | FileFormatException e) {
+            //this.sessionData.reloadFile();
+            throw new CommandException(e.getMessage());
+        }
     }
 
     /**
@@ -972,19 +1020,21 @@ public class ImportSession {
         sessionData.loadFile(filePath);
     }
 
-    public void reviewAllRemainingJobEntries(boolean approve) throws DataIndexOutOfBoundsException {
-        sessionData.reviewAllRemainingJobEntries(approve, "Imported with no comments.");
-    }
-
     public SessionData getSessionData() {
         return sessionData;
     }
 
     /**
-     * Flushes feedback to (@code outFile) and releases resources. Currently not persistent.
+     * Flushes feedback to (@return pathToOutfile) and releases resources. Currently not persistent.
      */
-    public String closeSession() throws IOException, UnitializedException {
-        return sessionData.saveData();
+    public String closeSession() throws CommandException {
+        try {
+            return sessionData.saveDataToSaveFile();
+        } catch (IOException e) {
+            throw new CommandException(ERROR_MESSAGE_EXPORT);
+        } catch (UninitializedException e) {
+            throw new CommandException(e.getMessage());
+        }
     }
 }
 ```
@@ -999,8 +1049,6 @@ public class JobEntry extends Job {
     private final int sheetNumber;
     private final int rowNumber;
 
-    private boolean reviewed;
-    private boolean approved;
     private final ArrayList<String> comments;
 
     public JobEntry (Person client, VehicleNumber vehicleNumber, JobNumber jobNumber, Date date,
@@ -1010,26 +1058,10 @@ public class JobEntry extends Job {
         this.sheetNumber = sheetNumber;
         this.rowNumber = rowNumber;
         comments = new ArrayList<>();
-        addComment(importComment);
-        reviewed = false;
-    }
-
-    /**
-     * Adds a non-empty comment to both remarks and comments.
-     */
-    private void addComment(String comment) {
-        if (comment != null && isValidRemark(comment)) {
-            remarks.add(new Remark(comment));
-            comments.add(comment);
+        if (importComment != null &&  !importComment.isEmpty()) {
+            comments.add(importComment);
+            remarks.add(new Remark(importComment));
         }
-    }
-
-    public boolean isReviewed() {
-        return reviewed;
-    }
-
-    public boolean isApproved() {
-        return approved;
     }
 
     /**
@@ -1038,8 +1070,29 @@ public class JobEntry extends Job {
      * @param comment feedback for (@code JobEntry) in String representation
      */
     public void review(boolean approved, String comment) {
-        this.approved = approved;
-        addComment(comment);
+        comments.add(comment);
+    }
+
+    /**
+     * Removes last comment from comments and remarks in the event that it cannot be saved to disk
+     */
+    public void unreviewLastComment() {
+        if (comments.isEmpty()) {
+            return;
+        }
+        comments.remove(comments.size() - 1);
+    }
+
+    /**
+     * Adds all comments into remarks
+     */
+    public void confirmLastReview() {
+        if (comments.isEmpty()) {
+            return;
+        }
+        if (!comments.get(comments.size() - 1).isEmpty()) {
+            remarks.add(new Remark(comments.get(comments.size() - 1)));
+        }
     }
 
     public List<String> getComments() {
@@ -1119,51 +1172,56 @@ public class SessionData {
     public static final String ERROR_MESSAGE_EMPTY_UNREVIWED_JOB_LIST = "There are no unreviewed job entries left!";
 
     public static final String FILE_PATH_CHARACTER = "/";
-    public static final String TIMESTAMP_FORMAT = "yyyy.MM.dd.HH.mm.ss";
-    public static final String SAVEFILE_SUFFIX = "";
-    public static final String TEMPFILE_SUFFIX = "temp";
-    public static final String ERROR_MESSAGE_UNITIALIZED = "There is no imported file to save!";
+    public static final String SAVEFILE_SUFFIX = "-comments";
+    public static final String ERROR_MESSAGE_UNINITIALIZED = "There is no imported file to save!";
+    public static final String XLS_SUFFIX = ".xls";
+    public static final String XLSX_SUFFIX = ".xlsx";
+    public static final String TEMPFILE_NAME = "comments.temp";
+    public static final String TEMPWORKBOOKFILE_NAME = "workbook.temp";
+    public static final String ERROR_MESSAGE_INVALID_JOB_NUMBER = "Job number not found!";
+    public static final String ERROR_MESSAGE_INVALID_JOB_INDEX = "Job index not found!";
 
-    private final ArrayList<JobEntry> jobEntries;
     private final ArrayList<JobEntry> unreviewedJobEntries;
     private final ArrayList<JobEntry> reviewedJobEntries;
     private final ArrayList<SheetWithHeaderFields> sheets;
-    // will be using an ObservableList
+    // implement a logger
 
     private File importFile;
-    private File tempFile;
     private Workbook workbook; // write comments to column after last row, with approval status
+    private File tempFile;
     private File saveFile;
-
+    private File tempWorkbookFile;
 
     public SessionData() {
-        jobEntries = new ArrayList<>();
         unreviewedJobEntries = new ArrayList<>();
         reviewedJobEntries = new ArrayList<>();
         sheets = new ArrayList<>();
     }
 
-    public SessionData(ArrayList<JobEntry> jobEntries, ArrayList<JobEntry> unreviewedJobEntries,
-                       ArrayList<JobEntry> reviewedJobEntries,
-                       ArrayList<SheetWithHeaderFields> sheets,
-                       File importFile, File tempFile, Workbook workbook, File saveFile) {
-        this.jobEntries = jobEntries;
-        this.unreviewedJobEntries = unreviewedJobEntries;
-        this.reviewedJobEntries = reviewedJobEntries;
-        this.sheets = sheets;
+    public SessionData(File importFile, File tempFile, File saveFile) {
+        this.unreviewedJobEntries = new ArrayList<>();
+        this.reviewedJobEntries = new ArrayList<>();
+        this.sheets = new ArrayList<>();
         this.importFile = importFile;
         this.tempFile = tempFile;
-        this.workbook = workbook;
         this.saveFile = saveFile;
+        // workbook and sheets have to be rewritten to file on undo
     }
 
     /**
      * Creates a copy of sessionData and returns it
      */
-    public SessionData createCopy() {
-        SessionData other = new SessionData(new ArrayList<>(jobEntries), new ArrayList<>(unreviewedJobEntries),
-                new ArrayList<>(reviewedJobEntries), new ArrayList<>(sheets), importFile,
-                tempFile, workbook, saveFile);
+    public SessionData createCopy() throws CommandException {
+        SessionData other = null;
+        tempFile = new File(TEMPFILE_NAME);
+        try {
+            saveDataToFile(tempFile);
+        } catch (IOException e) {
+            throw new CommandException(ERROR_MESSAGE_IO_EXCEPTION);
+        } catch (UninitializedException e) {
+            tempFile = null; // no data to save
+        }
+        other = new SessionData(importFile, tempFile, saveFile);
         return other;
     }
 
@@ -1176,34 +1234,27 @@ public class SessionData {
     ===================================================================*/
 
     /**
-     * Creates a file using relative filePath of (@code importFile), then appending a timestamp and
-     * (@code appendedName) to make it unique
+     * Creates a file using relative filePath of (@code importFile), then appending a SAVEFILE_SUFFIX
      */
-    private File generateFile(String appendedName) {
+    private File generateSaveFile() {
         requireNonNull(importFile);
-        String timeStamp = new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(importFile.getParent());
         stringBuilder.append(FILE_PATH_CHARACTER);
-        stringBuilder.append(timeStamp);
-        stringBuilder.append(importFile.getName());
-        stringBuilder.append(appendedName);
-        return new File(stringBuilder.toString());
-    }
-
-    public String getSaveFilePath() {
-        if (saveFile != null) {
-            return saveFile.getPath();
+        String fullFillName = importFile.getName();
+        String fileName;
+        String suffix = "";
+        if (fullFillName.endsWith(XLS_SUFFIX)) {
+            suffix = XLS_SUFFIX;
+        } else if (fullFillName.endsWith(XLSX_SUFFIX)) {
+            suffix = XLSX_SUFFIX;
         }
-        saveFile = generateFile(SAVEFILE_SUFFIX);
-        return saveFile.getPath();
-    }
+        fileName = fullFillName.substring(0, fullFillName.length() - suffix.length());
 
-    /**
-     * Sets the filePath using relative address from import file
-     */
-    public void setSaveFile(String filePath) {
-        saveFile = new File(filePath);
+        stringBuilder.append(fileName);
+        stringBuilder.append(SAVEFILE_SUFFIX);
+        stringBuilder.append(suffix);
+        return new File(stringBuilder.toString());
     }
 
     /*===================================================================
@@ -1216,8 +1267,9 @@ public class SessionData {
      */
     public void loadFile(String filePath) throws FileAccessException, FileFormatException {
         if (isInitialized()) {
-            throw new FileAccessException(ERROR_MESSAGE_FILE_OPEN);
+            // this check has been removed, can import to overwrite current import session
         }
+        freeResources(); // from previous session
         File file = new File(filePath);
         if (!file.exists()) {
             throw new FileAccessException(ERROR_MESSAGE_INVALID_FILEPATH);
@@ -1227,28 +1279,60 @@ public class SessionData {
         importFile = file;
 
         try {
-            workbook = createWorkBook(file);
+            setWorkBook(file);
         } catch (InvalidFormatException e) {
             throw new FileFormatException(ERROR_MESSAGE_FILE_FORMAT);
         } catch (IOException e) {
             throw new FileFormatException(ERROR_MESSAGE_IO_EXCEPTION);
         }
-
         initializeSessionData();
     }
 
     /**
-     * Attempts to create a (@code Workbook) for a given (@code File)
+     * Loads a workbook from a previous snapshot
      */
-    private Workbook createWorkBook(File file) throws IOException, InvalidFormatException {
-        tempFile = generateFile(TEMPFILE_SUFFIX);
-        FileOutputStream fileOutputStream = new FileOutputStream(tempFile);
-        Workbook workbook = WorkbookFactory.create(file);
-        workbook.write(fileOutputStream);
-        workbook.close();
-        workbook = WorkbookFactory.create(tempFile);
-        return workbook;
+    public void loadTempWorkBook() throws FileAccessException, FileFormatException {
+        if (tempFile == null) {
+            return;
+        }
+        if (saveFile.exists() && !saveFile.delete()) {
+            throw new FileAccessException(ERROR_MESSAGE_IO_EXCEPTION);
+        }
+        try {
+            setWorkBook(tempFile);
+        } catch (IOException e) {
+            throw new FileAccessException(ERROR_MESSAGE_IO_EXCEPTION);
+        } catch (InvalidFormatException e) {
+            throw new FileFormatException(ERROR_MESSAGE_FILE_FORMAT);
+        }
+        initializeSessionData();
+        tempFile.delete();
+        tempFile = null;
     }
+
+    /**
+     * Attempts to create and set (@code Workbook) for a given (@code File)
+     */
+    private void setWorkBook(File file) throws IOException, InvalidFormatException {
+        requireNonNull(file);
+        saveFile = generateSaveFile();
+        if (saveFile.exists()) {
+            try {
+                workbook = WorkbookFactory.create(saveFile);
+            } catch (EmptyFileException e) {
+                saveFile.delete();
+                saveFile = null;
+                setWorkBook(file);
+            }
+        } else {
+            workbook = WorkbookFactory.create(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(saveFile);
+            workbook.write(fileOutputStream);
+            fileOutputStream.close();
+            workbook = WorkbookFactory.create(saveFile);
+        }
+    }
+
     /**
      * Attempts to parse the column headers and retrieve job entries
      */
@@ -1265,38 +1349,36 @@ public class SessionData {
         }
     }
 
-    /**
-     * Saves feedback to specified saveFile path
-     */
-    public String saveData() throws IOException, UnitializedException {
-        if (!isInitialized()) {
-            throw new UnitializedException(ERROR_MESSAGE_UNITIALIZED);
-        }
-        for (JobEntry jobEntry : jobEntries) {
-            SheetWithHeaderFields sheet = sheets.get(jobEntry.getSheetNumber());
-            sheet.commentJobEntry(jobEntry.getRowNumber(), jobEntry.getCommentsAsString());
-            if (jobEntry.isApproved()) {
-                sheet.approveJobEntry(jobEntry.getRowNumber());
-            } else {
-                sheet.rejectJobEntry(jobEntry.getRowNumber());
-            }
-        }
+    public String saveDataToSaveFile() throws IOException, UninitializedException {
+        return saveDataToFile(saveFile);
+    }
 
-        if (saveFile == null) { // does not check if a file exists
-            saveFile = generateFile(SAVEFILE_SUFFIX);
+    /**
+     * Saves feedback to (@code file)
+     */
+    public String saveDataToFile(File file) throws IOException, UninitializedException {
+        requireNonNull(file);
+        if (!isInitialized()) {
+            throw new UninitializedException(ERROR_MESSAGE_UNINITIALIZED);
         }
-        FileOutputStream fileOut = new FileOutputStream(saveFile);
-        String path = saveFile.getAbsolutePath();
+        FileOutputStream fileOut = new FileOutputStream(file);
+        String path = file.getAbsolutePath();
         workbook.write(fileOut);
         fileOut.close();
-        workbook.close();
-        freeResources();
         return path;
     }
+
     /**
      * Releases resources associated with ImportSession by nulling field
      */
     public void freeResources() {
+        if (workbook != null) {
+            try {
+                workbook.close();
+            } catch (IOException e) {
+                ; // can't close it, but application is already closing
+            }
+        }
         workbook = null;
         importFile = null;
         if (tempFile != null) {
@@ -1309,9 +1391,60 @@ public class SessionData {
         sheets.clear();
     }
 
+    /**
+     * Attempts to close (@code workBook) so that the file associated can be modified
+     */
+    public void closeWorkBook() throws FileAccessException, FileFormatException {
+        if (workbook == null) {
+            return;
+        }
+        File newFile;
+        Workbook newWorkBook;
+        try {
+            newFile = new File(TEMPWORKBOOKFILE_NAME);
+            FileOutputStream fileOutputStream = new FileOutputStream(newFile);
+            workbook.write(fileOutputStream);
+            newWorkBook = WorkbookFactory.create(newFile);
+        } catch (FileNotFoundException e) {
+            throw new FileAccessException(ERROR_MESSAGE_IO_EXCEPTION);
+        } catch (IOException e) {
+            throw new FileAccessException(ERROR_MESSAGE_IO_EXCEPTION);
+        } catch (InvalidFormatException e) {
+            throw new FileFormatException(ERROR_MESSAGE_FILE_FORMAT);
+        }
+        try {
+            workbook.close();
+        } catch (IOException e) {
+            throw new FileAccessException(ERROR_MESSAGE_IO_EXCEPTION);
+        }
+        workbook = newWorkBook;
+    }
+
+    /**
+     * Attempts to reload (@code workBook) into (@code saveFile)
+     */
+    public void reloadFile() {
+        if (workbook == null) {
+            return;
+        }
+    }
+
+    /**
+     * Adds job entries from (@code sheetWithHeaderFields) into (@code SessionData)
+     */
+    public void addSheet(SheetWithHeaderFields sheetWithHeaderFields) {
+        Iterator<JobEntry> jobEntryIterator = sheetWithHeaderFields.iterator();
+        JobEntry jobEntry;
+        while ((jobEntry = jobEntryIterator.next()) != null) {
+            unreviewedJobEntries.add(jobEntry);
+        }
+        sheets.add(sheetWithHeaderFields.getSheetIndex(), sheetWithHeaderFields);
+    }
+
     /*===================================================================
     Job review methods
     ===================================================================*/
+
     /**
      * @return a copy of unreviewed jobs stored in this sheet
      */
@@ -1322,53 +1455,94 @@ public class SessionData {
     /**
      * @return a copy of reviewed jobs stored in this sheet
      */
-    public List<Job> getReviewedJobEntries() {
+    public List<Job> getReviewedJobEntries() { // marked for deletion
         return Collections.unmodifiableList(reviewedJobEntries);
     }
 
     /**
-     * Adds job entries from (@code sheetWithHeaderFields) into (@code SessionData)
+     * Reviews all remaining jobs using (@code reviewJobEntry). Writes to (@code saveFile) when done.
      */
-    public void addSheet(SheetWithHeaderFields sheetWithHeaderFields) {
-        Iterator<JobEntry> jobEntryIterator = sheetWithHeaderFields.iterator();
-        JobEntry jobEntry;
-        while (jobEntryIterator.hasNext()) {
-            jobEntry = jobEntryIterator.next();
-            jobEntries.add(jobEntry);
-            unreviewedJobEntries.add(jobEntry);
+    public ArrayList<JobEntry> reviewAllRemainingJobEntries(boolean approved, String comments) throws CommandException {
+        ArrayList<JobEntry> reviewedEntries = new ArrayList<>();
+        try {
+            while (!getUnreviewedJobEntries().isEmpty()) {
+                reviewedEntries.add(reviewJobEntry(0, approved, comments));
+            }
+        } catch (DataIndexOutOfBoundsException e) {
+            throw new CommandException(e.getMessage());
         }
-        sheets.add(sheetWithHeaderFields.getSheetIndex(), sheetWithHeaderFields);
+
+        try {
+            saveDataToSaveFile();
+        } catch (UninitializedException e) {
+            unreviewJobEntries(reviewedEntries);
+            throw new CommandException(e.getMessage());
+        } catch (IOException e) {
+            unreviewJobEntries(reviewedEntries);
+            throw new CommandException(ERROR_MESSAGE_IO_EXCEPTION);
+        }
+        for (JobEntry jobEntry: reviewedEntries) {
+            jobEntry.confirmLastReview();
+        }
+        return reviewedEntries;
     }
 
     /**
-     * Reviews all remaining jobs using (@code reviewJobEntry)
-     */
-    public void reviewAllRemainingJobEntries(boolean approved, String comments) throws DataIndexOutOfBoundsException {
-        while (!getUnreviewedJobEntries().isEmpty()) {
-            reviewJobEntry(0, approved, comments);
-        }
-    }
-
-    /**
-     * Reviews a (@code JobEntry) specified by (@code listIndex)
-     * @param jobNumber index of (@code JobEntry) in (@code unreviewedJobEntries)
+     * Reviews a (@code JobEntry) specified by (@code listIndex). Writes to (@code saveFile) when done.
+     * @param jobIndex index of (@code JobEntry) in (@code unreviewedJobEntries)
      * @param approved whether job entry will be added to Carvicim
      * @param comments feedback in string representation
+     * @return reviewed jobEntry
      */
-    public void reviewJobEntryUsingJobNumber(int jobNumber, boolean approved, String comments)
-            throws DataIndexOutOfBoundsException, InvalidDataException {
+    public JobEntry reviewJobEntryUsingJobIndex(int jobIndex, boolean approved, String comments)
+            throws CommandException {
         if (unreviewedJobEntries.isEmpty()) {
-            throw new IllegalStateException(ERROR_MESSAGE_EMPTY_UNREVIWED_JOB_LIST);
+            throw new CommandException(ERROR_MESSAGE_EMPTY_UNREVIWED_JOB_LIST);
         }
-        JobEntry entry;
-        for (int i = 0; i < unreviewedJobEntries.size(); i++) {
-            entry = unreviewedJobEntries.get(i);
-            if (entry.getJobNumber().asInteger() == jobNumber) {
+        if (unreviewedJobEntries.size() < jobIndex || jobIndex <= 0) {
+            throw new CommandException(ERROR_MESSAGE_INVALID_JOB_INDEX);
+        }
+        JobEntry entry = unreviewedJobEntries.get(jobIndex - 1);
+        try {
+            reviewJobEntry(jobIndex - 1, approved, comments);
+        } catch (DataIndexOutOfBoundsException e) {
+            throw new CommandException(e.getMessage());
+        }
+        try {
+            saveDataToSaveFile();
+        } catch (IOException e) {
+            unreviewJobEntry(entry);
+            throw new CommandException(ERROR_MESSAGE_IO_EXCEPTION);
+        } catch (UninitializedException e) {
+            unreviewJobEntry(entry);
+            throw new CommandException(ERROR_MESSAGE_UNINITIALIZED);
+        }
+        entry.confirmLastReview();
+        return entry;
+    }
+
+
+    /**
+     * Reviews (@code jobNumber) if present and returns review JobEntry
+     */
+    private boolean reviewJobNumberIfPresent(int jobNumber, boolean approved, String comments,
+                                             JobEntry entry, int i) throws CommandException {
+        if (entry.getJobNumber().asInteger() == jobNumber) {
+            try {
                 reviewJobEntry(i, approved, comments);
-                return;
+            } catch (DataIndexOutOfBoundsException e) {
+                throw new CommandException(e.getMessage());
             }
+            try {
+                saveDataToSaveFile();
+            } catch (IOException e) {
+                throw new CommandException(ERROR_MESSAGE_IO_EXCEPTION);
+            } catch (UninitializedException e) {
+                throw new CommandException(ERROR_MESSAGE_UNINITIALIZED);
+            }
+            return true;
         }
-        throw new InvalidDataException("Job number not found!");
+        return false;
     }
 
     /**
@@ -1376,8 +1550,10 @@ public class SessionData {
      * @param listIndex index of (@code JobEntry) in (@code unreviewedJobEntries)
      * @param approved whether job entry will be added to Carvicim
      * @param comments feedback in string representation
+     * @return reviewed jobEntry
      */
-    public void reviewJobEntry(int listIndex, boolean approved, String comments) throws DataIndexOutOfBoundsException {
+    private JobEntry reviewJobEntry(int listIndex, boolean approved, String comments) throws
+            DataIndexOutOfBoundsException {
         if (unreviewedJobEntries.isEmpty()) {
             throw new IllegalStateException(ERROR_MESSAGE_EMPTY_UNREVIWED_JOB_LIST);
         } else if (listIndex < 0 || listIndex >= unreviewedJobEntries.size()) {
@@ -1387,9 +1563,30 @@ public class SessionData {
         JobEntry jobEntry = unreviewedJobEntries.get(listIndex);
         jobEntry.review(approved, comments);
         unreviewedJobEntries.remove(jobEntry);
+        SheetWithHeaderFields sheet = sheets.get(jobEntry.getSheetNumber());
+        sheet.commentJobEntry(jobEntry.getRowNumber(), jobEntry.getCommentsAsString());
         if (approved) {
-            reviewedJobEntries.add(jobEntry);
+            sheet.approveJobEntry(jobEntry.getRowNumber());
+        } else {
+            sheet.rejectJobEntry(jobEntry.getRowNumber());
         }
+        return jobEntry;
+    }
+
+    private void unreviewJobEntries(ArrayList<JobEntry> jobEntries) {
+        for (JobEntry jobEntry : jobEntries) {
+            unreviewJobEntry(jobEntry);
+        }
+    }
+
+    /**
+     * Reverses the reviewing process of (@code jobEntry) in the event that it cannot be written to file
+     */
+    private void unreviewJobEntry(JobEntry jobEntry) {
+        sheets.get(jobEntry.getSheetNumber()).unreviewJobEntry(jobEntry.getRowNumber());
+        jobEntry.unreviewLastComment();
+        reviewedJobEntries.remove(jobEntry);
+        unreviewedJobEntries.add(jobEntry);
     }
 }
 ```
@@ -1429,7 +1626,7 @@ public class SheetParser {
         CLIENT_NAME, CLIENT_PHONE, CLIENT_EMAIL, VEHICLE_NUMBER, EMPLOYEE_NAME, EMPLOYEE_PHONE, EMPLOYEE_EMAIL
     };
     public static final String[] JOB_ENTRY_OPTIONAL_FIELDS = { // ignore case when reading headings
-        STATUS, REMARKS
+        REMARKS
     };
     public static final String MESSAGE_SEPARATOR = ", ";
 
@@ -1597,6 +1794,38 @@ public class JobCard extends UiPart<Region> {
     }
 }
 ```
+###### \java\seedu\carvicim\ui\JobListIndicator.java
+``` java
+/**
+ * A text box to indicate which tab the job list panel is on
+ */
+public class JobListIndicator extends UiPart<Region> {
+
+    public static final String IMPORTED = "unreviewed jobs";
+    public static final String SAVED = "saved jobs";
+
+    private static final Logger logger = LogsCenter.getLogger(JobListIndicator.class);
+    private static final String FXML = "JobListIndicator.fxml";
+
+    private final StringProperty displayed = new SimpleStringProperty(SAVED);
+
+    @FXML
+    private TextArea jobListIndicator;
+
+    public JobListIndicator() {
+        super(FXML);
+        jobListIndicator.textProperty().bind(displayed);
+        registerAsAnEventHandler(this);
+    }
+
+    @Subscribe
+    private void handleNewResultAvailableEvent(JobListSwitchEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        Platform.runLater(() -> displayed.setValue(event.message));
+    }
+
+}
+```
 ###### \java\seedu\carvicim\ui\JobListPanel.java
 ``` java
 /**
@@ -1688,21 +1917,21 @@ public class JobListPanel extends UiPart<Region> {
 ###### \resources\view\JobListCard.fxml
 ``` fxml
 
-<HBox id="cardPane" fx:id="jobCardPane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<HBox id="cardPane" fx:id="jobCardPane" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
   <GridPane HBox.hgrow="ALWAYS">
     <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
     </columnConstraints>
-    <VBox alignment="CENTER_LEFT" minHeight="105" GridPane.columnIndex="0">
+    <VBox alignment="CENTER_LEFT" minHeight="105" prefHeight="105.0" prefWidth="156.0" GridPane.columnIndex="0">
       <padding>
         <Insets bottom="5" left="15" right="5" top="5" />
       </padding>
-         <HBox prefHeight="18.0" prefWidth="130.0">
+         <HBox prefHeight="18.0" prefWidth="135.0">
             <children>
             <Label fx:id="startDate" styleClass="cell_small_label" text="\$startDate" />
                <Label fx:id="status" alignment="BOTTOM_RIGHT" text="\$status">
                   <HBox.margin>
-                     <Insets left="200.0" />
+                     <Insets left="100.0" />
                   </HBox.margin>
                </Label>
             </children>
@@ -1724,10 +1953,17 @@ public class JobListPanel extends UiPart<Region> {
   </GridPane>
 </HBox>
 ```
+###### \resources\view\JobListIndicator.fxml
+``` fxml
+<StackPane fx:id="placeHolder" styleClass="pane-with-border" xmlns="http://javafx.com/javafx/8"
+    xmlns:fx="http://javafx.com/fxml/1">
+  <TextArea fx:id="jobListIndicator" editable="false" styleClass="result-display"/>
+</StackPane>
+```
 ###### \resources\view\JobListPanel.fxml
 ``` fxml
 
 <VBox xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
-  <ListView fx:id="jobListView" />
+  <ListView fx:id="jobListView" VBox.vgrow="ALWAYS" />
 </VBox>
 ```

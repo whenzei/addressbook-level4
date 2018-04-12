@@ -52,130 +52,6 @@ public class AddJobCommandTest {
     }
 
     /**
-     * A default model stub that have all of the methods failing.
-     */
-    private class ModelStub implements Model {
-        @Override
-        public void addPerson(Employee employee) throws DuplicateEmployeeException {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void addJobs(List<Job> job) {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void addMissingEmployees(Set<Employee> employees) {
-            fail("This method should not be called.");
-        }
-
-        @Override public boolean isViewingImportedJobs() {
-            fail("This method should not be called.");
-            return false;
-        }
-
-        @Override public void switchJobView() {
-            fail("This method should not be called.");
-        }
-
-        @Override public void resetJobView() {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void resetData(ReadOnlyCarvicim newData, CommandWords newCommandWords) {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public CommandWords getCommandWords() {
-            fail("This method should never be called");
-            return null;
-        }
-
-        @Override
-        public void initJobNumber() {
-            fail("This method should never be called");
-        }
-
-        @Override public String appendCommandKeyToMessage(String message) {
-            fail("This method should never be called");
-            return null;
-        }
-
-        @Override
-        public ReadOnlyCarvicim getCarvicim() {
-            fail("This method should not be called.");
-            return null;
-        }
-
-        @Override
-        public void addJob(Job job) {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void closeJob(Job target) throws JobNotFoundException {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void addRemark(Job job, Remark remark) {
-            fail("This method should not be called");
-        }
-
-        @Override
-        public void archiveJob(DateRange dateRange) {
-            fail("This method should not be called");
-        }
-
-        @Override
-        public JobList analyseJob(JobList jobList) {
-            fail("This method should not be called");
-            return null;
-        }
-
-        @Override
-        public void deletePerson(Employee target) throws EmployeeNotFoundException {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void sortPersonList() {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public void updatePerson(Employee target, Employee editedEmployee)
-                throws DuplicateEmployeeException {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public ObservableList<Employee> getFilteredPersonList() {
-            fail("This method should not be called.");
-            return null;
-        }
-
-        @Override
-        public void updateFilteredPersonList(Predicate<Employee> predicate) {
-            fail("This method should not be called.");
-        }
-
-        @Override
-        public ObservableList<Job> getFilteredJobList() {
-            fail("This method should not be called.");
-            return null;
-        }
-
-        @Override
-        public void updateFilteredJobList(Predicate<Job> predicate) {
-            fail("This method should not be called.");
-        }
-    }
-
-    /**
      * Generates an Arraylist of valid assigned employee index
      */
     private ArrayList<Index> generateValidEmployeeIndices() {
@@ -216,13 +92,14 @@ public class CloseJobCommandTest {
 
     @Test
     public void execute_closeJobSuccess_jobIsPresent() throws Exception {
-        Job jobToClose = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+        Job target = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+        Job updatedJob = CloseJobCommand.createUpdatedJob(target);
 
         CloseJobCommand closeJobCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
 
-        String expectedMessage = String.format(CloseJobCommand.MESSAGE_CLOSE_JOB_SUCCESS, jobToClose);
+        String expectedMessage = String.format(CloseJobCommand.MESSAGE_CLOSE_JOB_SUCCESS, updatedJob);
         ModelManager expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
-        expectedModel.closeJob(jobToClose);
+        expectedModel.closeJob(target, updatedJob);
 
         assertCommandSuccess(closeJobCommand, model, expectedMessage, expectedModel);
 
@@ -241,8 +118,8 @@ public class CloseJobCommandTest {
         CloseJobCommand closeJobCommand = prepareCommand(new JobNumber(VALID_JOB_NUMBER_ONE));
         Model expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
 
-        Job jobToClose = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
-
+        Job target = model.getFilteredJobList().get(INDEX_FIRST_JOB.getZeroBased());
+        Job updatedJob = CloseJobCommand.createUpdatedJob(target);
         // close -> closes the job number 1 which is the first job in the job list
         closeJobCommand.execute();
         undoRedoStack.push(closeJobCommand);
@@ -250,8 +127,8 @@ public class CloseJobCommandTest {
         // undo -> reverts Carvicim back to previous state
         assertCommandSuccess(undoCommand, model, UndoCommand.MESSAGE_SUCCESS, expectedModel);
 
-        expectedModel.closeJob(jobToClose);
-        assertNotEquals(jobToClose, model.getFilteredPersonList().get(INDEX_FIRST_JOB.getZeroBased()));
+        expectedModel.closeJob(target, updatedJob);
+        assertNotEquals(target, model.getFilteredPersonList().get(INDEX_FIRST_JOB.getZeroBased()));
         // redo -> closes same Job of job number 1
         assertCommandSuccess(redoCommand, model, RedoCommand.MESSAGE_SUCCESS, expectedModel);
 
@@ -293,19 +170,6 @@ public class CloseJobCommandTest {
 ```
 ###### \java\seedu\carvicim\logic\commands\ListJobCommandTest.java
 ``` java
-
-import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicimWithAssignedJobs;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import seedu.carvicim.logic.CommandHistory;
-import seedu.carvicim.logic.UndoRedoStack;
-import seedu.carvicim.model.Model;
-import seedu.carvicim.model.ModelManager;
-import seedu.carvicim.model.UserPrefs;
-
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListJobCommand.
  */
@@ -366,10 +230,11 @@ public class RemarkCommandTest {
         RemarkCommand remarkCommand = prepareCommand("abc", "1");
         // Get first job
         Job targetJob = model.getFilteredJobList().get(0);
+        Job updatedJob = RemarkCommand.createUpdatedJob(targetJob, new Remark("abc"));
 
         String expectedMessage = String.format(RemarkCommand.MESSAGE_REMARK_SUCCESS, new Remark("abc"));
         ModelManager expectedModel = new ModelManager(model.getCarvicim(), new UserPrefs());
-        expectedModel.addRemark(targetJob, new Remark("abc"));
+        expectedModel.addRemark(targetJob, updatedJob);
 
         assertCommandSuccess(remarkCommand, model, expectedMessage, expectedModel);
     }
@@ -548,6 +413,31 @@ public class CloseJobCommandParserTest {
         assertParseFailure(parser, INVALID_JOB_NUMBER_DESC, String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 CloseJobCommand.MESSAGE_USAGE));
     }
+}
+```
+###### \java\seedu\carvicim\logic\parser\FindJobCommandParserTest.java
+``` java
+public class FindJobCommandParserTest {
+
+    private FindJobCommandParser parser = new FindJobCommandParser();
+
+    @Test
+    public void parse_emptyArg_throwParseException() {
+        assertParseFailure(parser, "         ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindJobCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_validArgs_returnsFindCommand() {
+        // no leading and trailing whitespaces
+        FindJobCommand expectedFindJobCommand =
+                new FindJobCommand(new JobDetailsContainKeyWordsPredicate(Arrays.asList("Apr", "Feb")));
+        assertParseSuccess(parser, "Apr Feb", expectedFindJobCommand);
+
+        // multiple whitespaces between keywords
+        assertParseSuccess(parser, " \n Apr \n \t Feb  \t", expectedFindJobCommand);
+    }
+
 }
 ```
 ###### \java\seedu\carvicim\logic\parser\RemarkCommandParserTest.java
@@ -872,6 +762,31 @@ public class XmlAdaptedJobTest {
     }
 }
 
+```
+###### \java\seedu\carvicim\storage\XmlAdaptedRemarkTest.java
+``` java
+public class XmlAdaptedRemarkTest {
+    private static final String INVALID_REMARK = "";
+
+    private static final String VALID_REMARK = "asd";
+
+    @Test
+    public void toModelType_validRemark_returnsRemark() throws Exception {
+        XmlAdaptedRemark xmlAdaptedRemark = new XmlAdaptedRemark(VALID_REMARK);
+        Remark remark = new Remark(VALID_REMARK);
+
+        assertEquals(remark, xmlAdaptedRemark.toModelType());
+    }
+
+    @Test
+    public void toModelType_invalidRemark_throwsIllegalValueException() {
+        XmlAdaptedRemark xmlAdaptedRemark = new XmlAdaptedRemark(INVALID_REMARK);
+
+        String expectedMessage = Remark.MESSAGE_REMARKS_CONSTRAINTS;
+        Assert.assertThrows(IllegalValueException.class, expectedMessage, xmlAdaptedRemark::toModelType);
+    }
+
+}
 ```
 ###### \java\seedu\carvicim\testutil\ClientBuilder.java
 ``` java

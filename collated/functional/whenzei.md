@@ -80,7 +80,7 @@ public class AddJobCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "addj";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a job to the Carvicim. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a job to the Carvicim.\n"
             + "Parameters: "
             + PREFIX_NAME + "CLIENT_NAME "
             + PREFIX_PHONE + "PHONE "
@@ -132,6 +132,7 @@ public class AddJobCommand extends UndoableCommand {
             }
             toAdd = new Job(client, vehicleNumber, new JobNumber(), new Date(), assignedEmployees,
                     new Status(Status.STATUS_ONGOING), new RemarkList());
+            prevJobNumber = toAdd.getJobNumber().value;
         } catch (DuplicateEmployeeException e) {
             throw new CommandException("Duplicate employee index");
         }
@@ -176,7 +177,8 @@ public class CloseJobCommand extends UndoableCommand {
 
     private final JobNumber targetJobNumber;
 
-    private Job jobToClose;
+    private Job target;
+    private Job updatedJob;
 
     public CloseJobCommand(JobNumber targetJobNumber) {
         this.targetJobNumber = targetJobNumber;
@@ -184,14 +186,15 @@ public class CloseJobCommand extends UndoableCommand {
 
     @Override
     public CommandResult executeUndoableCommand() {
-        requireNonNull(jobToClose);
+        requireNonNull(target);
+        requireNonNull(updatedJob);
         try {
-            model.closeJob(jobToClose);
+            model.closeJob(target, updatedJob);
         } catch (JobNotFoundException jnfe) {
             throw new AssertionError("The target job cannot be missing");
         }
 
-        return new CommandResult(String.format(MESSAGE_CLOSE_JOB_SUCCESS, jobToClose));
+        return new CommandResult(String.format(MESSAGE_CLOSE_JOB_SUCCESS, updatedJob));
     }
 
     @Override
@@ -201,13 +204,15 @@ public class CloseJobCommand extends UndoableCommand {
 
         while (jobIterator.hasNext()) {
             Job currJob = jobIterator.next();
-            if (currJob.getJobNumber().equals(this.targetJobNumber)) {
-                jobToClose = currJob;
+            if (currJob.getJobNumber().equals(this.targetJobNumber)
+                    && (currJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
+                target = currJob;
+                updatedJob = createUpdatedJob(currJob);
                 break;
             }
         }
 
-        if (jobToClose == null) {
+        if (target == null) {
             throw new CommandException(Messages.MESSAGE_JOB_NOT_FOUND);
         }
     }
@@ -217,9 +222,37 @@ public class CloseJobCommand extends UndoableCommand {
         return other == this // short circuit if same object
                 || (other instanceof CloseJobCommand // instanceof handles nulls
                 && this.targetJobNumber.equals(((CloseJobCommand) other).targetJobNumber) // state check
-                && Objects.equals(this.jobToClose, ((CloseJobCommand) other).jobToClose));
+                && Objects.equals(this.target, ((CloseJobCommand) other).target));
     }
 
+    /**
+     * Creates and returns a new {@code Job} with a closed status
+     */
+    public static Job createUpdatedJob(Job jobToEdit) {
+        assert jobToEdit != null;
+
+        return new Job(jobToEdit.getClient(), jobToEdit.getVehicleNumber(), jobToEdit.getJobNumber(),
+                jobToEdit.getDate(), jobToEdit.getAssignedEmployees(),
+                new Status(Status.STATUS_CLOSED), jobToEdit.getRemarkList());
+    }
+}
+```
+###### \java\seedu\carvicim\logic\commands\ListOngoingJobCommand.java
+``` java
+/**
+ * Lists all ongoing job in CarviciM
+ */
+public class ListOngoingJobCommand extends Command {
+
+    public static final String COMMAND_WORD = "listoj";
+
+    public static final String MESSAGE_SUCCESS = "Listed all ongoing jobs";
+
+    @Override
+    public CommandResult execute() {
+        model.showOngoingJobs();
+        return new CommandResult(MESSAGE_SUCCESS);
+    }
 }
 ```
 ###### \java\seedu\carvicim\logic\commands\RemarkCommand.java
@@ -241,6 +274,7 @@ public class RemarkCommand extends UndoableCommand {
     private final Remark remark;
 
     private Job target;
+    private Job updatedJob;
 
     /**
      * Creates a RemarkCommand to add the specified {@code Remark}
@@ -254,12 +288,13 @@ public class RemarkCommand extends UndoableCommand {
     @Override
     public CommandResult executeUndoableCommand() {
         requireNonNull(target);
+        requireNonNull(updatedJob);
         try {
-            model.addRemark(target, remark);
+            model.addRemark(target, updatedJob);
         } catch (JobNotFoundException jnfe) {
             throw new AssertionError("The target job cannot be missing");
         }
-        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(target));
+        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(updatedJob));
         return new CommandResult(String.format(MESSAGE_REMARK_SUCCESS, remark));
     }
 
@@ -270,8 +305,10 @@ public class RemarkCommand extends UndoableCommand {
 
         while (jobIterator.hasNext()) {
             Job currentJob = jobIterator.next();
-            if (currentJob.getJobNumber().equals(jobNumber)) {
+            if (currentJob.getJobNumber().equals(jobNumber)
+                    && (currentJob.getStatus().value).equals(Status.STATUS_ONGOING)) {
                 target = currentJob;
+                updatedJob = createUpdatedJob(target, remark);
                 break;
             }
         }
@@ -289,6 +326,18 @@ public class RemarkCommand extends UndoableCommand {
                 && this.remark.equals(((RemarkCommand) other).remark)
                 && Objects.equals(this.target, ((RemarkCommand) other).target));
     }
+
+    /**
+     * Creates and returns a new {@code Job} with a new remark added
+     */
+    public static Job createUpdatedJob(Job jobToEdit, Remark remark) {
+        assert jobToEdit != null;
+        RemarkList remarks = new RemarkList(jobToEdit.getRemarkList().getRemarks());
+        remarks.add(remark);
+
+        return new Job(jobToEdit.getClient(), jobToEdit.getVehicleNumber(), jobToEdit.getJobNumber(),
+                jobToEdit.getDate(), jobToEdit.getAssignedEmployees(), jobToEdit.getStatus(), remarks);
+    }
 }
 ```
 ###### \java\seedu\carvicim\logic\commands\ThemeCommand.java
@@ -299,14 +348,15 @@ public class RemarkCommand extends UndoableCommand {
 public class ThemeCommand extends Command {
     public static final String COMMAND_WORD = "theme";
 
-    public static final int NUMBER_OF_THEMES = 2;
+    public static final int NUMBER_OF_THEMES = 3;
 
     public static final String MESSAGE_THEME_CHANGE_SUCCESS = "Theme updated: %1$s";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Applies selected theme\n"
-            + "1. Teal theme\n"
+            + "1. Mauve theme\n"
             + "2. Dark theme\n"
+            + "3. Light theme\n"
             + "Parameters: INDEX (positive integer)\n"
             + "Example: " + COMMAND_WORD + " 2";
 
@@ -456,17 +506,10 @@ public class AddJobCommandParser implements Parser<AddJobCommand> {
 
 
     /**
-     * Adds a remark to a specified job in Carvicim
+     * Replaces a target job with an updated job in CariviciM
      */
-    public void addRemark(Job job, Remark remark) {
-        Iterator<Job> iterator = jobs.iterator();
-        while (iterator.hasNext()) {
-            Job currJob = iterator.next();
-            if (currJob.equals(job)) {
-                job.addRemark(remark);
-                break;
-            }
-        }
+    public void updateJob(Job target, Job updatedJob) {
+        jobs.replace(target, updatedJob);
     }
 
 ```
@@ -622,8 +665,16 @@ public class Job {
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public Set<Employee> getAssignedEmployees() {
+    public Set<Employee> getAssignedEmployeesAsSet() {
         return Collections.unmodifiableSet(assignedEmployees.toSet());
+    }
+
+    /**
+     * Returns assignedEmployees as UniqueEmployeeList
+     * @return
+     */
+    public UniqueEmployeeList getAssignedEmployees() {
+        return assignedEmployees;
     }
 
     public ObservableList getAssignedEmployeesAsObservableList() {
@@ -633,8 +684,8 @@ public class Job {
     /**
      * Returns an arraylist of remarks
      */
-    public ArrayList<Remark> getRemarks() {
-        return remarks.getRemarks();
+    public RemarkList getRemarkList() {
+        return remarks;
     }
 
     public void addRemark(Remark remark) {
@@ -664,9 +715,9 @@ public class Job {
                 && otherJob.getVehicleNumber().equals(this.getVehicleNumber())
                 && otherJob.getJobNumber().equals(this.getJobNumber())
                 && otherJob.getDate().equals(this.getDate())
-                && otherJob.getAssignedEmployees().equals(this.getAssignedEmployees())
+                && otherJob.getAssignedEmployeesAsSet().equals(this.getAssignedEmployeesAsSet())
                 && otherJob.getStatus().equals(this.getStatus())
-                && otherJob.getRemarks().equals(this.getRemarks());
+                && otherJob.getRemarkList().equals(this.getRemarkList());
     }
 
     @Override
@@ -702,6 +753,39 @@ public class Job {
     }
 }
 ```
+###### \java\seedu\carvicim\model\job\JobDetailsContainKeyWordsPredicate.java
+``` java
+/**
+ * Tests that a {@code Job}'s details matches any of the keywords given.
+ */
+public class JobDetailsContainKeyWordsPredicate implements Predicate<Job> {
+    private final List<String> keywords;
+
+    public JobDetailsContainKeyWordsPredicate(List<String> keywords) {
+        this.keywords = keywords;
+    }
+
+    @Override
+    public boolean test(Job job) {
+        return keywords.stream()
+                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getClient().getName().fullName, keyword))
+                 || keywords.stream()
+                        .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getDate().value, keyword))
+                 || keywords.stream()
+                        .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getJobNumber().value, keyword))
+                 || keywords.stream()
+                        .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(job.getVehicleNumber().value, keyword));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof JobDetailsContainKeyWordsPredicate // instanceof handles nulls
+                && this.keywords.equals(((JobDetailsContainKeyWordsPredicate) other).keywords)); // state check
+    }
+
+}
+```
 ###### \java\seedu\carvicim\model\job\JobList.java
 ``` java
 /**
@@ -713,6 +797,7 @@ public class JobList implements Iterable<Job> {
     private int jobCount = 0;
     private int ongoingCount = 0;
     private int closedCount = 0;
+    private HashMap<Name, Integer> analyse = new HashMap<Name, Integer>();
 
     /**
      * Returns true if the list contains an equivalent employee as the given argument
@@ -749,10 +834,21 @@ public class JobList implements Iterable<Job> {
      *
      * @throws JobNotFoundException if no such job could be found in the list
      */
-    public boolean remove(Job toRemove) throws JobNotFoundException {
+    public boolean remove(Job toRemove) {
         requireNonNull(toRemove);
         final boolean jobFoundAndDeleted = internalList.remove(toRemove);
         return jobFoundAndDeleted;
+    }
+
+    /**
+     * Replaces the {@targetJob} with the {@updateJob}
+     *
+     * @throws JobNotFoundException if no {@targetJob} exists
+     */
+    public void replace(Job targetJob, Job updatedJob) {
+        requireAllNonNull(targetJob, updatedJob);
+        int targetIndex = internalList.indexOf(targetJob);
+        internalList.set(targetIndex, updatedJob);
     }
 
     /**
@@ -762,26 +858,6 @@ public class JobList implements Iterable<Job> {
         return FXCollections.unmodifiableObservableList(internalList);
     }
 
-```
-###### \java\seedu\carvicim\model\job\JobList.java
-``` java
-    @Override
-    public Iterator<Job> iterator() {
-        return internalList.iterator();
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof JobList // instanceof handles nulls
-                && this.internalList.equals(((JobList) other).internalList));
-    }
-
-    @Override
-    public int hashCode() {
-        return internalList.hashCode();
-    }
-}
 ```
 ###### \java\seedu\carvicim\model\job\JobNumber.java
 ``` java
@@ -815,8 +891,16 @@ public class JobNumber {
         nextJobNumber = arg;
     }
 
-    public static void incrementNextJobNumber() {
+    public void incrementNextJobNumber() {
         nextJobNumber++;
+    }
+
+    public static String getNextJobNumber() {
+        return nextJobNumber + "";
+    }
+
+    public static void setNextJobNumber(String arg) {
+        nextJobNumber = Integer.parseInt(arg);
     }
 
     /**
@@ -847,6 +931,20 @@ public class JobNumber {
     @Override
     public int hashCode() {
         return value.hashCode();
+    }
+}
+```
+###### \java\seedu\carvicim\model\job\OngoingJobPredicate.java
+``` java
+/**
+ * Tests that a {@code Job}'s {@code Status} matches an ongoing status
+ */
+public class OngoingJobPredicate implements Predicate<Job> {
+
+    @Override
+    public boolean test(Job job) {
+        String ongoingStatus = Status.STATUS_ONGOING;
+        return ongoingStatus.equals(job.getStatus().value);
     }
 }
 ```
@@ -927,192 +1025,6 @@ public class VehicleNumber {
         return value.hashCode();
     }
 
-
-}
-```
-###### \java\seedu\carvicim\model\ModelManager.java
-``` java
-    /**
-     * Initializes the running job number based on the past job numbers.
-     */
-    @Override
-    public void initJobNumber() {
-        if (filteredJobs.isEmpty()) {
-            JobNumber.initialize(ONE_AS_STRING);
-            return;
-        }
-        int largest = filteredJobs.get(0).getJobNumber().asInteger();
-        for (Job job : filteredJobs) {
-            if (job.getJobNumber().asInteger() > largest) {
-                largest = job.getJobNumber().asInteger();
-            }
-        }
-        JobNumber.initialize(largest + 1);
-    }
-
-    @Override
-    public void resetData(ReadOnlyCarvicim newData, CommandWords newCommandWords) {
-        carvicim.resetData(newData);
-        commandWords.resetData(newCommandWords);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public CommandWords getCommandWords() {
-        return commandWords;
-    }
-
-    @Override
-    public String appendCommandKeyToMessage(String message) {
-        StringBuilder builder = new StringBuilder(message);
-        builder.append("\n");
-        builder.append(commandWords.toString());
-        return builder.toString();
-    }
-
-    @Override
-    public ReadOnlyCarvicim getCarvicim() {
-        return carvicim;
-    }
-
-    /** Raises an event to indicate the model has changed */
-    private void indicateAddressBookChanged() {
-        raise(new CarvicimChangedEvent(carvicim));
-    }
-
-    @Override
-    public synchronized void addJob(Job job) {
-        carvicim.addJob(job);
-        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public synchronized void closeJob(Job target) throws JobNotFoundException {
-        carvicim.closeJob(target);
-        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public synchronized void archiveJob(DateRange dateRange) {
-        carvicim.archiveJob(dateRange);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public synchronized void deletePerson(Employee target) throws EmployeeNotFoundException {
-        carvicim.removeEmployee(target);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public synchronized void addRemark(Job job, Remark remark) {
-        carvicim.addRemark(job, remark);
-        updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public synchronized void addPerson(Employee employee) throws DuplicateEmployeeException {
-        carvicim.addEmployee(employee);
-        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public void addJobs(List<Job> jobs) {
-        for (Job job : jobs) {
-            addMissingEmployees(job.getAssignedEmployees());
-            addJob(job);
-        }
-    }
-
-    @Override
-    public void addMissingEmployees(Set<Employee> employees) {
-        Iterator<Employee> employeeIterator = employees.iterator();
-        while (employeeIterator.hasNext()) {
-            try {
-                addPerson(employeeIterator.next());
-            } catch (DuplicateEmployeeException e) {
-                // discard the result
-            }
-        }
-    }
-
-    @Override
-    public void updatePerson(Employee target, Employee editedEmployee)
-            throws DuplicateEmployeeException, EmployeeNotFoundException {
-        requireAllNonNull(target, editedEmployee);
-
-        carvicim.updateEmployee(target, editedEmployee);
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public void sortPersonList() {
-        carvicim.sortList();
-        indicateAddressBookChanged();
-    }
-
-    @Override
-    public JobList analyseJob(JobList jobList) {
-        return carvicim.analyseJob(jobList);
-    }
-
-    //=========== Filtered Employee List Accessors =============================================================
-
-    /**
-     * Returns an unmodifiable view of the list of {@code Employee} backed by the internal list of
-     * {@code carvicim}
-     */
-    @Override
-    public ObservableList<Employee> getFilteredPersonList() {
-        return FXCollections.unmodifiableObservableList(filteredEmployees);
-    }
-
-    @Override
-    public void updateFilteredPersonList(Predicate<Employee> predicate) {
-        requireNonNull(predicate);
-        filteredEmployees.setPredicate(predicate);
-    }
-
-    //=========== Filtered Job List Accessors =============================================================
-
-    /**
-     * Returns an unmodifiable view of the list of {@code Job} backed by the internal list of
-     * {@code carvicim}
-     */
-    @Override
-    public ObservableList<Job> getFilteredJobList() {
-        return FXCollections.unmodifiableObservableList(filteredJobs);
-    }
-
-    @Override
-    public void updateFilteredJobList(Predicate<Job> predicate) {
-        requireNonNull(predicate);
-        filteredJobs.setPredicate(predicate);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        // short circuit if same object
-        if (obj == this) {
-            return true;
-        }
-
-        // instanceof handles nulls
-        if (!(obj instanceof ModelManager)) {
-            return false;
-        }
-
-        // state check
-        ModelManager other = (ModelManager) obj;
-        return carvicim.equals(other.carvicim)
-                && filteredEmployees.equals(other.filteredEmployees)
-                && filteredJobs.equals(other.filteredJobs)
-                && commandWords.equals(other.getCommandWords());
-    }
 
 }
 ```
@@ -1306,7 +1218,7 @@ public class XmlAdaptedJob {
         for (Employee employee : source.getAssignedEmployees()) {
             assignedEmployees.add(new XmlAdaptedEmployee(employee));
         }
-        for (Remark remark : source.getRemarks()) {
+        for (Remark remark : source.getRemarkList()) {
             remarks.add(new XmlAdaptedRemark(remark));
         }
     }
@@ -1443,7 +1355,7 @@ public class XmlAdaptedRemark {
     }
 
     /**
-     * Converts a given Tag into this class for JAXB use.
+     * Converts a given Remark into this class for JAXB use.
      *
      * @param source future changes to this will not affect the created
      */
@@ -1452,7 +1364,7 @@ public class XmlAdaptedRemark {
     }
 
     /**
-     * Converts this jaxb-friendly adapted tag object into the model's Remark object.
+     * Converts this jaxb-friendly adapted remark object into the model's Remark object.
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted job
      */
@@ -1505,7 +1417,7 @@ public class JobDisplayPanel extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
-    private FlowPane remarks;
+    private ListView remarks;
     @FXML
     private ListView assignedEmployees;
 
@@ -1521,9 +1433,15 @@ public class JobDisplayPanel extends UiPart<Region> {
     }
 
     @Subscribe
-    private void handlJobDisplayPanelUpdateRequest(JobDisplayPanelUpdateRequestEvent event) {
+    private void handlJobDisplayPanelUpdateRequestEvent(JobDisplayPanelUpdateRequestEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event));
         updateFxmlElements(event.getJob());
+    }
+
+    @Subscribe
+    private void handleJobDisplayPanelResetRequestEvent(JobDisplayPanelResetRequestEvent event) {
+        logger.info(LogsCenter.getEventHandlingLogMessage(event));
+        clearFxmlElements();
     }
 
     /**
@@ -1531,13 +1449,17 @@ public class JobDisplayPanel extends UiPart<Region> {
      */
     private void updateFxmlElements(Job job) {
         assignedEmployees.setVisible(true);
+        remarks.setVisible(true);
 
         //Clear previous selection's information
         assignedEmployees.refresh();
-        remarks.getChildren().clear();
+        remarks.refresh();
 
         jobNumber.setText(job.getJobNumber().toString());
+
         status.setText(job.getStatus().toString());
+        setStatusLabelColour(job.getStatus().value);
+
         date.setText(job.getDate().toString());
         vehicleNumber.setText(job.getVehicleNumber().toString());
         name.setText(job.getClient().getName().toString());
@@ -1545,13 +1467,31 @@ public class JobDisplayPanel extends UiPart<Region> {
         email.setText(job.getClient().getEmail().toString());
 
         assignedEmployees.setItems(job.getAssignedEmployeesAsObservableList());
+        remarks.setItems(job.getRemarkList().asObservableList());
+    }
 
-        int count = 1;
-        Iterator<Remark> remarkIterator = job.getRemarks().iterator();
-        while (remarkIterator.hasNext()) {
-            remarks.getChildren().add(new Label(count + ") " + remarkIterator.next().value));
-            count++;
+    private void setStatusLabelColour(String status) {
+        if (status.equals(Status.STATUS_ONGOING)) {
+            this.status.setStyle("-fx-text-fill: green");
+        } else {
+            this.status.setStyle("-fx-text-fill: red");
         }
+    }
+
+    /**
+     * Clear the FXML elements
+     */
+    private void clearFxmlElements() {
+        assignedEmployees.setVisible(false);
+        remarks.setVisible(false);
+
+        jobNumber.setText("");
+        status.setText("");
+        date.setText("");
+        vehicleNumber.setText("");
+        name.setText("");
+        phone.setText("");
+        email.setText("");
     }
 }
 ```
@@ -1584,24 +1524,24 @@ public class JobDisplayPanel extends UiPart<Region> {
 ###### \resources\view\JobDisplayPanel.fxml
 ``` fxml
 
-<StackPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="490.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <GridPane fx:id="jobDisplay" prefHeight="608.0" prefWidth="647.0" stylesheets="@TealTheme.css">
+      <GridPane fx:id="jobDisplay" gridLinesVisible="true" prefHeight="565.0" prefWidth="552.0">
         <columnConstraints>
-          <ColumnConstraints maxWidth="645.0" minWidth="10.0" prefWidth="194.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="451.0" />
+          <ColumnConstraints maxWidth="645.0" minWidth="10.0" prefWidth="158.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="709.0" minWidth="0.0" prefWidth="394.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="197.0" minHeight="0.0" prefHeight="36.0" valignment="TOP" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="395.0" minHeight="0.0" prefHeight="32.0" valignment="TOP" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="39.0" valignment="BASELINE" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="36.0" valignment="TOP" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="88.0" valignment="TOP" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="72.0" valignment="TOP" />
-            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="314.0" valignment="TOP" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="33.0" valignment="BASELINE" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="35.0" valignment="TOP" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="85.0" valignment="TOP" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="78.0" valignment="TOP" />
+            <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="205.0" valignment="TOP" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="TOP_LEFT" styleClass="label-bright" text="Job Number:" underline="true">
+            <Label alignment="TOP_LEFT" styleClass="label-header" text="Job Number:" underline="true">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1612,7 +1552,7 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets />
                </opaqueInsets>
             </Label>
-            <Label alignment="TOP_LEFT" styleClass="label-bright" text="Status:" underline="true" GridPane.rowIndex="1">
+            <Label alignment="TOP_LEFT" styleClass="label-header" text="Status:" underline="true" GridPane.rowIndex="1">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1623,7 +1563,7 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets />
                </opaqueInsets>
             </Label>
-            <Label alignment="TOP_LEFT" styleClass="label-bright" text="Date Added:" underline="true" GridPane.rowIndex="2">
+            <Label alignment="TOP_LEFT" prefHeight="20.0" prefWidth="155.0" styleClass="label-header" text="Date Added:" underline="true" GridPane.rowIndex="2">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1631,7 +1571,7 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <Label alignment="TOP_LEFT" styleClass="label-bright" text="Vehicle Number:" underline="true" GridPane.rowIndex="3">
+            <Label alignment="TOP_LEFT" prefHeight="20.0" prefWidth="224.0" styleClass="label-header" text="Vehicle Number:" underline="true" GridPane.rowIndex="3">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1639,7 +1579,7 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <Label alignment="TOP_LEFT" styleClass="label-bright" text="Client Details:" underline="true" GridPane.rowIndex="4">
+            <Label alignment="TOP_LEFT" prefHeight="20.0" prefWidth="230.0" styleClass="label-header" text="Client Details:" underline="true" GridPane.rowIndex="4">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1647,14 +1587,23 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <VBox prefHeight="88.0" prefWidth="593.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <children>
-                  <Label fx:id="name" lineSpacing="2.0" styleClass="label-bright" />
-                  <Label fx:id="phone" lineSpacing="2.0" styleClass="label-bright" />
-                  <Label fx:id="email" lineSpacing="2.0" styleClass="label-bright" />
+                  <Label fx:id="name" lineSpacing="2.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <Label fx:id="phone" lineSpacing="2.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
+                  <Label fx:id="email" lineSpacing="2.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding></Label>
                </children>
             </VBox>
-            <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="151.0" styleClass="label-bright" text="Assigned Employees:" underline="true" GridPane.rowIndex="5">
+            <Label alignment="TOP_LEFT" prefHeight="20.0" prefWidth="239.0" styleClass="label-header" text="Assigned Employees:" underline="true" GridPane.rowIndex="5">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1662,7 +1611,7 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <Label alignment="TOP_LEFT" styleClass="label-bright" text="Remarks:" underline="true" GridPane.rowIndex="6">
+            <Label alignment="TOP_LEFT" prefHeight="20.0" prefWidth="116.0" styleClass="label-header" text="Remarks:" underline="true" GridPane.rowIndex="6">
                <font>
                   <Font name="MS Outlook" size="16.0" />
                </font>
@@ -1670,12 +1619,31 @@ public class JobDisplayPanel extends UiPart<Region> {
                   <Insets left="5.0" top="2.0" />
                </padding>
             </Label>
-            <FlowPane fx:id="remarks" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label fx:id="vehicleNumber" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="date" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="status" styleClass="label-bright" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="jobNumber" styleClass="label-bright" GridPane.columnIndex="1" />
-            <ListView fx:id="assignedEmployees" prefHeight="200.0" prefWidth="200.0" styleClass="list-cell" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="vehicleNumber" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <Label fx:id="date" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <Label fx:id="status" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <Label fx:id="jobNumber" GridPane.columnIndex="1">
+               <padding>
+                  <Insets left="5.0" />
+               </padding></Label>
+            <ListView fx:id="assignedEmployees" prefHeight="200.0" prefWidth="200.0" styleClass="label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="3.0" right="3.0" top="10.0" />
+               </GridPane.margin></ListView>
+            <ListView fx:id="remarks" prefHeight="200.0" prefWidth="200.0" styleClass="label" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets bottom="10.0" left="3.0" right="3.0" top="10.0" />
+               </GridPane.margin>
+            </ListView>
          </children>
          <effect>
             <Glow />
@@ -1683,4 +1651,712 @@ public class JobDisplayPanel extends UiPart<Region> {
       </GridPane>
    </children>
 </StackPane>
+```
+###### \resources\view\LightTheme.css
+``` css
+.background {
+    -fx-background-color: derive(#e2d4cf, 20%);
+    background-color: #ffffff; /* Used in the default.html file */
+}
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: black;
+    -fx-opacity: 1;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
+.table-view {
+    -fx-base: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-background-color: #ffffff;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+        transparent
+        transparent
+        derive(-fx-base, 80%)
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: black;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: derive(#a6a6a6, 20%);
+    -fx-border-color: transparent transparent transparent #4d4d4d;
+}
+
+.split-pane {
+    -fx-border-radius: 1;
+    -fx-border-width: 1;
+    -fx-background-color: derive(#ffffff, 20%);
+}
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: derive(#ffffff, 20%);
+}
+
+.list-cell {
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap : 0;
+    -fx-padding: 0 0 0 0;
+}
+
+.list-cell:filled:even {
+    -fx-background-color: #f3f7ed;
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: #f2f2f2;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #ffffcc;
+}
+
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: #999900;
+    -fx-border-width: 1;
+}
+
+.list-cell .label {
+    -fx-text-fill: #402c26;
+}
+
+.cell_big_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16px;
+    -fx-text-fill: #010504;
+}
+
+.cell_small_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: #010504;
+}
+
+.anchor-pane {
+     -fx-background-color: derive(#ffffff, 20%);
+}
+
+.pane-with-border {
+     -fx-background-color: derive(#ffffff, 20%);
+     -fx-border-color: derive(#ffffff, 10%);
+     -fx-border-top-width: 1px;
+}
+
+.status-bar {
+    -fx-background-color: derive(#b48a7e, 20%);
+    -fx-text-fill: black;
+}
+
+.result-display {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: black;
+}
+
+.result-display .label {
+    -fx-text-fill: black !important;
+}
+
+.status-bar .label {
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+}
+
+.status-bar-with-border {
+    -fx-background-color: derive(#eadedb, 30%);
+    -fx-border-color: derive(#eadedb, 25%);
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: white;
+}
+
+.grid-pane {
+    -fx-background-color: derive(#ffffff, 30%);
+    -fx-border-color: derive(#ffffff, 30%);
+    -fx-border-width: 1px;
+}
+
+.grid-pane .anchor-pane {
+    -fx-background-color: derive(#b48a7e, 30%);
+}
+
+.context-menu {
+    -fx-background-color: derive(#b48a7e, 50%);
+}
+
+.context-menu .label {
+    -fx-text-fill: brown;
+}
+
+.menu-bar {
+    -fx-background-color: derive(#ffffff, 20%);
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: black;
+    -fx-opacity: 0.9;
+}
+
+.menu .left-container {
+    -fx-background-color: white;
+}
+
+/*
+ * Metro style Push Button
+ * Author: Pedro Duque Vieira
+ * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #1d1d1d;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #3a3a3a;
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-background-color: white;
+  -fx-text-fill: #1d1d1d;
+}
+
+.button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.button:default:hover {
+    -fx-background-color: derive(-fx-focus-color, 30%);
+}
+
+.dialog-pane {
+    -fx-background-color: #eadedb;
+}
+
+.dialog-pane > *.button-bar > *.container {
+    -fx-background-color: #eadedb;
+}
+
+.dialog-pane > *.label.content {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: brown;
+}
+
+.dialog-pane:header *.header-panel {
+    -fx-background-color: derive(#eadedb, 25%);
+}
+
+.dialog-pane:header *.header-panel *.label {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.scroll-bar {
+    -fx-background-color: derive(#c5d7a7, 20%);
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: derive(#ffffff, 50%);
+    -fx-background-insets: 3;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+}
+
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 1 8 1 8;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
+    -fx-padding: 8 1 8 1;
+}
+
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+#commandTypeLabel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #F70D1A;
+}
+
+#commandTextField {
+    -fx-background-color: transparent #ece2df transparent #ece2df;
+    -fx-background-insets: 0;
+    -fx-border-color: #f3f7ed #f3f7ed #30211d #f3f7ed;
+    -fx-border-insets: 0;
+    -fx-border-width: 1;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: #402c26;
+}
+
+#filterField, #personListPanel, #personWebpage {
+    -fx-effect: innershadow(gaussian, #503730, 10, 0, 0, 0);
+}
+
+#resultDisplay .content {
+    -fx-background-color: transparent, #b9d095, transparent, #f2f2f2;
+    -fx-background-radius: 0;
+}
+
+#tags {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+}
+
+#tags .label {
+    -fx-text-fill: white;
+    -fx-background-color: #75a3a3;
+    -fx-padding: 1 3 1 3;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11;
+}
+```
+###### \resources\view\MauveTheme.css
+``` css
+.background {
+    -fx-background-color: derive(#e2d4cf, 20%);
+    background-color: #ece2df; /* Used in the default.html file */
+}
+
+.label {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #725d40;
+    -fx-opacity: 0.9;
+}
+
+.label-bright {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+    -fx-opacity: 1;
+}
+
+.label-header {
+    -fx-font-size: 11pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: #725d40;
+    -fx-opacity: 1;
+}
+
+.text-field {
+    -fx-font-size: 12pt;
+    -fx-font-family: "Segoe UI Semibold";
+}
+
+.tab-pane {
+    -fx-padding: 0 0 0 1;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 0;
+    -fx-max-height: 0;
+}
+
+.table-view {
+    -fx-base: #ece2df;
+    -fx-control-inner-background: #ece2df;
+    -fx-background-color: #ece2df;
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-padding: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-size: 35;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: transparent;
+    -fx-border-color:
+        transparent
+        transparent
+        derive(-fx-base, 80%)
+        transparent;
+    -fx-border-insets: 0 10 1 0;
+}
+
+.table-view .column-header .label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: black;
+    -fx-alignment: center-left;
+    -fx-opacity: 1;
+}
+
+.table-view:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: -fx-focus-color;
+}
+
+.split-pane:horizontal .split-pane-divider {
+    -fx-background-color: derive(#eadedb, 20%);
+    -fx-border-color: transparent transparent transparent #916155;
+}
+
+.split-pane {
+    -fx-border-radius: 1;
+    -fx-border-width: 1;
+    -fx-background-color: derive(#eadedb, 20%);
+}
+
+.list-view {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-background-color: derive(#eadedb, 20%);
+}
+
+.list-cell {
+    -fx-label-padding: 0 0 0 0;
+    -fx-graphic-text-gap : 0;
+    -fx-padding: 0 0 0 0;
+}
+
+.list-cell:filled:even {
+    -fx-background-color: #f5f1ef;
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: #d8c8c0;
+}
+
+.list-cell:filled:selected {
+    -fx-background-color: #ff9966;
+}
+
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: #cc4400;
+    -fx-border-width: 1;
+}
+
+.list-cell .label {
+    -fx-text-fill: #402c26;
+}
+
+.cell_big_label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 16px;
+    -fx-text-fill: #010504;
+}
+
+.cell_small_label {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-text-fill: #010504;
+}
+
+.anchor-pane {
+     -fx-background-color: derive(#eadedb, 20%);
+}
+
+.pane-with-border {
+     -fx-background-color: derive(#eadedb, 20%);
+     -fx-border-color: derive(#eadedb, 10%);
+     -fx-border-top-width: 1px;
+}
+
+.status-bar {
+    -fx-background-color: derive(#b48a7e, 20%);
+    -fx-text-fill: black;
+}
+
+.result-display {
+    -fx-background-color: transparent;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: brown;
+}
+
+.result-display .label {
+    -fx-text-fill: black !important;
+}
+
+.status-bar .label {
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+}
+
+.status-bar-with-border {
+    -fx-background-color: derive(#eadedb, 30%);
+    -fx-border-color: derive(#eadedb, 25%);
+    -fx-border-width: 1px;
+}
+
+.status-bar-with-border .label {
+    -fx-text-fill: white;
+}
+
+.grid-pane {
+    -fx-background-color: derive(#eadedb, 30%);
+    -fx-border-color: derive(#eadedb, 30%);
+    -fx-border-width: 1px;
+}
+
+.grid-pane .anchor-pane {
+    -fx-background-color: derive(#b48a7e, 30%);
+}
+
+.context-menu {
+    -fx-background-color: derive(#b48a7e, 50%);
+}
+
+.context-menu .label {
+    -fx-text-fill: brown;
+}
+
+.menu-bar {
+    -fx-background-color: derive(#b48a7e, 20%);
+}
+
+.menu-bar .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
+    -fx-opacity: 0.9;
+}
+
+.menu .left-container {
+    -fx-background-color: white;
+}
+
+/*
+ * Metro style Push Button
+ * Author: Pedro Duque Vieira
+ * http://pixelduke.wordpress.com/2012/10/23/jmetro-windows-8-controls-on-java/
+ */
+.button {
+    -fx-padding: 5 22 5 22;
+    -fx-border-color: #e2e2e2;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+    -fx-background-color: #1d1d1d;
+    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 11pt;
+    -fx-text-fill: #d8d8d8;
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;
+}
+
+.button:hover {
+    -fx-background-color: #3a3a3a;
+}
+
+.button:pressed, .button:default:hover:pressed {
+  -fx-background-color: white;
+  -fx-text-fill: #1d1d1d;
+}
+
+.button:focused {
+    -fx-border-color: white, white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button:disabled, .button:default:disabled {
+    -fx-opacity: 0.4;
+    -fx-background-color: #1d1d1d;
+    -fx-text-fill: white;
+}
+
+.button:default {
+    -fx-background-color: -fx-focus-color;
+    -fx-text-fill: #ffffff;
+}
+
+.button:default:hover {
+    -fx-background-color: derive(-fx-focus-color, 30%);
+}
+
+.dialog-pane {
+    -fx-background-color: #eadedb;
+}
+
+.dialog-pane > *.button-bar > *.container {
+    -fx-background-color: #eadedb;
+}
+
+.dialog-pane > *.label.content {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: brown;
+}
+
+.dialog-pane:header *.header-panel {
+    -fx-background-color: derive(#eadedb, 25%);
+}
+
+.dialog-pane:header *.header-panel *.label {
+    -fx-font-size: 18px;
+    -fx-font-style: italic;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.scroll-bar {
+    -fx-background-color: derive(#eadedb, 20%);
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: derive(#eadedb, 50%);
+    -fx-background-insets: 3;
+}
+
+.scroll-bar .increment-button, .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+}
+
+.scroll-bar:vertical .increment-arrow, .scroll-bar:vertical .decrement-arrow {
+    -fx-padding: 1 8 1 8;
+}
+
+.scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
+    -fx-padding: 8 1 8 1;
+}
+
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-width: 0;
+}
+
+#commandTypeLabel {
+    -fx-font-size: 11px;
+    -fx-text-fill: #F70D1A;
+}
+
+#commandTextField {
+    -fx-background-color: transparent #ece2df transparent #ece2df;
+    -fx-background-insets: 0;
+    -fx-border-color: #ece2df #ece2df #30211d #ece2df;
+    -fx-border-insets: 0;
+    -fx-border-width: 1;
+    -fx-font-family: "Segoe UI Light";
+    -fx-font-size: 13pt;
+    -fx-text-fill: #402c26;
+}
+
+#filterField, #personListPanel, #personWebpage {
+    -fx-effect: innershadow(gaussian, #503730, 10, 0, 0, 0);
+}
+
+#resultDisplay .content {
+    -fx-background-color: transparent, #f5f0ef, transparent, #f5f0ef;
+    -fx-background-radius: 0;
+}
+
+#tags {
+    -fx-hgap: 7;
+    -fx-vgap: 3;
+}
+
+#tags .label {
+    -fx-text-fill: #402c26;
+    -fx-background-color: #dda1dd;
+    -fx-padding: 1 3 1 3;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11;
+}
 ```

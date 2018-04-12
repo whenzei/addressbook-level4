@@ -1,17 +1,42 @@
 # richardson0694
+###### \java\seedu\carvicim\commons\events\model\ArchiveEvent.java
+``` java
+/** Indicates the Carvicim in the model has changed*/
+public class ArchiveEvent extends BaseEvent {
+    public final ReadOnlyCarvicim data;
+
+    public ArchiveEvent(ReadOnlyCarvicim data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "number of persons " + data.getEmployeeList().size() + ", number of tags "
+                + data.getTagList().size() + ", number of jobs " + data.getJobList().size()
+                + ", number of archived jobs " + data.getArchiveJobList().size();
+    }
+}
+```
 ###### \java\seedu\carvicim\commons\util\FileUtil.java
 ``` java
     /**
      * Creates a file if it does not exist along with its missing parent directories.
      * @throws IOException if the file or directory cannot be created.
      */
-    public static void createEvenIfExist(File file) throws IOException {
-        if (isFileExists(file)) {
-            file.delete();
+    public static File createIfMissingAndNewIfExist (String filePath) throws IOException {
+        int fileNum = 0;
+        File file = new File(filePath);
+        if (!isFileExists(file)) {
             createFile(file);
         } else {
+            file = new File("data/archivejob" + fileNum + ".xml");
+            while (isFileExists(file)) {
+                fileNum++;
+                file = new File("data/archivejob" + fileNum + ".xml");
+            }
             createFile(file);
         }
+        return file;
     }
 
     /**
@@ -116,7 +141,7 @@ public class AnalyseCommand extends Command {
 /**
  * Archives job entries within selected date range.
  */
-public class ArchiveCommand extends UndoableCommand {
+public class ArchiveCommand extends Command {
     public static final String COMMAND_WORD = "archive";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Archives job entries within selected date range. "
@@ -128,8 +153,10 @@ public class ArchiveCommand extends UndoableCommand {
             + PREFIX_END_DATE + "Mar 25 2018";
 
     public static final String MESSAGE_SUCCESS = "Archived successfully";
+    public static final String MESSAGE_UNSUCCESS = "No jobs within selected range";
 
     private final DateRange toArchive;
+    private int archiveCount;
 
     /**
      * Creates an ArchiveCommand to archive the job entries within the specified {@code DateRange}
@@ -140,21 +167,18 @@ public class ArchiveCommand extends UndoableCommand {
     }
 
     @Override
-    public CommandResult executeUndoableCommand() throws CommandException {
+    public CommandResult execute() throws CommandException {
         if (toArchive.compareTo(toArchive.getStartDate(), toArchive.getEndDate()) > 0) {
             throw new CommandException(MESSAGE_INVALID_DATERANGE);
         }
         requireNonNull(model);
-        model.archiveJob(toArchive);
-        return new CommandResult(MESSAGE_SUCCESS);
+        archiveCount = model.archiveJob(toArchive);
+        if (archiveCount != 0) {
+            return new CommandResult(MESSAGE_SUCCESS);
+        }
+        return new CommandResult(MESSAGE_UNSUCCESS);
     }
 
-    @Override
-    public boolean equals(Object other) {
-        return other == this // short circuit if same object
-                || (other instanceof ArchiveCommand // instanceof handles nulls
-                && toArchive.equals(((ArchiveCommand) other).toArchive));
-    }
 }
 ```
 ###### \java\seedu\carvicim\logic\commands\SortCommand.java
@@ -257,17 +281,40 @@ public class ArchiveCommandParser implements Parser<ArchiveCommand> {
     /**
      * Archives job entries in Carvicim.
      */
-    public void archiveJob(DateRange dateRange) {
+    public int archiveJob(DateRange dateRange) {
+        int archiveJobCount = 0;
         archiveJobs = new JobList();
+        Date startDate = dateRange.getStartDate();
+        Date endDate = dateRange.getEndDate();
+        Status closed = new Status("closed");
         Iterator<Job> iterator = jobs.iterator();
         while (iterator.hasNext()) {
             Job job = iterator.next();
             Date date = job.getDate();
-            Date startDate = dateRange.getStartDate();
-            Date endDate = dateRange.getEndDate();
-            if (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0) {
+            date = new Date(date.toString());
+            Status status = job.getStatus();
+            boolean withinRange = (dateRange.compareTo(date, startDate) >= 0 && dateRange.compareTo(date, endDate) <= 0)
+                    ? true
+                    : false;
+            boolean isClosed = (status.equals(closed))
+                    ? true
+                    : false;
+            if (withinRange && isClosed) {
                 archiveJobs.add(job);
+                archiveJobCount++;
             }
+        }
+        return archiveJobCount;
+    }
+
+    /**
+     * Removes archived job entries in Carvicim.
+     */
+    public void removeArchivedJob() {
+        Iterator<Job> iterator = archiveJobs.iterator();
+        while (iterator.hasNext()) {
+            Job job = iterator.next();
+            jobs.remove(job);
         }
     }
 
@@ -275,7 +322,7 @@ public class ArchiveCommandParser implements Parser<ArchiveCommand> {
      * Analyses job entries in Carvicim for this month.
      */
     public JobList analyseJob(JobList jobList) {
-        return jobList.analyseList(jobs);
+        return jobList.analyseList(jobs, employees);
     }
 
     //// employee-level operations
@@ -453,7 +500,9 @@ public class DateRange {
         Iterator<Job> iterator = internalList.iterator();
         while (iterator.hasNext()) {
             Job job = iterator.next();
-            if (job.getDate().getMonth() == month) {
+            Date date = job.getDate();
+            date = new Date(date.toString());
+            if (date.getMonth() == month) {
                 currentMonthList.add(job);
             }
         }
@@ -461,14 +510,14 @@ public class DateRange {
     }
 
     /**
-     * Get the respective job counts for the current month.
+     * Get the respective job counts for both ongoing and closed.
      */
-    public JobList analyseList(JobList analyseList) {
+    public JobList analyseJobStatusCount(JobList analyseList) {
         analyseList = analyseList.getCurrentMonthJobList();
+        Status ongoing = new Status("ongoing");
         Iterator<Job> iterator = analyseList.iterator();
         while (iterator.hasNext()) {
             Job job = iterator.next();
-            Status ongoing = new Status("ongoing");
             if (job.getStatus().equals(ongoing)) {
                 analyseList.ongoingCount++;
             } else {
@@ -480,7 +529,44 @@ public class DateRange {
     }
 
     /**
-     * Get the respective job counts.
+     * Get the respective job counts for each employee.
+     */
+    public JobList analyseList(JobList analyseList, UniqueEmployeeList employeeList) {
+        analyseList = analyseList.analyseJobStatusCount(analyseList);
+        initEmployeeJobCount(employeeList);
+        Iterator<Job> iteratorJob = analyseList.iterator();
+        while (iteratorJob.hasNext()) {
+            Job job = iteratorJob.next();
+            updateEmployeeJobCount(job);
+        }
+        analyseList.analyse = analyse;
+        return analyseList;
+    }
+
+    /**
+     * Initialise the employee job count.
+     */
+    public void initEmployeeJobCount(UniqueEmployeeList employeeList) {
+        Iterator<Employee> iteratorEmployee = employeeList.iterator();
+        while (iteratorEmployee.hasNext()) {
+            Employee employee = iteratorEmployee.next();
+            analyse.put(employee.getName(), 0);
+        }
+    }
+
+    /**
+     * Update the employee job count.
+     */
+    public void updateEmployeeJobCount(Job job) {
+        Iterator<Employee> iteratorEmployee = job.getAssignedEmployees().iterator();
+        while (iteratorEmployee.hasNext()) {
+            Employee employee = iteratorEmployee.next();
+            int jobCount = analyse.get(employee.getName());
+            analyse.put(employee.getName(), jobCount + 1);
+        }
+    }
+    /**
+     * Get the analyse result.
      */
     public String getAnalyseResult() {
         final StringBuilder builder = new StringBuilder();
@@ -491,9 +577,28 @@ public class DateRange {
                 .append(" Number of Closed: ")
                 .append(closedCount)
                 .append("\n");
+        Set set = analyse.entrySet();
+        builder.append(set);
         return builder.toString();
     }
 
+    @Override
+    public Iterator<Job> iterator() {
+        return internalList.iterator();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof JobList // instanceof handles nulls
+                && this.internalList.equals(((JobList) other).internalList));
+    }
+
+    @Override
+    public int hashCode() {
+        return internalList.hashCode();
+    }
+}
 ```
 ###### \java\seedu\carvicim\storage\ArchiveJobStorage.java
 ``` java
@@ -567,10 +672,11 @@ public interface ArchiveJobStorage {
 
     @Override
     @Subscribe
-    public void handleArchiveEvent(CarvicimChangedEvent event) {
+    public void handleArchiveEvent(ArchiveEvent event) {
         logger.info(LogsCenter.getEventHandlingLogMessage(event, "Archiving data, saving to file"));
         try {
             saveArchiveJob(event.data);
+            saveCarvicim(event.data);
         } catch (IOException e) {
             raise(new DataSavingExceptionEvent(e));
         }
@@ -640,8 +746,7 @@ public class XmlArchiveJobStorage implements ArchiveJobStorage {
         requireNonNull(carvicim);
         requireNonNull(filePath);
 
-        File file = new File(filePath);
-        FileUtil.createEvenIfExist(file);
+        File file = FileUtil.createIfMissingAndNewIfExist(filePath);
         XmlFileStorage.saveDataToFile(file, new XmlSerializableArchiveJob(carvicim));
     }
 
@@ -665,7 +770,7 @@ public class XmlArchiveJobStorage implements ArchiveJobStorage {
 ###### \java\seedu\carvicim\storage\XmlFileStorage.java
 ``` java
     /**
-     * Returns archive job in the file or an empty carvicim book
+     * Returns archive job in the file.
      */
     public static XmlSerializableArchiveJob loadDataFromArchiveFile(File file) throws DataConversionException,
             FileNotFoundException {

@@ -53,7 +53,7 @@ Please ensure that the no files in the directory are named comments.temp or work
 application.
 .  Double-click the file to start the app. You should see the Graphical User Interface (GUI) as shown in the image below.
 +
-image::Ui.png[width="790"]
+image::Ui.png[width="850"]
 +
 
 You are all set to use CarviciM now! You can read the next section to find out more on how to use CarviciM.
@@ -64,29 +64,33 @@ This section will cover the basics you need to know for using the guide and the 
 
 === Various Regions In The GUI
 
-The GUI is made up of various regions as shown in the image below.
+The GUI of CarviciM is made up of the various regions as shown in the image below.
 
 image::UI_Orientation.PNG[width="900"]
 
 Command Box::
-A region on the User Interface which allows you to type in commands.
+A region on the GUI which allows you to type in commands.
 
 Job List Panel::
-A region on the User Interface where you can view the list of jobs.
+A region on the GUI where you can view the list of jobs.
 
 Employee List Panel::
-A region on the User Interface where you can view the list of employees.
+A region on the GUI where you can view the list of employees.
 
 Job Display Panel::
-A region on the User Interface which shows you the details of a selected job.
+A region on the GUI which shows you the details of a selected job.
 
 Result Display::
-A region on the User Interface which you can see the feedback to a command, entered in the command box.
+A region on the GUI which you can see the feedback to a command, entered in the command box.
 
 === Executing Your First Command In CarviciM
 
 You can execute a command by typing it in the command box and press kbd:[Enter]. +
-e.g. typing *`help`* and pressing kbd:[Enter] will open the help window.
+e.g. typing *`help`* into the command box (as shown in the image below), and pressing kbd:[Enter] will open the help window.
+
+.Typing *`help* into the command box
+image::help-command-example.PNG[width="300"]
+
 Here are some example commands you can try:
 
 * *`liste`* : lists all employees' contacts
@@ -118,7 +122,7 @@ Format: `help`
 
 === Adding a job entry: `addj`
 
-To add a new job entry into CarviciM, you can use this command. +
+To add a new job entry and assign employees to the job, you can use this command. +
 Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+`
 
 [NOTE]
@@ -131,8 +135,18 @@ Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE
 Example:
 
 `addj n/John Doe p/98765432 e/johnd@example.com v/bhj123 w/3` +
-You will see "New job added: ... " in the result display. +
-The job list panel will be updated to display the newly added job.
+You will see "New job added: ... " in the result display as shown in the image below. +
+
+.Result display indicating that a job has been added
+image::addj-command-example.PNG[width="300"]
+
+The job list panel will be updated to display the newly added job as seen in the image below. +
+
+.Job list panel (before)
+image::addj-job-list-panel-before.PNG[width="300"]
+
+.Job list panel (after)
+image::addj-job-list-panel-after.PNG[width="300"]
 
 === Closing a job entry: `closej`
 
@@ -646,12 +660,7 @@ For your convenience, authorization information will be stored on your computer'
 
 === Email assigned employees belonging to a job : `email`
 
-*V1.4 (current):*
-You can use this command to send an email to a dummy email address. +
-Format: `email`
-
-*V1.5 (future):*
-You can use this command to send a notice email to all assigned employees of a job. +
+To send a notice email to all assigned employees of a job, you can use this command. +
 Format: `email JOB_NUMBER`
 
 // tag::dataencryption[]
@@ -665,47 +674,73 @@ _{explain how the user can enable/disable data encryption}_
 *Q*: How do I transfer my data to another Computer? +
 *A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
 
+*Q*: Can i use this application without internet connection? +
+*A*: You will be able to use most commands in CarviciM except for the `email` command.
+
 == Command Summary
+This section contains a summary of all the commands that you can use in CarviciM.
 
-* *Add Job* `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` +
-e.g. `addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
-* *Close Job* `closej j/JOB_NUMBER` +
-e.g. `closej j/1232`
-* *Archive job entries* `archive sd/START_DATE ed/END_DATE` +
-e.g. `archive sd/Mar 25 2018 ed/Apr 03 2018`
-* *Analyse job entries* `analyse` +
-e.g. `analyse`
-* *Add Employee* `adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` +
-e.g. `adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
-* *Delete Employee* : `deletee INDEX` +
-e.g. `deletee 3`
-* *Select Employee* : `selecte INDEX` +
-e.g. `selecte 1`
-* *Find Employees* : `finde KEYWORD [MORE_KEYWORDS]` +
-e.g. `finde James Jake`
-* *List Employee* : `liste`
-* *Sort Employee* : `sort`
-* *Import excel file* : `import` +
-e.g. `import excel.xls`
-* *Accept imported job* : `accept NUMBER` +
-e.g. `accept 1`
-* *Reject imported job* : `reject NUMBER` +
-e.g. `reject 1`
-* *Accept all imported job* : `acceptAll` +
-e.g. `acceptAll`
-* *Reject all imported job* : `rejectAll` +
-e.g. `rejectAll`
-* *Save comments on job imports* : `save` +
-e.g. `save`
-* *Help* : `help`
-* *History* : `history`
-* *Undo* : `undo`
-* *Redo* : `redo`
-* *Email Assigned Employees Of A Job* : `email JOB_NUMBER` +
-e.g. `email 123`
-* *Change Command Word* : `set` +
-e.g. `set adde a`
-* *Theme* : `theme INDEX` +
-e.g. `theme 1`
-* *Clear entire CarviciM* : `clear`
+[width="59%",cols="22%,<23%,<25%,<30%",options="header",]
 
+|=======================================================================
+|Description |Command Format |Example
+
+|*Add Job* | `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` + |`addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
+
+|*Close Job* |`closej j/JOB_NUMBER` |`closej j/12`
+
+|*List Ongoing Jobs* |`listoj` |
+
+|*List All Jobs* |`listj` |
+
+|*Find Jobs* |`findj KEYWORD [MORE_KEYWORDS]` |`findj Apr Tom`
+
+|*Select A Job Entry* |`selectj j/JOB_NUMBER` |`selectj j/3`
+
+|*Archive Job Entries* |`archive sd/START_DATE ed/END_DATE |`archive sd/Mar 25 2018 ed/Apr 03 2018`
+
+|*Analyse Job Entries* |`analyse` |
+
+|*Add Employee Entry* |`adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` |`adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
+
+|*Delete Employee Entry* |`deletee INDEX` |`deletee 3`
+
+|*Find Employees Entries* |`finde KEYWORD [MORE_KEYWORDS]` |`finde James Jake`
+
+|*Select Employee* |`selecte INDEX` |`selecte 1`
+
+|*List Employee Entries* |`liste` |
+
+|*Sort Employee* |`sort` |
+
+|*Import Excel File* |`import` |`import excel.xls`
+
+|*Accept Imported Job* |`accept NUMBER` |`accept 1`
+
+|*Reject Imported Job* |`reject NUMBER` |`reject 1`
+
+|*Accept All Imported Jobs* |`acceptAll` |
+
+|*Reject All Imported Jobs* |`rejectAll` |
+
+|*Save Comments On Job Imports* |`save` |
+
+|*Viewing Help*| `help`|
+
+|*History* |`history` |
+
+|*Undo A Command* |`undo` |
+
+|*Redo A Command* |`redo` |
+
+|*Email Assigned Employees Of A Job* |`email JOB_NUMBER` |`email 123`
+
+|*Change Command Word* |`set` |`set adde a`
+
+|*Apply Theme* |`theme INDEX` |`theme 1`
+
+|*Clear Entire CarviciM* |`clear` |
+
+|*Exit The Application* |`exit` |
+
+|=======================================================================

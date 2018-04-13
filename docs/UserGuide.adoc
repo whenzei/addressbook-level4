@@ -140,12 +140,10 @@ You will see "New job added: ... " in the result display as shown in the image b
 .Result display indicating that a job has been added
 image::addj-command-example.PNG[width="500"]
 
-
 The job list panel will be updated to display the newly added job as seen in the image below.
 
 .Job list panel (before)
 image::addj-job-list-panel-before.PNG[width="300"]
-
 
 .Job list panel (after)
 image::addj-job-list-panel-after.PNG[width="300"]
@@ -164,12 +162,10 @@ You will see "Closed Job: 2" in the result display as shown in the image below.
 .Result display indicating that a job has been added
 image::closej-command-example.PNG[width="500"]
 
-
 You will see the job of number 2 have its status shown as "closed" in the job list panel.
 
 .Job list panel (before)
 image::closej-job-list-panel-before.PNG[width="300"]
-
 
 .Job list panel (after)
 image::closej-job-list-panel-after.PNG[width="300"]

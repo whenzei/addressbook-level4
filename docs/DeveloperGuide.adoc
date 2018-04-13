@@ -573,6 +573,7 @@ image::RemarkCommand_execute_SeqDiag.png[width="400"]
 * **Current choice:** Perform check in the `preprocessUndoableCommand` method in `RemarkCommand`, by going through the list of jobs.
 ** Pros: Does not introduce more coupling.
 ** Cons: May take some time if job list has many entries.
+// end::remark[]
 
 // tag::set[]
 === Set command feature

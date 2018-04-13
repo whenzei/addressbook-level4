@@ -26,12 +26,12 @@ This portfolio summarize my contributions for the development of CarviciM. It sh
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on Github
+*** Managed releases `v1.3` - `v1.5rc` (3 releases) on Github.
+*** Managed milestones `v1.1` - `v1.3` (3 milestones) on Github.
 ** Enhancements to existing features:
 *** Added JobDisplayPanel to support the displaying of job details (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/94[#94], https://github.com/CS2103JAN2018-W09-B1/main/pull/152[#152])
 ** Documentation:
-*** Worked on the formatting of the User Guide to improve readability.
-*** Made User Guide more user-friendly by adding screenshots.
+*** Worked on the user-friendliness of the User Guide by adding screenshots and restructuring the sections to have a better flow. (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/179[#179])
 
 
 == Contributions to the User Guide
@@ -51,8 +51,6 @@ include::../UserGuide.adoc[tag=remark]
 |===
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
-
-include::../DeveloperGuide.adoc[tag=userstories]
 
 include::../DeveloperGuide.adoc[tag=addjob]
 

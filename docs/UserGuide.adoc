@@ -124,6 +124,7 @@ This section will explain to you how you can use the features of CarviciM.
 To find out more on using CarviciM, you can use this command to bring out the help menu. +
 Format: `help`
 
+// tag::addjob[]
 === Adding a job entry: `addj`
 
 To add a new job entry and assign employees to the job, you can use this command. +
@@ -151,7 +152,9 @@ _Figure 5.2.2 : Job list panel before addition of job entry_
 
 image::addj-job-list-panel-after.PNG[width="300"]
 _Figure 5.2.3 : Job list panel after addition of job entry_
+// end::addjob[]
 
+// tag::closejob[]
 === Closing a job entry: `closej`
 
 To indicate that a job is completed in CarviciM, you can use this command. +
@@ -173,6 +176,7 @@ _Figure 5.3.2 : Job list panel before job is closed_
 
 image::closej-job-list-panel-after.PNG[width="300"]
 _Figure 5.3.3 : Job list panel after job is closed_
+// end::closejob[]
 
 // tag::remark[]
 === Adding remark to a job: `remark`

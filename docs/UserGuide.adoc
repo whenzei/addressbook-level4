@@ -142,10 +142,10 @@ image::addj-command-example.PNG[width="500"]
 
 The job list panel will be updated to display the newly added job as seen in the image below.
 
-.Job list panel (before)
+.Job list panel before job is added
 image::addj-job-list-panel-before.PNG[width="300"]
 
-.Job list panel (after)
+.Job list panel after job is added
 image::addj-job-list-panel-after.PNG[width="300"]
 
 === Closing a job entry: `closej`
@@ -164,23 +164,27 @@ image::closej-command-example.PNG[width="500"]
 
 You will see the job of number 2 have its status shown as "closed" in the job list panel.
 
-.Job list panel (before)
+.Job list panel before job is closed
 image::closej-job-list-panel-before.PNG[width="300"]
 
-.Job list panel (after)
+.Job list panel after job is closed.
 image::closej-job-list-panel-after.PNG[width="300"]
 
+// tag::remark[]
 === Adding remark to a job: `remark`
 
-To add remark or special note to an ongoing job entry, you can use this command.+
+To add remark or special note to an ongoing job entry, you can use this command. +
 Format: `remark j/JOB_NUMBER r/YOUR_REMARK`
 
 Example:
 
 `remark j/2 r/An urgent work that should be completed asap` +
 This command will add the remark "An urgent work that should be completed asap" to a job entry of a job number "2". +
-You will see the message "Remark Added: An urgent work that should be completed asap" shown in the result display.
+You will see the message "Remark added to job number 2: An urgent work that should be completed asap" shown in the result display (shown in the image below).
 
+.Result display showing feedback for remark added
+image::remark-command-example.PNG[width="500"]
+// end:remark[]
 
 === Listing all jobs : `listj`
 To view a list of all jobs in CarviciM, you can use this command. +

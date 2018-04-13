@@ -659,7 +659,7 @@ write comments.
 `JobEntry` also contains the `Job` data which will be imported upon approval.
 +
 .Sequence Diagram of `ImportSession` initialization
-image::SessionInitializationSequenceDiagram.png[width="800"]
+image::sessionInitializationSequenceDiagram.png[width="800"]
 
 ===== Reviewing job entries
 
@@ -669,7 +669,7 @@ which is used to update `sheetWithHeaderFields`. Upon reviewing a job, CarviciM 
 any employees not present in the application.
 +
 .Sequence Digram of `ImportSession` during the reviewing of a job
-image::SessionReviewSequenceDiagram.png[width="800"]
+image::sessionReviewSequenceDiagram.png[width="800"]
 
 ===== Saving feedback from an `ImportSession`
 

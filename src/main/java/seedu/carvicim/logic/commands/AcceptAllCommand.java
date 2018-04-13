@@ -41,6 +41,9 @@ public class AcceptAllCommand extends UndoableCommand {
         List<Job> jobs = new ArrayList<>(sessionData
                 .reviewAllRemainingJobEntries(true, comment));
         model.addJobs(jobs);
+        if (model.isViewingImportedJobs()) {
+            model.switchJobView();
+        }
         return new CommandResult(getMessageSuccess(jobs.size()));
     }
 

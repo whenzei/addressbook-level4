@@ -136,14 +136,6 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     @Override
-    public String appendCommandKeyToMessage(String message) {
-        StringBuilder builder = new StringBuilder(message);
-        builder.append("\n");
-        builder.append(commandWords.toString());
-        return builder.toString();
-    }
-
-    @Override
     public ReadOnlyCarvicim getCarvicim() {
         return carvicim;
     }

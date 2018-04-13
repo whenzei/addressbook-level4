@@ -382,10 +382,28 @@ Format: `import FILE_PATH`
 ** The first row specifies the type of detail in the column.
 ====
 
+[WARNING]
+The excel file must not be password-protected
+
 Example:
 
 `import excel.xlsx` +
 Imports file excel.xlsx.
+
+==== Importing and accepting all job entries in an excel file: `importAll`
+
+Similar to <<import-command, `import`>> command, `importAll` also loads an excel file,
+additionally it accepts all job entries and saves the reviews of the jobs. `importAll` is
+equivalent to an <<import-command, `import`>>, <<acceptAll-command, `acceptAll`>> and
+<<save-command, `save`>>.
+
+[TIP]
+You can use this command to import all job entries from an excel file to save time.
+
+Example:
+
+`importAll excel.xlsx` +
+Imports file excel.xlsx, accepts all job entries and saves the reviewed job entries as an external excel file.
 
 ==== Importing and accepting all job entries in an excel file: `importAll`
 

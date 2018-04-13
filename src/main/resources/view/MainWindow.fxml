@@ -58,21 +58,19 @@
                   </Label>
             <StackPane fx:id="personListPanelPlaceholder" VBox.vgrow="ALWAYS" />
           </VBox>
-               <SplitPane dividerPositions="0.1" orientation="VERTICAL" prefWidth="160.0" SplitPane.resizableWithParent="false">
-                 <items>
-                     <StackPane fx:id="jobListIndicatorPlaceholder" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" styleClass="pane-with-border">
-                        <padding>
-                           <Insets bottom="5" left="10" right="10" top="5" />
-                        </padding>
-                     </StackPane>
+             <SplitPane dividerPositions="0.1" opacity="0.5" orientation="VERTICAL" prefWidth="160.0" SplitPane.resizableWithParent="false" VBox.vgrow="ALWAYS">
+                 <StackPane fx:id="jobListIndicatorPlaceholder" maxHeight="40.0" minHeight="40.0" prefHeight="40.0" styleClass="pane-with-border">
+                    <padding>
+                       <Insets bottom="5" left="10" right="10" top="5" />
+                    </padding>
+                 </StackPane>
                 <VBox fx:id="jobList" minWidth="340" prefWidth="340">
                   <padding>
                     <Insets bottom="10" left="10" right="10" top="10" />
                   </padding>
                   <StackPane fx:id="jobListPanelPlaceholder" VBox.vgrow="ALWAYS" />
                  </VBox>
-                 </items>
-               </SplitPane>
+             </SplitPane>
 
                 <StackPane fx:id="jobDisplayPlaceholder" prefWidth="340">
             <padding>

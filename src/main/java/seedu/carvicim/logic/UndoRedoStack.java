@@ -20,6 +20,10 @@ public class UndoRedoStack {
         redoStack = new Stack<>();
     }
 
+    public void cleanStack() {
+        undoStack.empty();
+    }
+
     /**
      * Pushes {@code command} onto the undo-stack if it is of type {@code UndoableCommand}. Clears the redo-stack
      * if {@code command} is not of type {@code UndoCommand} or {@code RedoCommand}.

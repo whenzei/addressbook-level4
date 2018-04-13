@@ -21,13 +21,13 @@ public class ClearCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() throws CommandException {
         requireNonNull(model);
         model.resetData(new Carvicim(), new CommandWords());
+        ImportSession.getInstance().setSessionData(new SessionData());
         if (model.isViewingImportedJobs()) {
             model.switchJobView();
         }
         model.resetJobView();
         model.resetJobDisplayPanel();
         JobNumber.initialize("1");
-        ImportSession.getInstance().setSessionData(new SessionData());
         return new CommandResult(MESSAGE_SUCCESS);
     }
 }

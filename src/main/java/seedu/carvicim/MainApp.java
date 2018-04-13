@@ -218,6 +218,8 @@ public class MainApp extends Application {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
         }
         ImportSession.getInstance().getSessionData().freeResources();
+        logic.cleanUndoRedoStack();
+        ImportSession.cleanCache();
         Platform.exit();
         System.exit(0);
     }

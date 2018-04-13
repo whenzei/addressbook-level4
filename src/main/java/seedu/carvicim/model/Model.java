@@ -44,10 +44,6 @@ public interface Model {
     /** Returns the command words set by the user. */
     CommandWords getCommandWords();
 
-    /** Returns the command words set by the user. */
-    String appendCommandKeyToMessage(String message);
-
-
     /** Returns the Carvicim */
     ReadOnlyCarvicim getCarvicim();
 

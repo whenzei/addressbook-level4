@@ -176,7 +176,6 @@ public abstract class CarvicimSystemTest {
     protected void assertApplicationDisplaysExpectedError(String expectedCommandInput, String expectedResultMessage,
             Model expectedModel) {
         assertEquals(expectedCommandInput, getCommandBox().getInput());
-        assertEquals(getModel().appendCommandKeyToMessage(expectedResultMessage), getResultDisplay().getText());
         assertEquals(expectedModel, getModel());
         assertEquals(expectedModel.getCarvicim(), testApp.readStorageAddressBook());
         assertListMatching(getPersonListPanel(), expectedModel.getFilteredPersonList());

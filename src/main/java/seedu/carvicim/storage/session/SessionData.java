@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -75,12 +77,16 @@ public class SessionData {
         // workbook and sheets have to be rewritten to file on undo
     }
 
+    public static String getTimeStamp() {
+        return new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss.SSS").format(new Date());
+    }
+
     /**
      * Creates a copy of sessionData and returns it
      */
     public SessionData createCopy() throws CommandException {
         SessionData other = null;
-        tempFile = new File(TEMPFILE_NAME);
+        tempFile = new File("." + getTimeStamp() + TEMPFILE_NAME);
         try {
             saveDataToFile(tempFile);
         } catch (IOException e) {
@@ -203,7 +209,7 @@ public class SessionData {
     /**
      * Attempts to parse the column headers and retrieve job entries
      */
-    public void initializeSessionData() throws FileFormatException {
+    public void initializeSessionData() {
         SheetWithHeaderFields sheetWithHeaderFields;
         SheetParser sheetParser;
         Sheet sheet;
@@ -211,8 +217,12 @@ public class SessionData {
         for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
             sheet = workbook.getSheetAt(workbook.getFirstVisibleTab() + i);
             sheetParser = new SheetParser(sheet);
-            sheetWithHeaderFields = sheetParser.parseSheetWithHeaderField();
-            addSheet(sheetWithHeaderFields);
+            try {
+                sheetWithHeaderFields = sheetParser.parseSheetWithHeaderField();
+                addSheet(sheetWithHeaderFields);
+            } catch (FileFormatException e) {
+                sheets.add(null);
+            }
         }
     }
 
@@ -268,7 +278,7 @@ public class SessionData {
         File newFile;
         Workbook newWorkBook;
         try {
-            newFile = new File(TEMPWORKBOOKFILE_NAME);
+            newFile = new File("." + getTimeStamp() + TEMPWORKBOOKFILE_NAME);
             FileOutputStream fileOutputStream = new FileOutputStream(newFile);
             workbook.write(fileOutputStream);
             newWorkBook = WorkbookFactory.create(newFile);

@@ -164,11 +164,6 @@ public class AddEmployeeCommandTest {
             return null;
         }
 
-        @Override public String appendCommandKeyToMessage(String message) {
-            fail("This method should never be called");
-            return null;
-        }
-
         @Override
         public ReadOnlyCarvicim getCarvicim() {
             fail("This method should not be called.");

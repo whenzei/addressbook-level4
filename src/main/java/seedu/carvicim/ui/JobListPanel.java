@@ -40,7 +40,7 @@ public class JobListPanel extends UiPart<Region> {
 
     private void setConnections(ObservableList<Job> jobList) {
         ObservableList<JobCard> mappedList = EasyBind.map(
-                jobList, (job) -> new JobCard(job));
+                jobList, (job) -> new JobCard(job, jobList.indexOf(job) + 1));
         jobListView.setItems(mappedList);
         jobListView.setCellFactory(listView -> new JobListViewCell());
         setEventHandlerForSelectionChangeEvent();

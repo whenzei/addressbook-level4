@@ -29,6 +29,8 @@ public class JobCard extends UiPart<Region> {
     @FXML
     private Label client;
     @FXML
+    private Label index;
+    @FXML
     private Label id;
     @FXML
     private Label vehicleNumber;
@@ -37,10 +39,11 @@ public class JobCard extends UiPart<Region> {
     @FXML
     private Label status;
 
-    public JobCard(Job job) {
+    public JobCard(Job job, int index) {
         super(FXML);
         this.job = job;
-        id.setText(job.getJobNumber().toString());
+        this.index.setText(Integer.toString(index) + ".");
+        id.setText("Job number: #" + job.getJobNumber().toString());
         client.setText(job.getClient().getName().toString());
         vehicleNumber.setText(job.getVehicleNumber().toString());
         startDate.setText(job.getDate().toString());

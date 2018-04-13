@@ -2,8 +2,9 @@
 
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.StackPane?>
+
 <!--@@author yuhongherald-->
-<StackPane fx:id="placeHolder" styleClass="pane-with-border" xmlns="http://javafx.com/javafx/8"
-    xmlns:fx="http://javafx.com/fxml/1">
-  <TextArea fx:id="jobListIndicator" editable="false" styleClass="result-display"/>
+
+<StackPane fx:id="placeHolder" styleClass="indicator" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
+  <TextArea fx:id="jobListIndicator" editable="false" styleClass="indicator" />
 </StackPane>

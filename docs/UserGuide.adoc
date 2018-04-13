@@ -10,6 +10,7 @@
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
+:warning-caption: :warning:
 endif::[]
 :repoURL: https://github.com/CS2103JAN2018-W09-B1/main
 
@@ -25,6 +26,9 @@ This user guide shows you how to get started using the CarviciM. It shows you ho
 
 ====
 *Legend*
+
+[Warning]
+This icon represents a warning
 
 [NOTE]
 This icon represents something noteworthy
@@ -49,7 +53,7 @@ This app will not work with earlier versions of Java 8.
 .  You can download the latest `CarviciM.jar` link:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your CarviciM.
 [WARNING]
-Please ensure that the no files in the directory are named comments.temp or workbook.temp as this will affect the
+Please ensure that no files in the directory are named comments.temp or workbook.temp as this will affect the
 application.
 .  Double-click the file to start the app. You should see the Graphical User Interface (GUI) as shown in the image below.
 +

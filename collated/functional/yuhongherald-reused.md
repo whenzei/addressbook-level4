@@ -1,24 +1,6 @@
-package seedu.carvicim.ui;
-
-import java.util.logging.Logger;
-
-import org.fxmisc.easybind.EasyBind;
-
-import com.google.common.eventbus.Subscribe;
-
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.layout.Region;
-import seedu.carvicim.commons.core.LogsCenter;
-import seedu.carvicim.commons.events.ui.DisplayAllJobsEvent;
-import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
-import seedu.carvicim.commons.events.ui.JumpToJobListRequestEvent;
-import seedu.carvicim.model.job.Job;
-
-//@@author yuhongherald-reused
+# yuhongherald-reused
+###### \java\seedu\carvicim\ui\JobListPanel.java
+``` java
 /**
  * Panel containing the list of jobs.
  */
@@ -99,3 +81,4 @@ public class JobListPanel extends UiPart<Region> {
 
 
 }
+```

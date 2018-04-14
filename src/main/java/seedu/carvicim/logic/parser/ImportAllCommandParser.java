@@ -1,10 +1,10 @@
 package seedu.carvicim.logic.parser;
 
-import static seedu.carvicim.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.carvicim.logic.parser.ParserUtil.parseFilename;
 
 import seedu.carvicim.commons.exceptions.IllegalValueException;
 import seedu.carvicim.logic.commands.ImportAllCommand;
+import seedu.carvicim.logic.commands.ImportCommand;
 import seedu.carvicim.logic.parser.exceptions.ParseException;
 
 //@@author yuhongherald
@@ -25,7 +25,7 @@ public class ImportAllCommandParser implements Parser<ImportAllCommand> {
             String filePath = parseFilename(args);
             return new ImportAllCommand(filePath);
         } catch (IllegalValueException ive) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ImportAllCommand.MESSAGE_USAGE));
+            throw new ParseException(ive.getMessage() + "\n" + ImportCommand.MESSAGE_USAGE);
         }
     }
 

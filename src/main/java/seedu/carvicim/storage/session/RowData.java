@@ -35,7 +35,7 @@ public class RowData {
     public ArrayList<String> readDataFromSheet(Sheet sheet, int rowNumber)
             throws DataIndexOutOfBoundsException {
         if (rowNumber < sheet.getFirstRowNum() || rowNumber > sheet.getLastRowNum()) {
-            throw new DataIndexOutOfBoundsException("Rows", sheet.getFirstRowNum(), sheet.getLastRowNum(), rowNumber);
+            throw new DataIndexOutOfBoundsException(sheet.getFirstRowNum(), sheet.getLastRowNum(), rowNumber);
         }
         Row row = sheet.getRow(rowNumber);
         ArrayList<String> data = new ArrayList<>();

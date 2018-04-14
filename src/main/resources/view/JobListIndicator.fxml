@@ -5,6 +5,6 @@
 
 <!--@@author yuhongherald-->
 
-<StackPane fx:id="placeHolder" styleClass="indicator" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
-  <TextArea fx:id="jobListIndicator" editable="false" styleClass="indicator" />
+<StackPane fx:id="placeHolder" styleClass="label" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1">
+  <TextArea fx:id="jobListIndicator" editable="false" styleClass="label" />
 </StackPane>

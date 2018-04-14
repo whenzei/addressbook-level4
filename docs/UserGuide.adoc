@@ -53,8 +53,7 @@ This app will not work with earlier versions of Java 8.
 .  You can download the latest `CarviciM.jar` link:{repoURL}/releases[here].
 .  Copy the file to the folder you want to use as the home folder for your CarviciM.
 [WARNING]
-Please ensure that no files in the directory are named comments.temp or workbook.temp as this will affect the
-application.
+Please ensure that there are no other applications using the home folder, it can affect the performance of CarviciM.
 .  Double-click the file to start the app. You should see the Graphical User Interface (GUI) as shown in the image below.
 +
 image::Ui.png[width="850"]

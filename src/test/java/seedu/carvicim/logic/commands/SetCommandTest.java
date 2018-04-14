@@ -1,5 +1,7 @@
 package seedu.carvicim.logic.commands;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.carvicim.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.carvicim.testutil.TypicalEmployees.getTypicalCarvicim;
@@ -15,6 +17,35 @@ import seedu.carvicim.model.UserPrefs;
 
 //@@author yuhongherald
 public class SetCommandTest {
+
+    @Test
+    public void equals() {
+        Model model = new ModelManager(getTypicalCarvicim(),  new UserPrefs());
+        String word1 = "word1";
+        String word2 = "word2";
+        SetCommand setCommand1 = prepareCommand(model, AddJobCommand.COMMAND_WORD, word1);
+        SetCommand setCommand1Copy = prepareCommand(model, AddJobCommand.COMMAND_WORD, word1);
+        SetCommand setCommand2 = prepareCommand(model, AddEmployeeCommand.COMMAND_WORD, word1);
+        SetCommand setCommand3 = prepareCommand(model, AddJobCommand.COMMAND_WORD, word2);
+
+        // same object -> returns true
+        assertTrue(setCommand1.equals(setCommand1));
+
+        // same values -> returns true
+        assertTrue(setCommand1.equals(setCommand1Copy));
+
+        // different types -> returns false
+        assertFalse(setCommand1.equals(1));
+
+        // different current word -> return false
+        assertFalse(setCommand1.equals(setCommand2));
+
+        // different new word -> return false
+        assertFalse(setCommand1.equals(setCommand3));
+
+        // null -> return false
+        assertFalse(setCommand1.equals(null));
+    }
 
     @Test
     public void execute_changeAdd_success() throws CommandWordException {

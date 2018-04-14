@@ -84,6 +84,10 @@ public abstract class UndoableCommand extends Command {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
+    public void releaseResources() {
+        sessionData.freeResources();
+    }
+
     @Override
     public final CommandResult execute() throws CommandException {
         saveAddressBookSnapshot();

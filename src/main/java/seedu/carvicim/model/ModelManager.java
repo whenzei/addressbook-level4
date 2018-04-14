@@ -195,8 +195,10 @@ public class ModelManager extends ComponentManager implements Model {
         indicateAddressBookChanged();
     }
 
+    //@@author yuhongherald
     @Override
-    public void addJobs(List<Job> jobs) {
+    public void addJobsAndNewEmployees(List<Job> jobs) {
+        requireNonNull(jobs);
         for (Job job : jobs) {
             addMissingEmployees(job.getAssignedEmployeesAsSet());
             addJob(job);
@@ -215,6 +217,7 @@ public class ModelManager extends ComponentManager implements Model {
         }
     }
 
+    //@@author
     @Override
     public void updatePerson(Employee target, Employee editedEmployee)
             throws DuplicateEmployeeException, EmployeeNotFoundException {

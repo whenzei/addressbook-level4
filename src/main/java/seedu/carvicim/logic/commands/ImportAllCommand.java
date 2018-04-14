@@ -10,6 +10,7 @@ import seedu.carvicim.model.job.Job;
 import seedu.carvicim.storage.session.ImportSession;
 import seedu.carvicim.storage.session.exceptions.FileAccessException;
 import seedu.carvicim.storage.session.exceptions.FileFormatException;
+import seedu.carvicim.storage.session.exceptions.InvalidDataException;
 
 //@@author yuhongherald
 /**
@@ -41,12 +42,12 @@ public class ImportAllCommand extends UndoableCommand {
         ImportSession importSession = ImportSession.getInstance();
         try {
             importSession.initializeSession(filePath);
-        } catch (FileAccessException | FileFormatException e) {
+        } catch (FileAccessException | FileFormatException | InvalidDataException e) {
             throw new CommandException(e.getMessage());
         }
         List<Job> jobs = new ArrayList<>(importSession.getSessionData()
                 .reviewAllRemainingJobEntries(true, ""));
-        model.addJobs(jobs);
+        model.addJobsAndNewEmployees(jobs);
         importSession.closeSession();
         return new CommandResult(getMessageSuccess(jobs.size()));
     }

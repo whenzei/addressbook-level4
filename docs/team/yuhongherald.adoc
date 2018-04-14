@@ -1,10 +1,10 @@
-= Yu Hong Herald - Project Portfolio
+== Yu Hong Herald - Project Portfolio
 :imagesDir: ../images
 :stylesDir: ../stylesheets
 
-== Project: CarviciM
+=== Project: CarviciM
 
-=== Overview
+==== Overview
 
 image::../images/CarviciM_logo.PNG[width="150", align="left"]
 
@@ -14,7 +14,7 @@ which is used for teaching Software Engineering principles.
 The user interacts with it using a CLI, and it has a GUI created with JavaFX.
 It is written in Java, and has about 10 kLoC.
 
-=== Summary of contributions
+==== Summary of contributions
 
 * *Major enhancement*: added *the ability to import job entries from an excel file*
 ** What it does: allows the user to collate job entries from different people in the form of excel files.
@@ -71,11 +71,11 @@ alternative to the original.
 ** Tools:
 *** Integrated 2 third party libraries (Apache POI, Apache Commons) to the project
 
-=== Contributions to the User Guide
+==== Contributions to the User Guide
 
-|===
+|====
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
-|===
+|====
 
 include::../UserGuide.adoc[tag=set]
 
@@ -83,9 +83,9 @@ include::../UserGuide.adoc[tag=importexport]
 
 === Contributions to the Developer Guide
 
-|===
+|====
 |_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
-|===
+|====
 
 include::../DeveloperGuide.adoc[tag=set]
 

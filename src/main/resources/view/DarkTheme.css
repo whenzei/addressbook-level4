@@ -3,13 +3,6 @@
     background-color: #383838; /* Used in the default.html file */
 }
 
-.indicator {
-    -fx-font-color: #ffffff;
-    -fx-font-size: 16pt;
-    -fx-background-color: derive(#1d1d1d, 20%);
-    background-color: #383838; /* Used in the default.html file */
-}
-
 .label {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";

@@ -1,7 +1,624 @@
 # yuhongherald
+###### \java\seedu\carvicim\logic\commands\AcceptAllCommandTest.java
+``` java
+public class AcceptAllCommandTest extends ImportCommandTestEnv {
+    private Remark comment;
+
+    private ModelIgnoreJobDates expectedModelWithoutComment;
+    private ModelIgnoreJobDates expectedModelWithComment;
+
+    @Before
+    public void setup() throws Exception {
+        Employee jim = new Employee(new Name("Jim"), new Phone("87654321"), new Email("jim@gmail.com"),
+                Collections.emptySet());
+        Person client = new Person(new Name("JD"), new Phone("91234567"), new Email("jd@gmail.com"));
+        UniqueEmployeeList uniqueEmployeeList = new UniqueEmployeeList();
+        uniqueEmployeeList.add(jim);
+        RemarkList excelRemarkList1 = new RemarkList();
+        excelRemarkList1.add(new Remark("Haha"));
+        excelRemarkList1.add(new Remark("whew"));
+
+        Employee maya = new Employee(new Name("Maya"), new Phone("87654321"), new Email("maya@gmail.com"),
+                Collections.emptySet());
+        Person client2 = new Person(new Name("JS"), new Phone("91234567"), new Email("js@gmail.com"));
+
+        UniqueEmployeeList uniqueEmployeeList2 = new UniqueEmployeeList();
+        uniqueEmployeeList2.add(maya);
+        RemarkList excelRemarkList2 = new RemarkList();
+        excelRemarkList2.add(new Remark("first"));
+        excelRemarkList2.add(new Remark("second"));
+        excelRemarkList2.add(new Remark("last"));
+
+        Job job1 = new Job(client, new VehicleNumber("SXX1234X"), new JobNumber("1"), new Date(),
+                uniqueEmployeeList, new Status(Status.STATUS_ONGOING), excelRemarkList1);
+        Job job2 = new Job(client2, new VehicleNumber("SXX1234X"), new JobNumber("2"), new Date(),
+                uniqueEmployeeList2, new Status(Status.STATUS_ONGOING), excelRemarkList2);
+        List<Job> jobList = new ArrayList<>();
+        jobList.add(job1);
+        jobList.add(job2);
+
+        comment = new Remark("good job!");
+        RemarkList remarkList1 = new RemarkList();
+        RemarkList remarkList2 = new RemarkList();
+        remarkList1.add(new Remark("Haha"));
+        remarkList1.add(new Remark("whew"));
+        remarkList1.add(comment);
+        remarkList2.add(new Remark("first"));
+        remarkList2.add(new Remark("second"));
+        remarkList2.add(new Remark("last"));
+        remarkList2.add(comment);
+
+        Job jobWithComment1 = new Job(client, new VehicleNumber("SXX1234X"), new JobNumber("1"), new Date(),
+                uniqueEmployeeList, new Status(Status.STATUS_ONGOING), remarkList1);
+        Job jobWithComment2 = new Job(client2, new VehicleNumber("SXX1234X"), new JobNumber("2"), new Date(),
+                uniqueEmployeeList2, new Status(Status.STATUS_ONGOING), remarkList2);
+        List<Job> jobListWithComment = new ArrayList<>();
+        jobListWithComment.add(jobWithComment1);
+        jobListWithComment.add(jobWithComment2);
+
+        expectedModelWithoutComment = new ModelIgnoreJobDates();
+        expectedModelWithoutComment.addJobsAndNewEmployees(jobList);
+        expectedModelWithComment = new ModelIgnoreJobDates();
+        expectedModelWithComment.addJobsAndNewEmployees(jobListWithComment);
+    }
+
+    @Test
+    public void equals() throws Exception {
+        String comment = "comment";
+        AcceptAllCommand acceptAllCommand1 = prepareCommand(comment);
+        AcceptAllCommand acceptAllCommand1Copy = prepareCommand(comment);
+        AcceptAllCommand acceptAllCommand2 = prepareCommand("");
+
+        // same object -> returns true
+        assertTrue(acceptAllCommand1.equals(acceptAllCommand1));
+
+        // same values -> returns true
+        assertTrue(acceptAllCommand1.equals(acceptAllCommand1Copy));
+
+        // different types -> returns false
+        assertFalse(acceptAllCommand1.equals(1));
+
+        // different comments -> return false
+        assertFalse(acceptAllCommand1.equals(acceptAllCommand2));
+
+        // null -> return false
+        assertFalse(acceptAllCommand1.equals(null));
+    }
+
+    @Test
+    public void execute_acceptAllWithoutComment_success() throws Exception {
+        prepareInputFiles();
+        AcceptAllCommand command = prepareCommand("");
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModelWithoutComment.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_acceptAllWithComment_success() throws Exception {
+        prepareInputFiles();
+        AcceptAllCommand command = prepareCommand(comment.toString());
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModelWithComment.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_acceptAllWithoutImport_failure() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        AcceptAllCommand command = prepareCommand(comment.toString());
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(MESSAGE_NO_JOB_ENTRIES, e.getMessage());
+        }
+        commandCleanup(command);
+    }
+
+    /**
+     * Returns AcceptAllCommand with (@code comments), with default data
+     */
+    protected AcceptAllCommand prepareCommand(String comments) throws Exception {
+        JobNumber.initialize(0);
+        AcceptAllCommand command = new AcceptAllCommand(comments);
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+}
+```
+###### \java\seedu\carvicim\logic\commands\AcceptCommandTest.java
+``` java
+public class AcceptCommandTest extends ImportCommandTestEnv {
+    private Remark comment;
+
+    private ModelIgnoreJobDates expectedModelWithoutComment;
+    private ModelIgnoreJobDates expectedModelWithComment;
+
+    @Before
+    public void setup() throws Exception {
+        Employee jim = new Employee(new Name("Jim"), new Phone("87654321"), new Email("jim@gmail.com"),
+                Collections.emptySet());
+        Person client = new Person(new Name("JD"), new Phone("91234567"), new Email("jd@gmail.com"));
+        UniqueEmployeeList uniqueEmployeeList = new UniqueEmployeeList();
+        uniqueEmployeeList.add(jim);
+        Remark existingExcelRemark = new Remark("Haha");
+        Remark existingExcelRemark2 = new Remark("whew");
+        RemarkList excelRemarkList = new RemarkList();
+        excelRemarkList.add(existingExcelRemark);
+        excelRemarkList.add(existingExcelRemark2);
+        Job job = new Job(client, new VehicleNumber("SXX1234X"), new JobNumber("1"), new Date(),
+                uniqueEmployeeList, new Status(Status.STATUS_ONGOING), excelRemarkList);
+        comment = new Remark("good job!");
+        RemarkList remarkList = new RemarkList();
+        remarkList.add(existingExcelRemark);
+        remarkList.add(existingExcelRemark2);
+        remarkList.add(comment);
+        Job jobWithComment = new Job(client, new VehicleNumber("SXX1234X"), new JobNumber("1"), new Date(),
+                uniqueEmployeeList, new Status(Status.STATUS_ONGOING), remarkList);
+        expectedModelWithoutComment = new ModelIgnoreJobDates(jim, job);
+        expectedModelWithComment = new ModelIgnoreJobDates(jim, jobWithComment);
+    }
+
+    @Test
+    public void equals() throws Exception {
+        String comment = "comment";
+        AcceptCommand acceptCommand1 = prepareCommand(1, comment);
+        AcceptCommand acceptCommand1Copy = prepareCommand(1, comment);
+        AcceptCommand acceptCommand2 = prepareCommand(2, comment);
+        AcceptCommand acceptCommand3 = prepareCommand(1, "");
+
+        // same object -> returns true
+        assertTrue(acceptCommand1.equals(acceptCommand1));
+
+        // same values -> returns true
+        assertTrue(acceptCommand1.equals(acceptCommand1Copy));
+
+        // different types -> returns false
+        assertFalse(acceptCommand1.equals(1));
+
+        // different job index -> return false
+        assertFalse(acceptCommand1.equals(acceptCommand2));
+
+        // different comments -> return false
+        assertFalse(acceptCommand1.equals(acceptCommand3));
+
+        // null -> return false
+        assertFalse(acceptCommand1.equals(null));
+    }
+
+    @Test
+    public void execute_acceptWithoutComment_success() throws Exception {
+        prepareInputFiles();
+        AcceptCommand command = prepareCommand(1, "");
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModelWithoutComment.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_acceptWithComment_success() throws Exception {
+        prepareInputFiles();
+        AcceptCommand command = prepareCommand(1, comment.toString());
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModelWithComment.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_acceptOutOfBounds_failure() throws Exception {
+        prepareInputFiles();
+        AcceptCommand command = prepareCommand(3, comment.toString());
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(ERROR_MESSAGE_INVALID_JOB_INDEX, e.getMessage());
+        }
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_acceptWithoutImport_failure() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        AcceptCommand command = prepareCommand(1, comment.toString());
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(MESSAGE_NO_JOB_ENTRIES, e.getMessage());
+        }
+        commandCleanup(command);
+    }
+
+    /**
+     * Returns AcceptCommand with (@code jobIndex) and (@code comments), with default data
+     */
+    protected AcceptCommand prepareCommand(int jobIndex, String comments) throws Exception {
+        JobNumber.initialize(0);
+        AcceptCommand command = new AcceptCommand(jobIndex, comments);
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+}
+```
+###### \java\seedu\carvicim\logic\commands\ImportAllCommandTest.java
+``` java
+public class ImportAllCommandTest extends ImportCommandTestEnv {
+
+    private ModelIgnoreJobDates expectedModel;
+
+    @Before
+    public void setup() throws Exception {
+        Employee jim = new Employee(new Name("Jim"), new Phone("87654321"), new Email("jim@gmail.com"),
+                Collections.emptySet());
+        Person client = new Person(new Name("JD"), new Phone("91234567"), new Email("jd@gmail.com"));
+        UniqueEmployeeList uniqueEmployeeList = new UniqueEmployeeList();
+        uniqueEmployeeList.add(jim);
+        RemarkList excelRemarkList = new RemarkList();
+        excelRemarkList.add(new Remark("Haha"));
+        excelRemarkList.add(new Remark("whew"));
+        Job job = new Job(client, new VehicleNumber("SXX1234X"), new JobNumber("1"), new Date(),
+                uniqueEmployeeList, new Status(Status.STATUS_ONGOING), excelRemarkList);
+
+        Employee maya = new Employee(new Name("Maya"), new Phone("87654321"), new Email("maya@gmail.com"),
+                Collections.emptySet());
+        Person client2 = new Person(new Name("JS"), new Phone("91234567"), new Email("js@gmail.com"));
+
+        UniqueEmployeeList uniqueEmployeeList2 = new UniqueEmployeeList();
+        uniqueEmployeeList2.add(maya);
+        RemarkList excelRemarkList2 = new RemarkList();
+        excelRemarkList2.add(new Remark("first"));
+        excelRemarkList2.add(new Remark("second"));
+        excelRemarkList2.add(new Remark("last"));
+        Job job2 = new Job(client2, new VehicleNumber("SXX1234X"), new JobNumber("2"), new Date(),
+                uniqueEmployeeList2, new Status(Status.STATUS_ONGOING), excelRemarkList2);
+
+        List<Job> jobList = new ArrayList<>();
+        jobList.add(job);
+        jobList.add(job2);
+        expectedModel = new ModelIgnoreJobDates();
+        expectedModel.addJobsAndNewEmployees(jobList);
+    }
+
+    @Test
+    public void equals() throws Exception {
+        String filePath = "CS2103-testsheet.xlsx";
+        String altFilePath = "CS2103-testsheet-corrupt.xlsx";
+        ImportAllCommand importCommand1 = prepareCommand(filePath);
+        ImportAllCommand importCommand1Copy = prepareCommand(filePath);
+        ImportAllCommand importCommand2 = prepareCommand(altFilePath);
+
+        // same object -> returns true
+        assertTrue(importCommand1.equals(importCommand1));
+
+        // same values -> returns true
+        assertTrue(importCommand1.equals(importCommand1Copy));
+
+        // different types -> returns false
+        assertFalse(importCommand1.equals(1));
+
+        // different filepath -> return false
+        assertFalse(importCommand1.equals(importCommand2));
+
+        // null -> return false
+        assertFalse(importCommand1.equals(null));
+    }
+
+    @Test
+    public void execute_importValidExcelFile_success() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        setup(ERROR_INPUT_FILE, ERROR_IMPORTED_FILE, ERROR_OUTPUT_FILE);
+
+        ImportAllCommand command = prepareCommand(inputPath);
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModel.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_importInvalidExcelFile_failure() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        setup(NON_EXCEL_FILE, NON_EXCEL_FILE, NON_EXCEL_OUTPUT_FILE);
+        ImportAllCommand command = prepareCommand(inputPath);
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(ERROR_MESSAGE_FILE_FORMAT, e.getMessage());
+        }
+    }
+
+    /**
+     * Returns ImportAllCommand with (@code filePath), with default data
+     */
+    protected ImportAllCommand prepareCommand(String filePath) throws Exception {
+        JobNumber.initialize(0);
+        ImportAllCommand command = new ImportAllCommand(filePath);
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+
+}
+```
+###### \java\seedu\carvicim\logic\commands\ImportCommandTest.java
+``` java
+public class ImportCommandTest extends ImportCommandTestEnv {
+
+    @Test
+    public void equals() throws Exception {
+        String filePath = "CS2103-testsheet.xlsx";
+        String altFilePath = "CS2103-testsheet-corrupt.xlsx";
+        ImportCommand importCommand1 = prepareCommand(filePath);
+        ImportCommand importCommand1Copy = prepareCommand(filePath);
+        ImportCommand importCommand2 = prepareCommand(altFilePath);
+
+        // same object -> returns true
+        assertTrue(importCommand1.equals(importCommand1));
+
+        // same values -> returns true
+        assertTrue(importCommand1.equals(importCommand1Copy));
+
+        // different types -> returns false
+        assertFalse(importCommand1.equals(1));
+
+        // different filepath -> return false
+        assertFalse(importCommand1.equals(importCommand2));
+
+        // null -> return false
+        assertFalse(importCommand1.equals(null));
+    }
+
+    @Test
+    public void execute_importValidExcelFile_success() throws Exception {
+        Model expectedModel = new ModelManager();
+        ImportSession.getInstance().setSessionData(new SessionData());
+        setup(ERROR_INPUT_FILE, ERROR_IMPORTED_FILE, ERROR_OUTPUT_FILE);
+
+        ImportCommand command = prepareCommand(inputPath);
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModel.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_importInvalidExcelFile_failure() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        setup(NON_EXCEL_FILE, NON_EXCEL_FILE, NON_EXCEL_OUTPUT_FILE);
+        ImportCommand command = prepareCommand(inputPath);
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(ERROR_MESSAGE_FILE_FORMAT, e.getMessage());
+        }
+    }
+
+    /**
+     * Returns ImportCommand with (@code filePath), with default data
+     */
+    protected ImportCommand prepareCommand(String filePath) throws Exception {
+        JobNumber.initialize(1);
+        ImportCommand command = new ImportCommand(filePath);
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+
+}
+```
+###### \java\seedu\carvicim\logic\commands\RejectAllCommandTest.java
+``` java
+public class RejectAllCommandTest extends ImportCommandTestEnv {
+    private Remark comment;
+    private ModelIgnoreJobDates expectedModel;
+    @Before
+    public void setup() throws Exception {
+        comment = new Remark("comment");
+        expectedModel = new ModelIgnoreJobDates();
+    }
+
+    @Test
+    public void equals() throws Exception {
+        String comment = "comment";
+        RejectAllCommand rejectCommand1 = prepareCommand(comment);
+        RejectAllCommand rejectCommandCopy = prepareCommand(comment);
+        RejectAllCommand rejectCommand2 = prepareCommand("");
+
+        // same object -> returns true
+        assertTrue(rejectCommand1.equals(rejectCommand1));
+
+        // same values -> returns true
+        assertTrue(rejectCommand1.equals(rejectCommandCopy));
+
+        // different types -> returns false
+        assertFalse(rejectCommand1.equals(1));
+
+        // different comments -> return false
+        assertFalse(rejectCommand1.equals(rejectCommand2));
+
+        // null -> return false
+        assertFalse(rejectCommand1.equals(null));
+    }
+
+    @Test
+    public void execute_rejectWithoutComment_success() throws Exception {
+        prepareInputFiles();
+        RejectAllCommand command = prepareCommand("");
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModel.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_rejectAllWithComment_success() throws Exception {
+        prepareInputFiles();
+        RejectAllCommand command = prepareCommand(comment.toString());
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModel.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_rejectAllWithoutImport_failure() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        RejectAllCommand command = prepareCommand(comment.toString());
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(MESSAGE_NO_JOB_ENTRIES, e.getMessage());
+        }
+        commandCleanup(command);
+    }
+
+    /**
+     * Returns RejectCommand with (@code comments), with default data
+     */
+    protected RejectAllCommand prepareCommand(String comments) throws Exception {
+        JobNumber.initialize(1);
+        RejectAllCommand command = new RejectAllCommand(comments);
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+}
+```
+###### \java\seedu\carvicim\logic\commands\RejectCommandTest.java
+``` java
+public class RejectCommandTest extends ImportCommandTestEnv {
+    private Remark comment;
+    private ModelIgnoreJobDates expectedModel;
+    @Before
+    public void setup() throws Exception {
+        comment = new Remark("comment");
+        expectedModel = new ModelIgnoreJobDates();
+    }
+
+    @Test
+    public void equals() throws Exception {
+        String comment = "comment";
+        RejectCommand rejectCommand1 = prepareCommand(1, comment);
+        RejectCommand rejectCommandCopy = prepareCommand(1, comment);
+        RejectCommand rejectCommand2 = prepareCommand(2, comment);
+        RejectCommand rejectCommand3 = prepareCommand(1, "");
+
+        // same object -> returns true
+        assertTrue(rejectCommand1.equals(rejectCommand1));
+
+        // same values -> returns true
+        assertTrue(rejectCommand1.equals(rejectCommandCopy));
+
+        // different types -> returns false
+        assertFalse(rejectCommand1.equals(1));
+
+        // different job index -> return false
+        assertFalse(rejectCommand1.equals(rejectCommand2));
+
+        // different comments -> return false
+        assertFalse(rejectCommand1.equals(rejectCommand3));
+
+        // null -> return false
+        assertFalse(rejectCommand1.equals(null));
+    }
+
+    @Test
+    public void execute_rejectWithoutComment_success() throws Exception {
+        prepareInputFiles();
+        RejectCommand command = prepareCommand(1, "");
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModel.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_rejectWithComment_success() throws Exception {
+        prepareInputFiles();
+        RejectCommand command = prepareCommand(1, comment.toString());
+        command.execute();
+        prepareOutputFiles();
+        assertTrue(expectedModel.equals(command.model));
+        assertOutputResultFilesEqual();
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_rejectOutOfBounds_failure() throws Exception {
+        prepareInputFiles();
+        RejectCommand command = prepareCommand(3, comment.toString());
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(ERROR_MESSAGE_INVALID_JOB_INDEX, e.getMessage());
+        }
+        commandCleanup(command);
+    }
+
+    @Test
+    public void execute_rejectWithoutImport_failure() throws Exception {
+        ImportSession.getInstance().setSessionData(new SessionData());
+        RejectCommand command = prepareCommand(1, comment.toString());
+        try {
+            command.execute();
+        } catch (CommandException e) {
+            assertEquals(MESSAGE_NO_JOB_ENTRIES, e.getMessage());
+        }
+        commandCleanup(command);
+    }
+
+    /**
+     * Returns RejectCommand with (@code jobIndex) and (@code comments), with default data
+     */
+    protected RejectCommand prepareCommand(int jobIndex, String comments) throws Exception {
+        JobNumber.initialize(1);
+        RejectCommand command = new RejectCommand(jobIndex, comments);
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+}
+```
 ###### \java\seedu\carvicim\logic\commands\SetCommandTest.java
 ``` java
 public class SetCommandTest {
+
+    @Test
+    public void equals() {
+        Model model = new ModelManager(getTypicalCarvicim(),  new UserPrefs());
+        String word1 = "word1";
+        String word2 = "word2";
+        SetCommand setCommand1 = prepareCommand(model, AddJobCommand.COMMAND_WORD, word1);
+        SetCommand setCommand1Copy = prepareCommand(model, AddJobCommand.COMMAND_WORD, word1);
+        SetCommand setCommand2 = prepareCommand(model, AddEmployeeCommand.COMMAND_WORD, word1);
+        SetCommand setCommand3 = prepareCommand(model, AddJobCommand.COMMAND_WORD, word2);
+
+        // same object -> returns true
+        assertTrue(setCommand1.equals(setCommand1));
+
+        // same values -> returns true
+        assertTrue(setCommand1.equals(setCommand1Copy));
+
+        // different types -> returns false
+        assertFalse(setCommand1.equals(1));
+
+        // different current word -> return false
+        assertFalse(setCommand1.equals(setCommand2));
+
+        // different new word -> return false
+        assertFalse(setCommand1.equals(setCommand3));
+
+        // null -> return false
+        assertFalse(setCommand1.equals(null));
+    }
 
     @Test
     public void execute_changeAdd_success() throws CommandWordException {
@@ -141,6 +758,105 @@ public class SetCommandTest {
     }
 }
 ```
+###### \java\seedu\carvicim\logic\commands\SwitchCommandTest.java
+``` java
+public class SwitchCommandTest {
+    @Test
+    public void execute_switch_success() throws CommandException {
+        SwitchCommand command = prepareCommand();
+        command.execute();
+        Model expectedModel = new ModelManager();
+        expectedModel.switchJobView();
+        assertEquals(expectedModel.isViewingImportedJobs(), command.model.isViewingImportedJobs());
+    }
+
+    private SwitchCommand prepareCommand() {
+        SwitchCommand command = new SwitchCommand();
+        command.setData(new ModelManager(), new CommandHistory(), new UndoRedoStack());
+        return command;
+    }
+}
+```
+###### \java\seedu\carvicim\logic\parser\AcceptAllCommandParserTest.java
+``` java
+public class AcceptAllCommandParserTest {
+    private AcceptAllCommandParser parser = new AcceptAllCommandParser();
+
+    @Test
+    public void parse_acceptAllWithoutComment_success() {
+        assertParseSuccess(parser, "", new AcceptAllCommand(""));
+    }
+
+    @Test
+    public void parse_acceptAllWithComment_success() {
+        String comment = "comment";
+        assertParseSuccess(parser, comment, new AcceptAllCommand(comment));
+    }
+}
+```
+###### \java\seedu\carvicim\logic\parser\AcceptCommandParserTest.java
+``` java
+public class AcceptCommandParserTest {
+    private AcceptCommandParser parser = new AcceptCommandParser();
+
+    @Test
+    public void parse_acceptWithoutComment_success() {
+        assertParseSuccess(parser, " 1", new AcceptCommand(1, ""));
+    }
+
+    @Test
+    public void parse_acceptWithComment_success() {
+        String comment = "comment";
+        assertParseSuccess(parser, " 1 " + comment, new AcceptCommand(1, comment));
+    }
+
+    @Test
+    public void parse_invalidNumber_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AcceptCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "", expectedMessage);
+    }
+}
+```
+###### \java\seedu\carvicim\logic\parser\RejectAllCommandParserTest.java
+``` java
+public class RejectAllCommandParserTest {
+    private RejectAllCommandParser parser = new RejectAllCommandParser();
+
+    @Test
+    public void parse_acceptAllWithoutComment_success() {
+        assertParseSuccess(parser, "", new RejectAllCommand(""));
+    }
+
+    @Test
+    public void parse_acceptAllWithComment_success() {
+        String comment = "comment";
+        assertParseSuccess(parser, comment, new RejectAllCommand(comment));
+    }
+}
+```
+###### \java\seedu\carvicim\logic\parser\RejectCommandParserTest.java
+``` java
+public class RejectCommandParserTest {
+    private RejectCommandParser parser = new RejectCommandParser();
+
+    @Test
+    public void parse_rejectWithoutComment_success() {
+        assertParseSuccess(parser, " 1", new RejectCommand(1, ""));
+    }
+
+    @Test
+    public void parse_rejectWithComment_success() {
+        String comment = "comment";
+        assertParseSuccess(parser, " 1 " + comment, new RejectCommand(1, comment));
+    }
+
+    @Test
+    public void parse_invalidNumber_failure() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RejectCommand.MESSAGE_USAGE);
+        assertParseFailure(parser, "", expectedMessage);
+    }
+}
+```
 ###### \java\seedu\carvicim\logic\parser\SetCommandParserTest.java
 ``` java
 public class SetCommandParserTest {
@@ -173,85 +889,68 @@ public class SetCommandParserTest {
     }
 }
 ```
-###### \java\seedu\carvicim\storage\ImportSessionTest.java
+###### \java\seedu\carvicim\storage\ImportSessionTestEnv.java
 ``` java
-public class ImportSessionTest {
-    private static final String TEST_INPUT_FILE = "storage/session/ImportSessionTest/CS2103-testsheet.xlsx";
-    private static final String TEST_RESULT_FILE =
-            "storage/session/ImportSessionTest/CS2103-testsheet-results.xlsx";
-    private static final String TEST_OUTPUT_FILE =
-            "storage/session/ImportSessionTest/CS2103-testsheet-comments.xlsx";
-    private static final String EMPTY_FILE =
-            "storage/session/ImportSessionTest/CS2103-testsheet-empty.xls";
-    private static final String EMPTY_OUTPUT_FILE =
-            "storage/session/ImportSessionTest/CS2103-testsheet-empty-comments.xls";
-    private static final String EMPTY_FILE_MESSAGE =
-            "Missing header fields: client name, client phone, client email, "
-            + "vehicle number, employee name, employee phone, employee email, ";
-    private static final String NO_JOBS_MESSAGE = "Sheet 1 contains no valid job entries!";
-    private String inputPath;
-    private String outputPath;
-    private String testPath;
-    private String emptyPath;
-    private String emptyOutputPath;
 
-    @Before
-    public void cleanUp() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        inputPath = classLoader.getResource(TEST_INPUT_FILE).getPath();
-        testPath = classLoader.getResource(TEST_RESULT_FILE).getPath();
-        emptyPath = classLoader.getResource(EMPTY_FILE).getPath();
+/**
+ * Used to test classes that manipulate sessionData in importSession
+ */
+public abstract class ImportSessionTestEnv {
+    protected static final String RESOURCE_PATH = "storage/session/ImportSessionTest/";
+    protected static final String ERROR_INPUT_FILE = "CS2103-testsheet.xlsx";
+    protected static final String ERROR_RESULT_FILE = "CS2103-testsheet-results.xlsx";
+    protected static final String ERROR_OUTPUT_FILE = "CS2103-testsheet-comments.xlsx";
+    protected static final String ERROR_IMPORTED_FILE = "CS2103-testsheet-import.xlsx";
+    protected static final String MULTIPLE_INPUT_FILE = "CS2103-testsheet-multiple.xlsx";
+    protected static final String MULTIPLE_RESULT_FILE = "CS2103-testsheet-multiple-results.xlsx";
+    protected static final String MULTIPLE_OUTPUT_FILE = "CS2103-testsheet-multiple-comments.xlsx";
+    protected static final String CORRUPT_INPUT_FILE = "CS2103-testsheet-corrupt.xlsx";
+    protected static final String CORRUPT_RESULT_FILE = "CS2103-testsheet-corrupt-results.xlsx";
+    protected static final String CORRUPT_OUTPUT_FILE = "CS2103-testsheet-corrupt-comments.xlsx";
+    protected static final String NON_EXCEL_FILE = "non-excel-file.xlsx";
+    protected static final String NON_EXCEL_OUTPUT_FILE = "non-excel-file-comments.xlsx";
+    protected static final String MISSING_HEADER_FIELD_FILE = "missing-header-field.xlsx";
+    protected static final String MISSING_HEADER_FIELD_OUTPUT_FILE = "missing_header_field-comments.xlsx";
+    protected String expectedOutputPath;
+    protected String inputPath;
+    protected String outputPath;
+    protected String resultPath;
+    protected String outputFilePath;
+
+    protected File testFile;
+    protected File outputFile;
+    protected File expectedOutputFile;
+
+    /**
+     * Attempts to delete -comments file if found
+     */
+    protected void cleanup() throws IOException {
         try {
-            outputPath = classLoader.getResource(TEST_OUTPUT_FILE).getPath();
             deleteFile(outputPath);
         } catch (NullPointerException e) {
             ;
         }
+    }
+
+    /**
+     * asserts output file from importAll of input file is the same as result file
+     */
+    protected void assertOutputResultFilesEqual() throws Exception {
+        assertEquals(expectedOutputFile.getAbsolutePath(), outputFile.getAbsolutePath());
+        ImportSession.getInstance().getSessionData().freeResources();
+        assertExcelFilesEquals(testFile, outputFile);
+    }
+
+    protected void setup(String inputPath, String resultPath, String outputPath) throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        this.inputPath = classLoader.getResource(RESOURCE_PATH + inputPath).getPath();
+        this.resultPath = classLoader.getResource(RESOURCE_PATH + resultPath).getPath();
+        this.expectedOutputPath = RESOURCE_PATH + outputPath;
         try {
-            emptyOutputPath = classLoader.getResource(EMPTY_OUTPUT_FILE).getPath();
-            deleteFile(emptyOutputPath);
+            this.outputPath = classLoader.getResource(expectedOutputPath).getPath();
+            deleteFile(this.outputPath);
         } catch (NullPointerException e) {
             ;
-        }
-    }
-
-    @Test
-    public void importTestFileWithErrorCorrection() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-
-        ImportSession importSession = ImportSession.getInstance();
-
-        File inputFile = new File(inputPath);
-        importSession.initializeSession(inputFile.getPath());
-        importSession.getSessionData().reviewAllRemainingJobEntries(true, "");
-        String outputFilePath = importSession.closeSession();
-        outputPath = classLoader.getResource(TEST_OUTPUT_FILE).getPath();
-        File testFile = new File(testPath);
-        File outputFile = new File(outputFilePath);
-        File expectedOutputFile = new File(outputPath);
-        assertEquals(expectedOutputFile.getAbsolutePath(), outputFile.getAbsolutePath());
-        importSession.getSessionData().freeResources();
-        assertExcelFilesEquals(testFile, outputFile);
-        try {
-            importSession.initializeSession(inputPath);
-        } catch (FileFormatException e) {
-            assertEquals(NO_JOBS_MESSAGE, e.getMessage());
-        } finally {
-            deleteFile(outputFilePath);
-            importSession.getSessionData().freeResources();
-        }
-    }
-
-    @Test
-    public void importTestFileEmpty() throws FileAccessException {
-        ImportSession importSession = ImportSession.getInstance();
-
-        try {
-            importSession.initializeSession(emptyPath);
-        } catch (FileFormatException e) {
-            assertEquals(EMPTY_FILE_MESSAGE, e.getMessage());
-        } finally {
-            importSession.getSessionData().freeResources();
         }
     }
 
@@ -273,6 +972,8 @@ public class ImportSessionTest {
             sheet2 = workbook2.getSheetAt(workbook1.getFirstVisibleTab() + i);
             assertSheetEquals(sheet1, sheet2);
         }
+        workbook1.close();
+        workbook2.close();
     }
 
     /**

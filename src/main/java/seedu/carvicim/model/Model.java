@@ -69,7 +69,7 @@ public interface Model {
     void addPerson(Employee employee) throws DuplicateEmployeeException;
 
     /** Adds a list of (@code Job) into (@code Carvicim), and automatically imports new employees */
-    void addJobs(List<Job> job);
+    void addJobsAndNewEmployees(List<Job> job);
 
     /** Adds employees in list into (@code Carvicim) if it is not present */
     void addMissingEmployees(Set<Employee> employees);

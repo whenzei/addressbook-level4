@@ -127,7 +127,7 @@ public class ModelManager extends ComponentManager implements Model {
     public void resetData(ReadOnlyCarvicim newData, CommandWords newCommandWords) {
         carvicim.resetData(newData);
         commandWords.resetData(newCommandWords);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ModelManager extends ComponentManager implements Model {
     }
 
     /** Raises an event to indicate the model has changed */
-    private void indicateAddressBookChanged() {
+    private void indicateCarvicimChanged() {
         raise(new CarvicimChangedEvent(carvicim));
     }
 
@@ -154,14 +154,14 @@ public class ModelManager extends ComponentManager implements Model {
     public synchronized void addJob(Job job) {
         carvicim.addJob(job);
         updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override
     public synchronized void closeJob(Job target, Job updatedJob) throws JobNotFoundException {
         carvicim.updateJob(target, updatedJob);
         updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override
@@ -178,21 +178,21 @@ public class ModelManager extends ComponentManager implements Model {
     @Override
     public synchronized void deletePerson(Employee target) throws EmployeeNotFoundException {
         carvicim.removeEmployee(target);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override
     public synchronized void addRemark(Job target, Job updatedJob) {
         carvicim.updateJob(target, updatedJob);
         updateFilteredJobList(PREDICATE_SHOW_ALL_JOBS);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override
     public synchronized void addPerson(Employee employee) throws DuplicateEmployeeException {
         carvicim.addEmployee(employee);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     //@@author yuhongherald
@@ -224,13 +224,13 @@ public class ModelManager extends ComponentManager implements Model {
         requireAllNonNull(target, editedEmployee);
 
         carvicim.updateEmployee(target, editedEmployee);
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override
     public void sortPersonList() {
         carvicim.sortList();
-        indicateAddressBookChanged();
+        indicateCarvicimChanged();
     }
 
     @Override

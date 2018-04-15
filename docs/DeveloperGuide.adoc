@@ -1842,23 +1842,33 @@ Priorities::
 
 |`* * *` |user |view all employees |decide which employee to assign a job
 
-|`* *` |user |sort by employees' name |sort employee list alphabetically
-
 |`* * *` |user |add a new job entry |manage job entries
 
-|`* * *` |user |close an ongoing job entry |remove completed job and add it to jobs history
+|`* * *` |user |close an ongoing job entry |indicate that a job is completed
 
 |`* * *` |user |find a job entry by its assigned job id |locate details of a job without having to go through the list of ongoing jobs
-
-|`* *` |user |find job entries by the assigned employee's name |locate details of all jobs that are handled by an employee without having to go through the lists of jobs
-
-|`* *` |user |find job entries by client's name |locate details of all jobs belonging to a client without having to go through the lists of jobs
-
-|`* *` |user |find job entries by car number |locate details of all jobs related to a car number without having to go through the lists of jobs
 
 |`* * *` |user |add remarks to ongoing job entry |take note of details that are specific to the job
 
 |`* * *` |user |import job entries |add multiple job entries at once
+
+|`* *` |user |sort by employees' name |sort employee list alphabetically
+
+|`* *` |user |find job entries by the assigned employee's name |locate details of all jobs that are handled by an employee without having to go through the list of jobs
+
+|`* *` |user |find job entries by client's name |locate details of all jobs belonging to a client without having to go through the list of jobs
+
+|`* *` |user |find job entries by car number |locate details of all jobs related to a car number without having to go through the list of jobs
+
+|`* *` |user |archive job entries |extract job entries within the selected range for archiving
+
+|`* *` |user |analyse job entries |keep track of employees' workload
+
+|`* *` |user |change the colour label of job status |easily differentiate between the job statuses
+
+|`* *` |user who likes customization |change the theme of the application |customize the theme to my preference
+
+|`* *` |user who likes customization |change the command words of the application |improve ease of use
 
 |`* *` |user |accept and reject imported changes |have control when over bulk imports
 
@@ -1869,16 +1879,6 @@ Priorities::
 |`* *` |user |export changes |provide feedback to employees regarding the changes
 
 |`*` |user |export completed jobs to other formats |print out all the completed job entries and view it with a better program
-
-|`**` |user |archive job entries |extract job entries within the selected range for archiving
-
-|`**` |user |analyse job entries |keep track of employees' workload
-
-|`* *` |user |change the colour label of job status |easily differentiate between the job statuses
-
-|`* *` |user who likes customization |change the theme of the application |customize the theme to my preference
-
-|`* *` |user who likes customization |change the command words of the application |improve ease of use
 
 |=======================================================================
 
@@ -1933,6 +1933,16 @@ Use case ends.
 ** 3a1. CarviciM shows an error message.
 +
 Use case resumes at step 2.
+
+[none]
+* 3b. The given employee is assigned to an ongoing job.
++
+[none]
+** 3b1. CarviciM shows an error message.
++
+Use case resumes at step 3.
++
+Use case ends.
 
 [discrete]
 === Use case: Find an employee by name
@@ -2320,23 +2330,6 @@ Pull Request
 Single Layer of Abstraction Principle: extraction of methods, fields and constants to keep details at the same level in a method.
 
 [appendix]
-== Product Survey
-
-*Product Name*
-
-Author: ...
-
-Pros:
-
-* ...
-* ...
-
-Cons:
-
-* ...
-* ...
-
-[appendix]
 == Instructions for Manual Testing
 
 Given below are instructions to test the app manually.
@@ -2364,12 +2357,12 @@ _{ more test cases ... }_
 
 . Deleting a employee while all employees are listed
 
-.. Prerequisites: List all employees using the `list` command. Multiple employees in the list.
-.. Test case: `delete 1` +
+.. Prerequisites: List all employees using the `liste` command. Multiple employees in the list.
+.. Test case: `deletee 1` +
    Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-.. Test case: `delete 0` +
+.. Test case: `deletee 0` +
    Expected: No employee is deleted. Error details shown in the status message. Status bar remains the same.
-.. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size) _{give more}_ +
+.. Other incorrect delete commands to try: `deletee`, `deletee x` (where x is larger than the list size) _{give more}_ +
    Expected: Similar to previous.
 
 _{ more test cases ... }_

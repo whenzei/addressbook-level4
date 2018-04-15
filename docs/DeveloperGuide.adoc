@@ -288,6 +288,7 @@ image::ModelClassDiagram.png[width="800"]
 `Person` represents the client of a job. `JobNumber` represents the number of a job and is responsible for generating a running number for each job. `Status` represents the status of a job which holds value of either `ongoing` or `closed` that is used for categorizing jobs. `Date` represents the date of creation for the job. `RemarkList` holds all `Remark` belonging to the job. `UniqueEmployeeList` of the job represents the employees assigned.
 
 New classes has been added in the Storage component, `XmlAdaptedJob` and `XmlAdaptedRemark`, to support the saving of job entries into the data file (as shown in the diagram below).
+
 .Partial Class Diagram of Storage Component
 image::StorageComponent_Xml_Job_Xml_Remark.PNG[width="800"]
 [none]

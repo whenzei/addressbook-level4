@@ -120,7 +120,7 @@ This section will explain to you how you can use the features of CarviciM.
 
 === Viewing help : `help`
 
-To find out more on using CarviciM, you can use this command to open the help menu. +
+To find out more on using CarviciM, you can use this command to open the help menu: +
 Format: `help`
 
 // tag::addjob[]
@@ -210,7 +210,7 @@ This command will retire employees of index 1 and 2 from the assigned employee l
 
 === Listing all jobs : `listj`
 
-To view a list of all jobs in CarviciM, you can use this command to display them in the job list panel. +
+To view a list of all jobs in CarviciM, you can use this command to display them in the job list panel: +
 Format: `listj`
 
 [NOTE]
@@ -220,7 +220,7 @@ Format: `listj`
 
 === Listing all ongoing jobs : `listoj`
 
-To view a list of all *ongoing* jobs in CarviciM, you can use this command to display them in the job list panel. +
+To view a list of all *ongoing* jobs in CarviciM, you can use this command to display them in the job list panel: +
 Format: `listoj`
 
 === Locating jobs by keyword: `findj`
@@ -326,8 +326,15 @@ Example:
 
 `adde n/John Doe p/98765432 e/johnd@example.com` +
 The command will add the details of the new employee into CarviciM. +
-You will see "New employee added: ..." followed by details of the new employee. +
-You will see the newly added details of the employee in the employee list panel.
+You will see "New employee added: ..." followed by details of the new employee (shown in the image below). +
+
+image::AddEmployeeResult1.PNG[width="500"]
+_Figure 5.12.1 : Result display showing the details of the new employee_
+
+You will see the newly added details of the employee in the employee list panel (shown in the image below).
+
+image::AddEmployeeResult2.PNG[width="300"]
+_Figure 5.12.1 : Employee list panel showing the details of the new employee_
 
 === Listing all employee entries : `liste`
 
@@ -351,18 +358,32 @@ Examples:
 * Example 1: +
 +
 `liste` +
-You will see a list of employee entries displayed in the employee list panel. +
+You will see a list of employee entries displayed in the employee list panel (shown in the image below). +
++
+image::DeleteEmployeeResult1.PNG[width="300"]
+_Figure 5.14.1 : Employee list panel displaying the details of all employees_
+
 +
 `deletee 2` +
-You will see an updated employee list panel which has the 2nd employee entry removed.
+You will see an updated employee list panel which has the 2nd employee entry removed (shown in the image below).
++
+image::DeleteEmployeeResult2.PNG[width="850"]
+_Figure 5.14.2 : Employee list panel displaying the updated list of employees_
 
 * Example 2: +
 +
-`finde Betsy` +
-You will see the results of the `finde` command which shows all employee entries with matching keyword name, in the employee list panel. +
+`finde david` +
+You will see the results of the `finde` command which shows all employee entries with matching keyword name, in the employee list panel (shown in the image below). +
++
+image::DeleteEmployeeResult3.PNG[width="300"]
+_Figure 5.14.3 : Employee list panel displaying the matching list of employees_
+
 +
 `deletee 1` +
-You will see an updated employee list panel which has the 1st employee entry removed.
+You will see an updated employee list panel which has the 1st employee entry removed (shown in the image below).
++
+image::DeleteEmployeeResult4.PNG[width="850"]
+_Figure 5.14.4 : Employee list panel displaying the updated matching list of employees_
 
 // tag::sort[]
 === Sorting all employee entries : `sort`
@@ -377,7 +398,7 @@ Given a unsorted list of employees (shown in the image below).
 image::SortResult1.PNG[width="300"]
 _Figure 5.15.1 : Employee List Panel showing a list of unsorted employee entries_
 
-You will see the sorted list of employee after the execution of `sort` command (shown in the image below).
+You will see the sorted list of employees after the execution of `sort` command (shown in the image below).
 
 image::SortResult2.PNG[width="850"]
 _Figure 5.15.2 : Employee List Panel showing a list of sorted employee entries_
@@ -468,19 +489,19 @@ You will see all employee entries with the tags `technican` and/or `mechanic`(no
 Before using this command, ensure that you are connected to the internet.
 ====
 
-You will need to login to Gmail before you can use the `email` feature to send out emails to your employees (see Section 5.19 below). To login to Gmail, use the `login` command as follows: +
+You will need to login to Gmail before you can use the `email` feature to send out emails to your employees (see Section 5.20 below). To login to Gmail, use the `login` command as follows: +
 Format: `login`
 
 You will be redirected to the Gmail login page on your default internet browser, where you can then proceed to login.
 
 [NOTE]
 ====
-When you are redirected to the Gmail login page, CarviciM may sometimes appear as if it is not responding. Don't panic! Once you have successfully logged in to Gmail, CarviciM will be up and running again, from exactly where you left off.
+When you are redirected to the Gmail login page, CarviciM may (although unlikely to happen) appear as if it is not responding. If so, don't panic! Once you have successfully logged in to Gmail, CarviciM will be up and running again, from exactly where you left off.
 ====
 
 When prompted to give your permission to allow CarviciM to access your Gmail account, click on `ALLOW`.
 
-[NOTE]
+[WARNING]
 ====
 Please do NOT click on `CANCEL`. Be assured that CarviciM will only use your account to send out emails to your employees.
 ====
@@ -491,7 +512,8 @@ For your convenience, your authorization information will be stored on your comp
 
 [NOTE]
 ====
-Before using this command, ensure that you are connected to the internet.
+* Before using this command, ensure that you are connected to the internet.
+* You will need to `login` first before you can send out emails. If you have yet to `login`, the `email` command will first redirect you to the Gmail login page on your default internet browser before sending the emails. Please see Section 5.18 above on how to `login`.
 ====
 
 To send auto-generated emails containing the job details from your Gmail account to all assigned employees of the job, use this command as follows: +
@@ -499,8 +521,13 @@ Format: `email j/JOB_NUMBER`
 
 [NOTE]
 ====
-You will need to `login` first before you can send out emails. If you have yet to `login`, the `email` command will first redirect you to the Gmail login page on your default internet browser before sending the emails. Please see Section 5.18 above on how to `login`.
+* The `JOB_NUMBER` *must be a positive integer* 1, 2, 3, ...
 ====
+
+Take a look at the image below for a sample of the contents of the emails that will be sent when you use this command.
+
+image::Email_example.PNG[width="550"]
+_Figure 5.20.1 : Sample of auto-generated email content_
 
 Example:
 
@@ -722,7 +749,7 @@ You will see the theme of the application set as the selected one.
 
 === Listing entered commands : `history`
 
-To find out what commands that you have executed recently, you can use this command to list a history of executed commands in reverse chronological order. +
+To find out what commands that you have executed recently, use this command to list a history of executed commands in reverse chronological order: +
 Format: `history`
 
 [NOTE]
@@ -733,12 +760,12 @@ Pressing the kbd:[&uarr;] and kbd:[&darr;] arrows will display the previous and 
 // tag::undoredo[]
 === Undoing previous command : `undo`
 
-To reverse an undoable command that was executed by mistake, you can use this command to restore CarviciM to the state before the execution of that command. +
+Nobody's perfect. To reverse an undoable command that was executed by mistake, use this command to restore CarviciM to the state before the execution of that command: +
 Format: `undo`
 
 [NOTE]
 ====
-Undoable commands: those commands that modify CarviciM's content (`addj, `closej`, `adde`, `deletee` and `remarkj`).
+Undoable commands: those commands that modify CarviciM's content (`addj`, `closej`, `adde`, `deletee` `remarkj`, and `sort`).
 ====
 
 
@@ -808,7 +835,7 @@ You will see that the same employee entry is removed from the employee list pane
 
 === Clearing the application : `clear`
 
-To have an empty CarviciM app, you can use this command to clear everything in the app. +
+To have an empty CarviciM app, use this command to clear everything in the app: +
 Format: `clear`
 
 [NOTE]
@@ -832,8 +859,17 @@ There is no need to save manually.
 *Q*: How do I transfer my data to another Computer? +
 *A*: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Address Book folder.
 
-*Q*: Can i use this application without internet connection? +
-*A*: You will be able to use most commands in CarviciM except for the `email` command.
+*Q*: Can I use this application without internet connection? +
+*A*: You will be able to use most commands in CarviciM except for the `login` and `email` command.
+
+*Q*: Why can't I use my mouse? +
+*A*: CarviciM is targeted at users who can type fast. The commands can be executed faster than with a mouse if you are fast typer.
+
+*Q*: I want to be able to view an employee's schedule on a calendar so that I can better allocate jobs. How can I do that? +
+*A*: We hear you. We are currently working on this feature, and it will be one of the new features in CarviciM 2.0. Do watch out for the update!
+
+*Q*: The problem that I am facing is not listed here. What can I do? +
+*A*: Don't worry, simply drop us an email at _carvicim@gmail.com_ and we will respond to you shortly.
 
 == Command Summary
 This section contains a summary of all the commands that you can use in CarviciM.
@@ -842,6 +878,8 @@ This section contains a summary of all the commands that you can use in CarviciM
 
 |=======================================================================
 |Description |Command Format |Example
+
+3+| *_Job Management Features_*
 
 |*Add Job* | `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+` + |`addj n/James Ho p/22224444 e/jamesho@example.com v/saa213 w/22`
 
@@ -859,6 +897,8 @@ This section contains a summary of all the commands that you can use in CarviciM
 
 |*Analyse Job Entries* |`analyse` |
 
+3+| *_Employee Entries Management Features_*
+
 |*Add Employee Entry* |`adde n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]...` |`adde n/James Ho p/22224444 e/jamesho@example.com t/mechanic`
 
 |*Delete Employee Entry* |`deletee INDEX` |`deletee 3`
@@ -871,6 +911,8 @@ This section contains a summary of all the commands that you can use in CarviciM
 
 |*Sort Employee* |`sort` |
 
+3+| *_Import Features_*
+
 |*Import Excel File* |`import` |`import excel.xls`
 
 |*Accept Imported Job* |`accept NUMBER` |`accept 1`
@@ -882,6 +924,8 @@ This section contains a summary of all the commands that you can use in CarviciM
 |*Reject All Imported Jobs* |`rejectAll` |
 
 |*Save Comments On Job Imports* |`save` |
+
+3+| *_Other Features_*
 
 |*Viewing Help*| `help`|
 
@@ -902,4 +946,3 @@ This section contains a summary of all the commands that you can use in CarviciM
 |*Exit The Application* |`exit` |
 
 |=======================================================================
-

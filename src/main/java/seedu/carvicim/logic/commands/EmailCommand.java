@@ -26,7 +26,7 @@ public class EmailCommand extends Command {
 
     public static final String COMMAND_WORD = "email";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": emails employee about job details.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": email employees about job details.\n"
             + "Parameters: "
             + PREFIX_JOB_NUMBER + "JOB_NUMBER "
             + "Example: " + COMMAND_WORD + " "
@@ -50,7 +50,7 @@ public class EmailCommand extends Command {
     public UniqueEmployeeList getListOfEmployeesOfJob() throws CommandException {
         ObservableList<Job> filteredJobList = model.getFilteredJobList();
 
-        if (jobNumber.asInteger() >= filteredJobList.size() || jobNumber.asInteger() < 0) {
+        if (jobNumber.asInteger() > filteredJobList.size() || jobNumber.asInteger() <= 0) {
             throw new CommandException(Messages.MESSAGE_INVALID_JOB_NUMBER);
         }
 

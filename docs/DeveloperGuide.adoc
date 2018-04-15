@@ -9,12 +9,19 @@
 ifdef::env-github[]
 :tip-caption: :bulb:
 :note-caption: :information_source:
+:warning-caption: :warning:
 endif::[]
 :repoURL: https://github.com/CS2103JAN2018-W09-B1/main/tree/master
 
 By: `W09-GroupB1`      Since: `FEB 2018`      Licence: `MIT`
 
+== Introduction
+
+Welcome on board the CarviciM project! This guide will provide you with all the information you need to start contributing to CarviciM.
+
 == Setting up
+
+Before you can get started, here are some things you will need to do.
 
 === Prerequisites
 
@@ -40,6 +47,7 @@ Do not disable them. If you have disabled them, go to `File` > `Settings` > `Plu
 
 === Setting up the project in your computer
 
+Here are the steps you can take to set up the project:
 . Fork this repo, and clone the fork to your computer
 . Open IntelliJ (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project dialog first)
 . Set up the correct JDK version for Gradle
@@ -119,11 +127,11 @@ When you are ready to start coding,
 [[Design-Architecture]]
 === Architecture
 
+The *_Architecture Diagram_* below (figure 1) explains the high-level design of the App. Read this section (section 2) to get a quick overview of each component.
+
 .Architecture Diagram
 image::Architecture.png[width="600"]
 [none]
-
-The *_Architecture Diagram_* (figure 1) given above explains the high-level design of the App. Read this section (section 2) to get a quick overview of each component.
 
 ====
 [TIP]
@@ -222,15 +230,15 @@ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 
 
 Here is what happens when the UI makes an `execute()` call to Logic:
-.  `Logic` uses the `AddressBookParser` class to parse the user command.
-.  This results in a `Command` object which is executed by the `LogicManager`.
+.  `Logic` uses the `CarvicimParser` class to parse the user command.
+.  This results in a `Command` object which is executed by the `LogicManager`
 .  The command execution can affect the `Model` (e.g. adding a employee) and/or raise events.
 .  The result of the command execution is encapsulated as a `CommandResult` object which is passed back to the `Ui` (figure 6).
 
 
-For a more specific example of the steps above, given below (figure 8) is the Sequence Diagram for interactions within the `Logic` component for the `execute("delete 1")` <<api, API>> call.
+For a more specific example of the steps above, given below (figure 8) is the Sequence Diagram for interactions within the `Logic` component for the `execute("deletee 1")` <<api, API>> call.
 
-.Interactions Inside the Logic Component for the `delete 1` Command
+.Interactions Inside the Logic Component for the `deletee 1` Command
 image::DeletePersonSdForLogic.png[width="800"]
 
 [[Design-Model]]
@@ -279,7 +287,7 @@ This section describes some noteworthy details on how certain features are imple
 === Add job feature
 ==== Current Implementation
 
-To implement the job management feature, new classes has been added to the `Model` component. `Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` as shown below.
+To implement the job management feature, new classes have been added to the `Model` component. `Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` as shown below.
 
 .Class Diagram of Model component
 image::ModelClassDiagram.png[width="800"]
@@ -833,7 +841,7 @@ public boolean test(Employee employee) {
 }
 ----
 
-This algorithm is then repeated for all existing employees.
+This algorithm is then repeated for all existing employees to get the filtered list.
 
 ==== Design Considerations
 
@@ -887,6 +895,30 @@ image::SortSequenceDiagram.png[width="800"]
 ==== Current Implementation
 
 The `ArchiveCommand` is facilitated by a `AddJobCommandParser`, which is responsible for parsing the input starting `Date` and ending `Date`.
+
+`ArchiveCommandParser` code snippet that parses the starting and ending `Date`:
+[source,java]
+----
+public ArchiveCommand parse(String args) throws ParseException {
+    ArgumentMultimap argMultimap =
+            ArgumentTokenizer.tokenize(args, PREFIX_START_DATE, PREFIX_END_DATE);
+
+    if (!arePrefixesPresent(argMultimap, PREFIX_START_DATE, PREFIX_END_DATE)
+            || !argMultimap.getPreamble().isEmpty()) {
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ArchiveCommand.MESSAGE_USAGE));
+    }
+
+    try {
+        Date startDate = ParserUtil.parseDate(argMultimap.getValue(PREFIX_START_DATE)).get();
+        Date endDate = ParserUtil.parseDate(argMultimap.getValue(PREFIX_END_DATE)).get();
+
+        DateRange dateRange = new DateRange(startDate, endDate);
+        return new ArchiveCommand(dateRange);
+    } catch (IllegalValueException ive) {
+        throw new ParseException(ive.getMessage(), ive);
+    }
+}
+----
 
 The `ArchiveCommand` is implemented this way to ensure that the specified starting date is earlier than the ending date:
 [source,java]
@@ -1193,7 +1225,7 @@ image::UndoRedoActivityDiagram.png[width="650"]
 
 ===== Aspect: Data structure to support the undo/redo commands
 
-* Current choice:** Use separate stack for undo and redo
+* **Current choice:** Use separate stack for undo and redo
 ** Pros: Easy to understand for new Computer Science undergraduates to understand, who are likely to be * the new incoming developers of our project.
 ** Cons: Logic is duplicated twice. For example, when a new command is executed, we must remember to update * both `HistoryManager` and `UndoRedoStack`.
 * _Alternative:_ Use `HistoryManager` for undo/redo
@@ -1211,7 +1243,7 @@ This feature is implemented using https://developers.google.com/gmail/api/[Gmail
 When the user enters the `login` command, a new GmailAuthenticator object will be created which builds an authorized Gmail client service, as seen in the diagram below.
 
 .Login sequence diagram
-image::LoginCommand_SeqDiagram.png[width="550"]
+image::LoginCommand_SeqDiagram.PNG[width="550"]
 
 In the `authorize` method, a `GoogleAuthorizationCodeFlow` object is created to build the authorization code flow and trigger user authorization request. It then manages and persists user `Credential` by saving it in the file path `./src/main/resources/.credentials/carvicim-gmail`. For more details, look at the the code snippet below.
 
@@ -1244,9 +1276,24 @@ This feature is implemented using https://developers.google.com/gmail/api/[Gmail
 A general overview of how this feature is implemented is shown in the sequence diagram below.
 
 .Email sequence diagram
-image::EmailCommand_SeqDiagram.png[width="550"]
+image::EmailCommand_SeqDiagram.PNG[width="550"]
 
-To explain the sequence of events in greater detail, when the user enters the `email j/JOB_NUMBER` command, a `UniqueEmployeeList` of `JOB_NUMBER` job is obtained from the `Job` object. Using a `for` loop, an email is sent to each employee in the `UniqueEmployeeList`. To craft an email, an empty `Properties` list is created, which is used to create an email `Session`. A `MimeMessage`, a class in the `javax.mail.internet` package is created using that `Session`. The body of the `MimeMessage` contains details extracted from the particular `Job`, and is then encoded using https://en.wikipedia.org/wiki/Base64[base64url] and repackaged into a `Message` by setting the value of the `raw` property of the `Message` to the encoded `MimeMessage`. Finally, this `Message` is sent by making a call to `messages.send`.
+To explain the sequence of events in greater detail, when the user enters the `email j/JOB_NUMBER` command, a `UniqueEmployeeList` of `JOB_NUMBER` job is obtained from the `Job` object. Using a `for` loop, an email is sent to each employee in the `UniqueEmployeeList`.
+
+To craft an email, an empty `Properties` list is created, which is used to create an email `Session`. A `MimeMessage`, a class in the `javax.mail.internet` package is created using that `Session`. The body of the `MimeMessage` contains details extracted from the particular `Job`, and is then encoded using https://en.wikipedia.org/wiki/Base64[base64url] and repackaged into a `Message` by setting the value of the `raw` property of the `Message` to the encoded `MimeMessage`. How the repacking is done is shown in the code snippet below:
+[source,java]
+----
+public static Message createMessageWithEmail(MimeMessage emailContent) throws MessagingException, IOException {
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    emailContent.writeTo(buffer);
+    byte[] bytes = buffer.toByteArray();
+    String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+    Message message = new Message();
+    message.setRaw(encodedEmail);
+    return message;
+}
+----
+Finally, this `Message` is sent by making a call to `messages.send`.
 
 ==== Design Considerations
 
@@ -1865,7 +1912,7 @@ A convenient App for car servicing managers to organize servicing jobs and assig
 * Archiving and analysing job entries. (Major)
 +
 [none]
-** User can archive that may be needed for future reference. Job entries can also be analyse to keep track of the the employees' performance.
+** User can archive that may be needed for future reference. Job entries can also be analyse to keep track of the the employees' workload.
 
 
 [appendix]
@@ -1904,7 +1951,21 @@ Priorities::
 
 |`* * *` |user |import job entries |add multiple job entries at once
 
-|`* *` |user |sort by employees' name |sort employee list alphabetically
+|`* *` |user |login to Gmail |email employees about the assigned job details
+
+|`* *` |user |send emails to employees about the assigned job details |inform my employees of which jobs they are in charge of.
+
+|`* *` |busy user |send auto-generated emails to employees about the assigned job details |reduce the amount of time spent informing my employees of which jobs they are in charge of.
+
+|`* *` |user |find employees by their tags |find the employee with the matching skills for the job.
+
+|`* *` |user |accept and reject imported changes |have control when over bulk imports
+
+|`* *` |user |modify imported job entries |import incomplete or invalid job entries
+
+|`* *` |user |add comments on job entries |record feedback to employees
+
+|`* *` |user |export changes |provide feedback to employees regarding the changes
 
 |`* *` |user |find job entries by the assigned employee's name |locate details of all jobs that are handled by an employee without having to go through the list of jobs
 
@@ -1916,19 +1977,13 @@ Priorities::
 
 |`* *` |user |analyse job entries |keep track of employees' workload
 
+|`* *` |user |sort by employees' name |sort employee list alphabetically
+
 |`* *` |user |change the colour label of job status |easily differentiate between the job statuses
 
 |`* *` |user who likes customization |change the theme of the application |customize the theme to my preference
 
 |`* *` |user who likes customization |change the command words of the application |improve ease of use
-
-|`* *` |user |accept and reject imported changes |have control when over bulk imports
-
-|`* *` |user |modify imported job entries |import incomplete or invalid job entries
-
-|`* *` |user |add comments on job entries |record feedback to employees
-
-|`* *` |user |export changes |provide feedback to employees regarding the changes
 
 |`*` |user |export completed jobs to other formats |print out all the completed job entries and view it with a better program
 
@@ -2405,11 +2460,11 @@ These instructions only provide a starting point for testers to work on; testers
 
 === Deleting a employee
 
-. Deleting a employee while all employees are listed
+. Deleting an employee's record while all employees are listed
 
 .. Prerequisites: List all employees using the `liste` command. Multiple employees in the list.
 .. Test case: `deletee 1` +
-   Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+   Expected: First contact is deleted from the list. Details of the deleted contact is shown in the status message. Timestamp in the status bar is updated.
 .. Test case: `deletee 0` +
    Expected: No employee is deleted. Error details shown in the status message. Status bar remains the same.
 .. Other incorrect delete commands to try: `deletee`, `deletee x` (where x is larger than the list size) _{give more}_ +

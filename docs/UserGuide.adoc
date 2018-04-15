@@ -292,12 +292,12 @@ Example:
 The command will save the closed job entries within the selected date range in CarviciM. +
 You will see "Archived Successfully" in the result display (shown in the image below). +
 
-image::ArchiveResult1.png[width="500"]
+image::ArchiveResult1.PNG[width="500"]
 _Figure 5.10.1 : Result display indicating that archiving is completed successfully_
 
 You will see the newly created archive xml file (shown in the image below).
 
-image::ArchiveResult2.png[width="500"]
+image::ArchiveResult2.PNG[width="500"]
 _Figure 5.10.2 : New archivejob xml file created in the data folder_
 // end::archive[]
 

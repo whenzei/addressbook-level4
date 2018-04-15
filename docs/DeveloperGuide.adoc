@@ -2351,8 +2351,6 @@ These instructions only provide a starting point for testers to work on; testers
 .. Re-launch the app by double-clicking the jar file. +
    Expected: The most recent window size and location is retained.
 
-_{ more test cases ... }_
-
 === Deleting a employee
 
 . Deleting a employee while all employees are listed
@@ -2365,14 +2363,25 @@ _{ more test cases ... }_
 .. Other incorrect delete commands to try: `deletee`, `deletee x` (where x is larger than the list size) _{give more}_ +
    Expected: Similar to previous.
 
-_{ more test cases ... }_
+=== Closing a job
 
-=== Saving data
+. Closing a job while all jobs are listed
 
-. Dealing with missing/corrupted data files
+.. Prerequisites: List all ongoing jobs using the `listoj` command. Multiple ongoing jobs in the list.
+.. Test case: `closej j/1` +
+   Expected: Job with job number 1 has its status change from "ongoing" to "closed". Details of the closed job shown in the status message. Job list shows updated job. Timestamp in the status bar is updated.
+.. Test case: `closej j/0` +
+   Expected: No job is closed. Error details shown in the status message. Status bar remains the same.
 
-.. _{explain how to simulate a missing/corrupted file and the expected behavior}_
+=== Adding remark to a job
 
-_{ more test cases ... }_
+. Adding a remark to an ongoing job, while all ongoing jobs are listed
+
+.. Prerequisites: List all jobs using the `listoj` command. Multiple ongoing jobs in the list.
+.. Test case: `remark j/1 r/Urgent` +
+   Expected: Remark "Urgent" added to job number 1. Details of remark added to job shown in the status message. Timestamp in the status bar is updated.
+.. Test case: `remark j/0 r/Urgent` +
+   Expected: Remark not added to the specified job. Error details shown in the status message. Status bar remains the same.
+
 
 

@@ -408,9 +408,9 @@ The close job mechanisim is facilitated by a `CloseJobCommand`. `CloseJobCommand
 
 Since `CloseJobCommand` is an undoable command, it overrides the `preprocessUndoableCommand` method of `UndoableCommand`, to check if the specified job can be closed.
 
-[NOTE]
 ====
-If the provided `JOB_NUMBER` belongs to a closed job or does not match any job in the job list, `CloseJobCommand` will return an invalid message. `CloseJobCommand` creates a copy of the job if it is found, and sets the status of the duplicate job to be "closed". This is to complement the undo feature.
+[NOTE]
+If the provided `JOB_NUMBER` belongs to a closed job or does not match any job in the job list, `CloseJobCommand` will return an invalid message. `CloseJobCommand` creates a copy of the job if it is found, and sets the status of the duplicate job to be "closed". This is to support the undo feature.
 ====
 
 `preprocessUndoableCommand` method code snippet in `CloseJobCommand`, which checks for the respective job for closing:
@@ -491,8 +491,9 @@ image::CloseJobCommand_execute_SeqDiag.png[width="400"]
 The remark feature is facilitated by `RemarkCommand` which is an `UndoableCommand`. `RemarkCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `JOB_NUMBER` and `REMARK` input, and creates the `RemarkCommand` object.
 
 Similar to the `CloseJobCommand`, the `RemarkCommand` is also an undoable command which overrides the `preprocessUndoableCommand` method of `UndoableCommand`. It checks if the specified job can have a remark added.
-[NOTE]
+
 ====
+[NOTE]
 If the paramters are invalid, `remark` command will return an invalid message, which shows the usage information to the user.
 ====
 

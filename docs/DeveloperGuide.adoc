@@ -547,7 +547,7 @@ If the paramters are invalid, `remark` command will return an invalid message, w
     }
 ----
 
-`executeUndoableCommand` method code snippet in `RemarkCommand`, which updates the job list with the job copy created and posts an `JobDisplayPanelUpdateRequestEvent`:
+`executeUndoableCommand` method code snippet in `RemarkCommand`, which updates the job list with the job copy created:
 [source,java]
 ----
     public CommandResult executeUndoableCommand() {
@@ -558,7 +558,6 @@ If the paramters are invalid, `remark` command will return an invalid message, w
         } catch (JobNotFoundException jnfe) {
             throw new AssertionError("The target job cannot be missing");
         }
-        EventsCenter.getInstance().post(new JobDisplayPanelUpdateRequestEvent(updatedJob));
         return new CommandResult(String.format(MESSAGE_REMARK_SUCCESS, remark));
     }
 ----

@@ -7,6 +7,8 @@
 
 == Overview
 
+image::../images/CarviciM_logo.PNG[width="150", align="left"]
+
 CarviciM is an efficient and systematic application for car servicing managers to manage their servicing jobs and employee assignment. It is a Command Line Interface (CLI) application which is optimized for users who are adpet at using the keyboard.
 CarviciM is built on the link:https://github.com/nus-cs2103-AY1718S2/addressbook-level4[AddressBook - Level 4] project (used for teaching Software Engineering principles). It is written in Java, and has about 10 kLoC.
 

@@ -6,6 +6,7 @@ import seedu.carvicim.logic.commands.exceptions.CommandException;
 import seedu.carvicim.storage.session.ImportSession;
 import seedu.carvicim.storage.session.exceptions.FileAccessException;
 import seedu.carvicim.storage.session.exceptions.FileFormatException;
+import seedu.carvicim.storage.session.exceptions.InvalidDataException;
 
 //@@author yuhongherald
 
@@ -38,7 +39,7 @@ public class ImportCommand extends UndoableCommand {
         ImportSession importSession = ImportSession.getInstance();
         try {
             importSession.initializeSession(filePath);
-        } catch (FileAccessException | FileFormatException e) {
+        } catch (FileAccessException | FileFormatException | InvalidDataException e) {
             throw new CommandException(e.getMessage());
         }
 

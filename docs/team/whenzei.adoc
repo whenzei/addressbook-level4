@@ -19,8 +19,8 @@ This portfolio summarize my contributions for the development of CarviciM. It sh
 ** Justification: Car servicing managers need to manage huge numbers of job entries, and keep track of the employees that are assigned to them. These set of features give them a systematic and convenient way to manage the servicing jobs.
 ** Highlights: This enhancement requires the morphing of the _AddressBook - Level 4_ project and require substantial changes to the codebase. As the added features interact with the 'management of contacts' feature from the addressbook application, changes were to be made to the existing commands so that the newly added commands would work properly. Most changes were made in the Model component.
 
-* *Minor enhancement*: added a theme command that allows the user to select theme from a list of themes provided.
-** Justification: The default application only supports one theme and users would prefer to have more control over how the application looks . They may prefer to use different themes under certain circumstances (e.g. A brighter look would be prefered when working in a different environment, as it is more pleasing to the eyes.)
+* *Minor enhancement*: added the theme setting feature which users can select from the list of themes.
+** Justification: The default application only supports one theme and users would prefer to have more control over how the application looks. They may prefer to use different themes under certain circumstances (e.g. A brighter look would be prefered when working in a different environment, as it is more pleasing to the eyes.)
 * *Code contributed*: [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/whenzei.md[Functional code]] [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/whenzei.md[Test Code]]
 
 * *Other contributions*:
@@ -31,7 +31,7 @@ This portfolio summarize my contributions for the development of CarviciM. It sh
 ** Enhancements to existing features:
 *** Added JobDisplayPanel to support the displaying of job details (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/94[#94], https://github.com/CS2103JAN2018-W09-B1/main/pull/152[#152])
 ** Documentation:
-*** Worked on the user-friendliness of the User Guide by adding screenshots and restructuring the sections to have a better flow. (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/179[#179])
+*** Improved on the user-friendliness of the User Guide by adding screenshots and restructuring the sections to have a better flow. (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/179[#179])
 
 
 == Contributions to the User Guide

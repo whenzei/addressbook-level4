@@ -20,8 +20,18 @@ public class UndoRedoStack {
         redoStack = new Stack<>();
     }
 
-    public void cleanStack() {
-        undoStack.empty();
+    /**
+     * Cleans all commands from UndoRedoStack
+     */
+    public void cleanUndoRedoStack() {
+        cleanStack(undoStack);
+        cleanStack(redoStack);
+    }
+
+    private static void cleanStack(Stack<UndoableCommand> stack) {
+        while (!stack.isEmpty()) {
+            stack.pop().releaseResources();
+        }
     }
 
     /**

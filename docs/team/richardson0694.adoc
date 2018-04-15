@@ -4,8 +4,6 @@
 
 == PROJECT: CarviciM
 
----
-
 == Overview
 
 CarviciM is a desktop car servicing application used for job management purpose. The user interacts with it using a CLI, and it has a GUI created with JavaFX. It is written in Java, and has about 10 kLoC.
@@ -29,7 +27,7 @@ CarviciM is a desktop car servicing application used for job management purpose.
 *** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
 *** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
 ** Documentation:
-*** Did cosmetic tweaks to existing contents of the User Guide: https://github.com[#14]
+*** Updated existing images of the Developer Guide: https://github.com[#14]
 ** Community:
 *** Reported bugs and suggestions for other teams in the class (examples:  https://github.com/CS2103JAN2018-W15-B2/main/issues/169, https://github.com/CS2103JAN2018-W15-B2/main/issues/178, https://github.com/CS2103JAN2018-W15-B2/main/issues/174)
 

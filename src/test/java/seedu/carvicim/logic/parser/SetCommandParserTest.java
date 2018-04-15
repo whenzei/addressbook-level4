@@ -1,8 +1,8 @@
 package seedu.carvicim.logic.parser;
 
-import static seedu.carvicim.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.carvicim.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.carvicim.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.carvicim.logic.parser.SetCommandParser.ERROR_MESSAGE;
 
 import org.junit.Test;
 
@@ -24,15 +24,13 @@ public class SetCommandParserTest {
     @Test
     public void parse_noCommandWord_failure() {
         String currentWord = "";
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, currentWord, expectedMessage);
+        assertParseFailure(parser, currentWord, ERROR_MESSAGE);
     }
 
     @Test
     public void parse_oneCommandWord_failure() {
         String currentWord = AddEmployeeCommand.COMMAND_WORD;
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, currentWord, expectedMessage);
+        assertParseFailure(parser, currentWord, ERROR_MESSAGE);
     }
 
     public static String getWord() {

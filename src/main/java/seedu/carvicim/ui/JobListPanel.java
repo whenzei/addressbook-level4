@@ -18,7 +18,7 @@ import seedu.carvicim.commons.events.ui.JobPanelSelectionChangedEvent;
 import seedu.carvicim.commons.events.ui.JumpToJobListRequestEvent;
 import seedu.carvicim.model.job.Job;
 
-//@@author yuhongherald
+//@@author yuhongherald-reused
 /**
  * Panel containing the list of jobs.
  */

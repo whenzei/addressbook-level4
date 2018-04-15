@@ -31,7 +31,7 @@ Responsibilities: Storage
 
 === Wee Jia Sheng Richardson
 image::richardson0694.jpg[width="150", align="left"]
-{empty}[http://github.com/Richardson0694[github]] [<<Richardson0694#, portfolio>>]
+{empty}[http://github.com/Richardson0694[github]] [<<richardson0694#, portfolio>>]
 
 Role: Developer, Documentation, Integration +
 Responsibilities: UI

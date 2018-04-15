@@ -118,7 +118,7 @@ public class AddEmployeeCommandTest {
         }
 
         @Override
-        public void addJobs(List<Job> job) {
+        public void addJobsAndNewEmployees(List<Job> job) {
             fail("This method should not be called.");
         }
 

@@ -1,5 +1,7 @@
 package seedu.carvicim.logic.commands;
 
+import static seedu.carvicim.commons.core.Messages.MESSAGE_NO_JOB_ENTRIES;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +38,14 @@ public class AcceptAllCommand extends UndoableCommand {
     public CommandResult executeUndoableCommand() throws CommandException {
         SessionData sessionData = ImportSession.getInstance().getSessionData();
         if (sessionData.getUnreviewedJobEntries().isEmpty()) {
-            throw new CommandException("There are no job entries to review!");
+            throw new CommandException(MESSAGE_NO_JOB_ENTRIES);
         }
         List<Job> jobs = new ArrayList<>(sessionData
                 .reviewAllRemainingJobEntries(true, comment));
-        model.addJobs(jobs);
+        model.addJobsAndNewEmployees(jobs);
         if (model.isViewingImportedJobs()) {
             model.switchJobView();
+            model.resetJobView();
         }
         return new CommandResult(getMessageSuccess(jobs.size()));
     }

@@ -106,7 +106,7 @@ Here are some example commands you can try:
 Before reading more about commands, you should take note of the command format used in the user guide:
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `adde n/NAME`, `NAME` is a parameter which can be used as `adde n/John Doe`.
-* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`._
+* Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`.
 * Items with `…` after them can be used multiple times including zero times e.g. `[t/TAG]...` can be used as `{nbsp}` (i.e. 0 times), `t/mechanic`, `t/technician` etc.
 * Items with `+` after them can be used multiple times but has to be used **at least once** e.g. `w/ASSIGNED_EMPLOYEE_INDEX+` can be used as `w/4`, `w/5` etc.
 * Parameters can be in any order e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
@@ -314,7 +314,7 @@ The command will analyse the job entries within the current month in CarviciM. +
 You will see "Result: Number of Jobs: ... Number of Ongoing: ... Number of Closed: ..."
 followed by the number of jobs assigned to each employee in the result display (shown in the image below). +
 
-image::AnalyseResult.png[width="850"]
+image::AnalyseResult.PNG[width="850"]
 _Figure 5.11.1 : Result display showing a summary of the job entries_
 // end::analyse[]
 
@@ -352,7 +352,7 @@ Examples:
 * Example 1: +
 +
 `liste` +
-You will see a list of employee entries displayed in the employee list panel.+
+You will see a list of employee entries displayed in the employee list panel. +
 +
 `deletee 2` +
 You will see an updated employee list panel which has the 2nd employee entry removed.
@@ -375,12 +375,12 @@ Example:
 
 Given a unsorted list of employees (shown in the image below).
 
-image::SortResult1.png[width="300"]
+image::SortResult1.PNG[width="300"]
 _Figure 5.15.1 : Employee List Panel showing a list of unsorted employee entries_
 
 You will see the sorted list of employee after the execution of `sort` command (shown in the image below).
 
-image::SortResult2.png[width="850"]
+image::SortResult2.PNG[width="850"]
 _Figure 5.15.2 : Employee List Panel showing a list of sorted employee entries_
 // end::sort[]
 

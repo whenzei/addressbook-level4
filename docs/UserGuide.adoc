@@ -166,7 +166,7 @@ Example:
 
 `closej j/2` +
 This command closes the ongoing job of number 2 in CarviciM. +
-You will see "Closed Job: 2" in the result display as shown in the image below.
+You will see "Closed Job..." in the result display as shown in the image below.
 
 image::closej-command-example.PNG[width="500"]
 _Figure 5.3.1 : Result display indicating that a job has been closed_
@@ -190,7 +190,7 @@ Example:
 
 `remark j/2 r/An urgent work that should be completed asap` +
 This command will add the remark "An urgent work that should be completed asap" to a job entry of a job number "2". +
-You will see the message "Remark added to job number 2: An urgent work that should be completed asap" shown in the result display (shown in the image below).
+You will see the message "Remark added to job number ..." reflected in the result display (shown in the image below).
 
 image::remark-command-example.PNG[width="500"]
 _Figure 5.4.1 : Result display showing feedback for remark added_

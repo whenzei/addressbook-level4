@@ -30,7 +30,7 @@ public class RowData {
     }
 
     /**
-     * Reads all the entries between (@code startIndex) and (@code endIndex) from a row in the excel file
+     * Reads all the entries between {@code startIndex} and {@code endIndex} from a row in the excel file
      */
     public ArrayList<String> readDataFromSheet(Sheet sheet, int rowNumber)
             throws DataIndexOutOfBoundsException {

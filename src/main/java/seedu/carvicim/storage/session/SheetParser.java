@@ -13,7 +13,7 @@ import seedu.carvicim.storage.session.exceptions.InvalidDataException;
 
 //@@author yuhongherald
 /**
- * a
+ * Used to parse a Sheet from a an Excel Workbook into {@link SheetWithHeaderFields}
  */
 public class SheetParser {
     public static final String INVALID_FIELD = "INVALID_FIELD";
@@ -70,7 +70,7 @@ public class SheetParser {
     }
 
     /**
-     * Reads the (@code Sheet) and converts it into (@code SheetWithHeaderFields)
+     * Reads the {@code Sheet} and converts it into {@code SheetWithHeaderFields}
      */
     public SheetWithHeaderFields parseSheetWithHeaderField() throws FileFormatException, InvalidDataException {
         parseFirstRow();
@@ -88,7 +88,7 @@ public class SheetParser {
     }
 
     /**
-     * Creates a new column with header (@code name) (@code offset) columns after last column.
+     * Creates a new column with header {@code name} {@code offset} columns after last column.
      * @param offset
      */
     private void createCommentField(String name, int offset) {
@@ -97,7 +97,7 @@ public class SheetParser {
     }
 
     /**
-     * Processes the header fields in the first row into (@code headerFields) and throws (@code FileFormatException)
+     * Processes the header fields in the first row into {@code headerFields} and throws {@code FileFormatException}
      * if there are missing compulsory header fields
      */
     private void parseFirstRow() throws FileFormatException {
@@ -119,8 +119,8 @@ public class SheetParser {
     }
 
     /**
-     * Removes header field from (@code missingCompulsoryFields) or (@code missingOptionalFields) and
-     * places it into (@code headerFields)
+     * Removes header field from {@code missingCompulsoryFields} or {@code missingOptionalFields} and
+     * places it into {@code headerFields}
      */
     private void addHeaderField(String currentField, RowData rowData) throws FileFormatException {
         if (missingCompulsoryFields.contains(currentField)) {
@@ -135,7 +135,7 @@ public class SheetParser {
     }
 
     /**
-     * Checks if (@code field) is present in (@code fields), ignoring case
+     * Checks if {@code field} is present in {@code fields}, ignoring case
      */
     private boolean isFieldPresent(String field) {
         return missingCompulsoryFields.contains(field) || missingOptionalFields.contains(field);

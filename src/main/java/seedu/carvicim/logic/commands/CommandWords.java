@@ -69,7 +69,7 @@ public class CommandWords implements Serializable {
     }
 
     /**
-     * Returns whether (@code commandWord) is in (@code COMMANDS)
+     * Returns whether {@code commandWord} is in {@code COMMANDS}
      */
     public static boolean isDefaultCommandWord(String commandWord) {
         for (String command: COMMANDS) {
@@ -156,10 +156,10 @@ public class CommandWords implements Serializable {
     }
 
     /**
-     * throws a (@code CommandWordException) if:
+     * throws a {@code CommandWordException} if:
      * 1. Both words are the same
-     * 2. (@code newWord) overwrites the default word for another command
-     * 3. (@code newWord) is already in use
+     * 2. {@code newWord} overwrites the default word for another command
+     * 3. {@code newWord} is already in use
      */
     private void throwExceptionIfCommandWordsNotValid(String currentWord, String newWord) throws CommandWordException {
         if (currentWord.equals(newWord)) {
@@ -175,8 +175,8 @@ public class CommandWords implements Serializable {
     }
 
     /**
-     * Copies key and value of (@code command) from (@code commands)
-     * to (@code verifiedCommands). Creates a new entry with default
+     * Copies key and value of {@code command} from {@code commands}
+     * to {@code verifiedCommands}. Creates a new entry with default
      * key = value if missing.
      */
     private void moveVerifiedWord(String command, HashMap<String, String> verifiedCommands) {

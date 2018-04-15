@@ -120,7 +120,7 @@ public class ImportAllCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns ImportAllCommand with (@code filePath), with default data
+     * Returns ImportAllCommand with {@code filePath}, with default data
      */
     protected ImportAllCommand prepareCommand(String filePath) throws Exception {
         JobNumber.initialize(0);

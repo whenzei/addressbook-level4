@@ -97,17 +97,6 @@ public class AcceptAllCommandTest extends ImportCommandTestEnv {
     }
 
     @Test
-    public void execute_acceptAllWithComment_success() throws Exception {
-        prepareInputFiles();
-        AcceptAllCommand command = prepareCommand(comment.toString());
-        command.execute();
-        prepareOutputFiles();
-        assertTrue(expectedModelWithComment.equals(command.model));
-        assertOutputResultFilesEqual();
-        commandCleanup(command);
-    }
-
-    @Test
     public void execute_acceptAllWithoutImport_failure() throws Exception {
         ImportSession.getInstance().setSessionData(new SessionData());
         AcceptAllCommand command = prepareCommand(comment.toString());
@@ -120,7 +109,7 @@ public class AcceptAllCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns AcceptAllCommand with (@code comments), with default data
+     * Returns AcceptAllCommand with {@code comments}, with default data
      */
     protected AcceptAllCommand prepareCommand(String comments) throws Exception {
         JobNumber.initialize(0);
@@ -237,7 +226,7 @@ public class AcceptCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns AcceptCommand with (@code jobIndex) and (@code comments), with default data
+     * Returns AcceptCommand with {@code jobIndex} and {@code comments}, with default data
      */
     protected AcceptCommand prepareCommand(int jobIndex, String comments) throws Exception {
         JobNumber.initialize(0);
@@ -336,7 +325,7 @@ public class ImportAllCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns ImportAllCommand with (@code filePath), with default data
+     * Returns ImportAllCommand with {@code filePath}, with default data
      */
     protected ImportAllCommand prepareCommand(String filePath) throws Exception {
         JobNumber.initialize(0);
@@ -402,7 +391,7 @@ public class ImportCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns ImportCommand with (@code filePath), with default data
+     * Returns ImportCommand with {@code filePath}, with default data
      */
     protected ImportCommand prepareCommand(String filePath) throws Exception {
         JobNumber.initialize(1);
@@ -482,7 +471,7 @@ public class RejectAllCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns RejectCommand with (@code comments), with default data
+     * Returns RejectCommand with {@code comments}, with default data
      */
     protected RejectAllCommand prepareCommand(String comments) throws Exception {
         JobNumber.initialize(1);
@@ -577,7 +566,7 @@ public class RejectCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns RejectCommand with (@code jobIndex) and (@code comments), with default data
+     * Returns RejectCommand with {@code jobIndex} and {@code comments}, with default data
      */
     protected RejectCommand prepareCommand(int jobIndex, String comments) throws Exception {
         JobNumber.initialize(1);
@@ -629,7 +618,7 @@ public class SetCommandTest {
 
         setCommandWord(expectedModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageDefaultSuccess(), expectedModel);
     }
 
     @Test
@@ -643,7 +632,7 @@ public class SetCommandTest {
         newWord = getUnusedCommandWord(actualModel);
         setCommandWord(expectedModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageDefaultSuccess(), expectedModel);
     }
 
     @Test
@@ -655,12 +644,12 @@ public class SetCommandTest {
 
         setCommandWord(actualModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, newWord, currentWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageRemoveAliasSuccess(), expectedModel);
     }
 
 
     @Test
-    public void execute_changeSet_success() throws CommandWordException {
+    public void execute_addSetAliasAndRemove_success() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalCarvicim(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalCarvicim(), new UserPrefs());
         String currentWord = SetCommand.COMMAND_WORD;
@@ -668,11 +657,11 @@ public class SetCommandTest {
 
         setCommandWord(expectedModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageDefaultSuccess(), expectedModel);
 
         setCommandWord(expectedModel, newWord, currentWord);
         SetCommand newCommand2 = prepareCommand(actualModel, newWord, currentWord);
-        assertCommandSuccess(newCommand2, actualModel, newCommand2.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand2, actualModel, newCommand2.getMessageRemoveAliasSuccess(), expectedModel);
     }
 
     @Test
@@ -749,7 +738,7 @@ public class SetCommandTest {
     }
 
     /**
-     * Generates a new {@code SetCommand} which upon execution replaces (@code currentWord) with (@code newWord).
+     * Generates a new {@code SetCommand} which upon execution replaces {@code currentWord} with {@code newWord}.
      */
     private SetCommand prepareCommand(Model model, String currentWord, String newWord) {
         SetCommand command = new SetCommand(currentWord, newWord);
@@ -812,8 +801,7 @@ public class AcceptCommandParserTest {
 
     @Test
     public void parse_invalidNumber_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AcceptCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, "", expectedMessage);
+        assertParseFailure(parser, "", ERROR_MESSAGE);
     }
 }
 ```
@@ -852,8 +840,7 @@ public class RejectCommandParserTest {
 
     @Test
     public void parse_invalidNumber_failure() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, RejectCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, "", expectedMessage);
+        assertParseFailure(parser, "", ERROR_MESSAGE);
     }
 }
 ```
@@ -873,15 +860,13 @@ public class SetCommandParserTest {
     @Test
     public void parse_noCommandWord_failure() {
         String currentWord = "";
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, currentWord, expectedMessage);
+        assertParseFailure(parser, currentWord, ERROR_MESSAGE);
     }
 
     @Test
     public void parse_oneCommandWord_failure() {
         String currentWord = AddEmployeeCommand.COMMAND_WORD;
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, SetCommand.MESSAGE_USAGE);
-        assertParseFailure(parser, currentWord, expectedMessage);
+        assertParseFailure(parser, currentWord, ERROR_MESSAGE);
     }
 
     public static String getWord() {
@@ -1017,7 +1002,7 @@ public abstract class ImportSessionTestEnv {
     }
 
     /**
-     * Deletes file at (@String filePath) if file exists
+     * Deletes file at {@code filePath} if file exists
      */
     private void deleteFile(String filePath) throws IOException {
         File file = new File(filePath);

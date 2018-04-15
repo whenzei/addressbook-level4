@@ -16,7 +16,7 @@ import seedu.carvicim.model.remark.RemarkList;
 
 //@@author yuhongherald
 /**
- * Represents a job entry in an (@link ImportSession)
+ * Represents a job entry in an {@link ImportSession}
  */
 public class JobEntry extends Job {
     public static final String NEWLINE = "\n";
@@ -40,9 +40,9 @@ public class JobEntry extends Job {
     }
 
     /**
-     * Marks (@code JobEntry) as reviewed.
-     * @param approved whether (@code JobEntry) is going to be added to Carvicim
-     * @param comment feedback for (@code JobEntry) in String representation
+     * Marks {@code JobEntry} as reviewed.
+     * @param approved whether {@code JobEntry} is going to be added to Carvicim
+     * @param comment feedback for {@code JobEntry} in String representation
      */
     public void review(boolean approved, String comment) {
         comments.add(comment);

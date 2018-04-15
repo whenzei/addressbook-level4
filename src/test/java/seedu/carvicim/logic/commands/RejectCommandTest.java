@@ -102,7 +102,7 @@ public class RejectCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns RejectCommand with (@code jobIndex) and (@code comments), with default data
+     * Returns RejectCommand with {@code jobIndex} and {@code comments}, with default data
      */
     protected RejectCommand prepareCommand(int jobIndex, String comments) throws Exception {
         JobNumber.initialize(1);

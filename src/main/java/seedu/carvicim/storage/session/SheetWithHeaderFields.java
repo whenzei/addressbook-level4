@@ -77,7 +77,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
-     * Marks job at (@code row) as rejected
+     * Marks job at {@code row} as rejected
      */
     public void rejectJobEntry(int row) {
         int index = commentFields.get(APPROVAL_STATUS).getStartIndex();
@@ -92,7 +92,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
-     * Marks job at (@code row) as accepted
+     * Marks job at {@code row} as accepted
      */
     public void approveJobEntry(int row) {
         int index = commentFields.get(APPROVAL_STATUS).getStartIndex();
@@ -163,7 +163,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
-     * Looks for first (@code JobEtnry) with no missing fields and returns it
+     * Looks for first {@code JobEtnry} with no missing fields and returns it
      * @throws FileFormatException if no valid job entries
      */
     private JobEntry getFirstJobEntry() throws FileFormatException {
@@ -245,7 +245,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
-     * Reads single entry (@ocde rowDta) from row (@code rowNumber)
+     * Reads single entry (@ocde rowDta) from row {@code rowNumber}
      */
     private String readFirstData(RowData rowData, int rowNumber) {
         requireNonNull(rowData);
@@ -257,7 +257,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
-     * Reads all entries (@ocde rowDta) from row (@code rowNumber)
+     * Reads all entries (@ocde rowDta) from row {@code rowNumber}
      */
     private ArrayList<String> readListData(RowData rowData, int rowNumber) {
         requireNonNull(rowData);
@@ -268,7 +268,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
         }
     }
     /**
-     * Retrieves the job at (@code rowNumber), and missing details from those in first job entry.
+     * Retrieves the job at {@code rowNumber}, and missing details from those in first job entry.
      * Adds missing fields in remarks.
      */
     private JobEntry getJobEntryAt(int rowNumber, JobEntry previousEntry) {
@@ -296,7 +296,7 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
     }
 
     /**
-     * Creates an (@code UniqueEmployeeList) containing (@code Employee)
+     * Creates an {@code UniqueEmployeeList} containing {@code Employee}
      */
     private UniqueEmployeeList createSingleEmployeeList(Employee employee) {
         UniqueEmployeeList employeeList = new UniqueEmployeeList();

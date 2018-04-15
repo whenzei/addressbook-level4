@@ -13,7 +13,7 @@ import seedu.carvicim.storage.session.SessionData;
 //@@author yuhongherald
 
 /**
- * Accepts all remaining unreviewed job entries into Servicing Manager with (@code comment)
+ * Accepts all remaining unreviewed job entries into Servicing Manager with {@code comment}
  */
 public class AcceptAllCommand extends UndoableCommand {
 

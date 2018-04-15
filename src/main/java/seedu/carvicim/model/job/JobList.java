@@ -90,7 +90,7 @@ public class JobList implements Iterable<Job> {
 
     //@@author yuhongherald
     /**
-     * Filters (@code jobList) for jobs assigned to (@code employee).
+     * Filters {@code jobList} for jobs assigned to {@code employee}.
      */
     public static Predicate<Job> filterByEmployee(ObservableList<Job> jobList, Employee employee) {
         Predicate<Job> predicate = new Predicate<Job>() {

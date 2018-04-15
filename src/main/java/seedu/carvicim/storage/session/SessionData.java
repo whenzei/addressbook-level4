@@ -33,7 +33,7 @@ import seedu.carvicim.storage.session.exceptions.UninitializedException;
 
 //@@author yuhongherald
 /**
- * A data structure used to keep track of job entries in an (@code ImportSession)
+ * A data structure used to keep track of job entries in an {@code ImportSession}
  */
 public class SessionData {
     public static final String ERROR_MESSAGE_INVALID_FILEPATH = "Please check the path to your file.";
@@ -114,7 +114,7 @@ public class SessionData {
     ===================================================================*/
 
     /**
-     * Creates a file using relative filePath of (@code importFile), then appending a SAVEFILE_SUFFIX
+     * Creates a file using relative filePath of {@code importFile}, then appending a SAVEFILE_SUFFIX
      */
     private File generateSaveFile() {
         requireNonNull(importFile);
@@ -142,7 +142,7 @@ public class SessionData {
     ===================================================================*/
 
     /**
-     * Attempts load file specified at (@code filePath) if there is no currently open file and
+     * Attempts load file specified at {@code filePath} if there is no currently open file and
      * specified file exists, is readable and is an excel file
      */
     public void loadFile(String filePath) throws FileAccessException, FileFormatException, InvalidDataException {
@@ -196,7 +196,7 @@ public class SessionData {
     }
 
     /**
-     * Attempts to create and set (@code Workbook) for a given (@code File)
+     * Attempts to create and set {@code Workbook} for a given {@code File}
      */
     private void setWorkBook(File file) throws IOException, InvalidFormatException, IllegalArgumentException {
         logger.info("Setting workbook from file: " + file);
@@ -247,7 +247,7 @@ public class SessionData {
     }
 
     /**
-     * Saves feedback to (@code file)
+     * Saves feedback to {@code file}
      */
     public String saveDataToFile(File file) throws IOException, UninitializedException {
         requireNonNull(file);
@@ -285,7 +285,7 @@ public class SessionData {
     }
 
     /**
-     * Attempts to close (@code workBook) so that the file associated can be modified
+     * Attempts to close {@code workBook} so that the file associated can be modified
      */
     public void closeWorkBook() throws FileAccessException {
         if (workbook == null) {
@@ -311,7 +311,7 @@ public class SessionData {
     }
 
     /**
-     * Adds job entries from (@code sheetWithHeaderFields) into (@code SessionData)
+     * Adds job entries from {@code sheetWithHeaderFields} into {@code SessionData}
      */
     public void addSheet(SheetWithHeaderFields sheetWithHeaderFields) {
         Iterator<JobEntry> jobEntryIterator = sheetWithHeaderFields.iterator();
@@ -341,7 +341,7 @@ public class SessionData {
     }
 
     /**
-     * Reviews all remaining jobs using (@code reviewJobEntry). Writes to (@code saveFile) when done.
+     * Reviews all remaining jobs using {@code reviewJobEntry}. Writes to {@code saveFile} when done.
      */
     public ArrayList<JobEntry> reviewAllRemainingJobEntries(boolean approved, String comments) throws CommandException {
         logger.info("Reviewing all remaining entries: ");
@@ -372,8 +372,8 @@ public class SessionData {
     }
 
     /**
-     * Reviews a (@code JobEntry) specified by (@code listIndex). Writes to (@code saveFile) when done.
-     * @param jobIndex index of (@code JobEntry) in (@code unreviewedJobEntries)
+     * Reviews a {@code JobEntry} specified by {@code listIndex}. Writes to {@code saveFile} when done.
+     * @param jobIndex index of {@code JobEntry} in {@code unreviewedJobEntries}
      * @param approved whether job entry will be added to Carvicim
      * @param comments feedback in string representation
      * @return reviewed jobEntry
@@ -409,8 +409,8 @@ public class SessionData {
     }
 
     /**
-     * Reviews a (@code JobEntry) specified by (@code listIndex)
-     * @param listIndex index of (@code JobEntry) in (@code unreviewedJobEntries)
+     * Reviews a {@code JobEntry} specified by {@code listIndex}
+     * @param listIndex index of {@code JobEntry} in {@code unreviewedJobEntries}
      * @param approved whether job entry will be added to Carvicim
      * @param comments feedback in string representation
      * @return reviewed jobEntry
@@ -444,7 +444,7 @@ public class SessionData {
     }
 
     /**
-     * Reverses the reviewing process of (@code jobEntry) in the event that it cannot be written to file
+     * Reverses the reviewing process of {@code jobEntry} in the event that it cannot be written to file
      */
     private void unreviewJobEntry(JobEntry jobEntry) {
         sheets.get(jobEntry.getSheetNumber()).unreviewJobEntry(jobEntry.getRowNumber());

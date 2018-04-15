@@ -137,7 +137,7 @@ public class AcceptCommandTest extends ImportCommandTestEnv {
     }
 
     /**
-     * Returns AcceptCommand with (@code jobIndex) and (@code comments), with default data
+     * Returns AcceptCommand with {@code jobIndex} and {@code comments}, with default data
      */
     protected AcceptCommand prepareCommand(int jobIndex, String comments) throws Exception {
         JobNumber.initialize(0);

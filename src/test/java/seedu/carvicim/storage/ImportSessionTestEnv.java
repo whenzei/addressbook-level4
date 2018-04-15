@@ -142,7 +142,7 @@ public abstract class ImportSessionTestEnv {
     }
 
     /**
-     * Deletes file at (@String filePath) if file exists
+     * Deletes file at {@code filePath} if file exists
      */
     private void deleteFile(String filePath) throws IOException {
         File file = new File(filePath);

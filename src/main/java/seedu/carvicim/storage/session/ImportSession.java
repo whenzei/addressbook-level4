@@ -16,8 +16,8 @@ import seedu.carvicim.storage.session.exceptions.UninitializedException;
 
 //@@author yuhongherald
 /**
- * Used to store data relevant to importing of (@code Job) from (@code inFile) and
- * exporting (@code Job) with commens to (@code outFile). Implements a Singleton design pattern.
+ * Used to store data relevant to importing of {@code Job} from {@code inFile} and
+ * exporting {@code Job} with commens to {@code outFile}. Implements a Singleton design pattern.
  */
 public class ImportSession {
 
@@ -77,7 +77,7 @@ public class ImportSession {
     }
 
     /**
-     *  Opens excel file specified by (@code filepath) and initializes (@code SessionData) to support import operations
+     *  Opens excel file specified by {@code filepath} and initializes {@code SessionData} to support import operations
      */
     public void initializeSession(String filePath) throws FileAccessException, FileFormatException,
             InvalidDataException {
@@ -89,7 +89,7 @@ public class ImportSession {
     }
 
     /**
-     * Flushes feedback to (@return pathToOutfile) and releases resources.
+     * Flushes feedback to {@code pathToOutfile} and releases resources.
      */
     public String closeSession() throws CommandException {
         logger.info("Attempting to close session:");

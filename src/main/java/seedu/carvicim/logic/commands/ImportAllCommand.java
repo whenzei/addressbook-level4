@@ -14,7 +14,7 @@ import seedu.carvicim.storage.session.exceptions.InvalidDataException;
 
 //@@author yuhongherald
 /**
- * Attempts to import all (@code JobEntry) into Servicing Manager
+ * Attempts to import all {@code JobEntry} into Servicing Manager
  */
 public class ImportAllCommand extends UndoableCommand {
 

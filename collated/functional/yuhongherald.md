@@ -44,7 +44,7 @@ public class JobListSwitchEvent extends BaseEvent {
 ``` java
 
 /**
- * Accepts all remaining unreviewed job entries into Servicing Manager with (@code comment)
+ * Accepts all remaining unreviewed job entries into Servicing Manager with {@code comment}
  */
 public class AcceptAllCommand extends UndoableCommand {
 
@@ -204,7 +204,7 @@ public class CommandWords implements Serializable {
     }
 
     /**
-     * Returns whether (@code commandWord) is in (@code COMMANDS)
+     * Returns whether {@code commandWord} is in {@code COMMANDS}
      */
     public static boolean isDefaultCommandWord(String commandWord) {
         for (String command: COMMANDS) {
@@ -291,10 +291,10 @@ public class CommandWords implements Serializable {
     }
 
     /**
-     * throws a (@code CommandWordException) if:
+     * throws a {@code CommandWordException} if:
      * 1. Both words are the same
-     * 2. (@code newWord) overwrites the default word for another command
-     * 3. (@code newWord) is already in use
+     * 2. {@code newWord} overwrites the default word for another command
+     * 3. {@code newWord} is already in use
      */
     private void throwExceptionIfCommandWordsNotValid(String currentWord, String newWord) throws CommandWordException {
         if (currentWord.equals(newWord)) {
@@ -310,8 +310,8 @@ public class CommandWords implements Serializable {
     }
 
     /**
-     * Copies key and value of (@code command) from (@code commands)
-     * to (@code verifiedCommands). Creates a new entry with default
+     * Copies key and value of {@code command} from {@code commands}
+     * to {@code verifiedCommands}. Creates a new entry with default
      * key = value if missing.
      */
     private void moveVerifiedWord(String command, HashMap<String, String> verifiedCommands) {
@@ -398,7 +398,7 @@ public class CommandWordException extends Exception {
 ###### \java\seedu\carvicim\logic\commands\ImportAllCommand.java
 ``` java
 /**
- * Attempts to import all (@code JobEntry) into Servicing Manager
+ * Attempts to import all {@code JobEntry} into Servicing Manager
  */
 public class ImportAllCommand extends UndoableCommand {
 
@@ -518,7 +518,7 @@ public class ListJobCommand extends Command {
 ``` java
 
 /**
- * Rejects all remaining unreviewed job entries into Servicing Manager with (@code comment)
+ * Rejects all remaining unreviewed job entries into Servicing Manager with {@code comment}
  */
 public class RejectAllCommand extends UndoableCommand {
 
@@ -627,7 +627,9 @@ public class SetCommand extends UndoableCommand {
             + "Parameters: CURRENT_COMMAND_WORD NEW_COMMAND_WORD\n"
             + "Example: " + COMMAND_WORD + " set st";
 
-    public static final String MESSAGE_SUCCESS = "%s has been replaced with %s!";
+    public static final String MESSAGE_ALIAS_SUCCESS = "%s has been replaced with %s!";
+    public static final String MESSAGE_DEFAULT_SUCCESS = "%s has been set as an alternative for %s!";
+    public static final String MESSAGE_REMOVE_ALIAS_SUCCESS = "%s has been removed!";
 
     private final String currentWord;
     private final String newWord;
@@ -640,8 +642,16 @@ public class SetCommand extends UndoableCommand {
         this.newWord = newWord;
     }
 
-    public String getMessageSuccess() {
-        return String.format(MESSAGE_SUCCESS, currentWord, newWord);
+    public String getMessageAliasSuccess() {
+        return String.format(MESSAGE_ALIAS_SUCCESS, currentWord, newWord);
+    }
+
+    public String getMessageRemoveAliasSuccess() {
+        return String.format(MESSAGE_REMOVE_ALIAS_SUCCESS, currentWord);
+    }
+
+    public String getMessageDefaultSuccess() {
+        return String.format(MESSAGE_DEFAULT_SUCCESS, newWord, currentWord);
     }
 
     public String getMessageUsed() {
@@ -660,7 +670,12 @@ public class SetCommand extends UndoableCommand {
         } catch (CommandWordException e) {
             throw new CommandException(e.getMessage());
         }
-        return new CommandResult(getMessageSuccess());
+        if (CommandWords.isDefaultCommandWord(currentWord)) {
+            return new CommandResult(getMessageDefaultSuccess());
+        } else if (CommandWords.isDefaultCommandWord(newWord)) {
+            return new CommandResult(getMessageRemoveAliasSuccess());
+        }
+        return new CommandResult(getMessageAliasSuccess());
     }
 
     @Override
@@ -723,6 +738,7 @@ public class AcceptCommandParser implements Parser<AcceptCommand> {
     public static final int NUMBER_OF_ARGUMENTS = 2;
     public static final String SPACE = " ";
     public static final int COMMENTS_INDEX = 1;
+    public static final String ERROR_MESSAGE = MESSAGE_INVALID_JOB_INDEX + "\n" + AcceptCommand.MESSAGE_USAGE;
 
     /**
      * Parses the given {@code String} of arg
@@ -741,7 +757,7 @@ public class AcceptCommandParser implements Parser<AcceptCommand> {
             int jobNumber = parseInteger(arguments[0]);
             return new AcceptCommand(jobNumber, comment);
         } catch (IllegalValueException ive) {
-            throw new ParseException(MESSAGE_INVALID_JOB_INDEX + "\n" + AcceptCommand.MESSAGE_USAGE);
+            throw new ParseException(ERROR_MESSAGE);
         }
     }
 
@@ -832,6 +848,7 @@ public class RejectCommandParser implements Parser<RejectCommand> {
     public static final int NUMBER_OF_ARGUMENTS = 2;
     public static final int COMMENTS_INDEX = 1;
     public static final int JOB_INDEX_INDEX = 0;
+    public static final String ERROR_MESSAGE = MESSAGE_INVALID_JOB_INDEX + "\n" + AcceptCommand.MESSAGE_USAGE;
 
     /**
      * Parses the given {@code String} of arg
@@ -850,7 +867,7 @@ public class RejectCommandParser implements Parser<RejectCommand> {
             int jobNumber = parseInteger(arguments[JOB_INDEX_INDEX]);
             return new RejectCommand(jobNumber, comment);
         } catch (IllegalValueException ive) {
-            throw new ParseException(MESSAGE_INVALID_JOB_INDEX + "\n" + AcceptCommand.MESSAGE_USAGE);
+            throw new ParseException(ERROR_MESSAGE);
         }
     }
 
@@ -863,6 +880,8 @@ public class RejectCommandParser implements Parser<RejectCommand> {
  */
 public class SetCommandParser implements Parser<SetCommand> {
 
+    public static final String ERROR_MESSAGE = MESSAGE_INSUFFICIENT_WORDS + "\n" + SetCommand.MESSAGE_USAGE;
+
     /**
      * Parses the given {@code String} of arg
      * uments in the context of the SetCommand
@@ -874,7 +893,7 @@ public class SetCommandParser implements Parser<SetCommand> {
             String[] commandWords = parseWords(args);
             return new SetCommand(commandWords[0], commandWords[1]);
         } catch (IllegalValueException ive) {
-            throw new ParseException(MESSAGE_INSUFFICIENT_WORDS + "\n" + SetCommand.MESSAGE_USAGE);
+            throw new ParseException(ERROR_MESSAGE);
         }
     }
 
@@ -883,7 +902,7 @@ public class SetCommandParser implements Parser<SetCommand> {
 ###### \java\seedu\carvicim\model\job\JobList.java
 ``` java
     /**
-     * Filters (@code jobList) for jobs assigned to (@code employee).
+     * Filters {@code jobList} for jobs assigned to {@code employee}.
      */
     public static Predicate<Job> filterByEmployee(ObservableList<Job> jobList, Employee employee) {
         Predicate<Job> predicate = new Predicate<Job>() {
@@ -1026,8 +1045,8 @@ public class UninitializedException extends Exception {
 ###### \java\seedu\carvicim\storage\session\ImportSession.java
 ``` java
 /**
- * Used to store data relevant to importing of (@code Job) from (@code inFile) and
- * exporting (@code Job) with commens to (@code outFile). Implements a Singleton design pattern.
+ * Used to store data relevant to importing of {@code Job} from {@code inFile} and
+ * exporting {@code Job} with commens to {@code outFile}. Implements a Singleton design pattern.
  */
 public class ImportSession {
 
@@ -1087,7 +1106,7 @@ public class ImportSession {
     }
 
     /**
-     *  Opens excel file specified by (@code filepath) and initializes (@code SessionData) to support import operations
+     *  Opens excel file specified by {@code filepath} and initializes {@code SessionData} to support import operations
      */
     public void initializeSession(String filePath) throws FileAccessException, FileFormatException,
             InvalidDataException {
@@ -1099,7 +1118,7 @@ public class ImportSession {
     }
 
     /**
-     * Flushes feedback to (@return pathToOutfile) and releases resources.
+     * Flushes feedback to {@code pathToOutfile} and releases resources.
      */
     public String closeSession() throws CommandException {
         logger.info("Attempting to close session:");
@@ -1117,7 +1136,7 @@ public class ImportSession {
 ###### \java\seedu\carvicim\storage\session\JobEntry.java
 ``` java
 /**
- * Represents a job entry in an (@link ImportSession)
+ * Represents a job entry in an {@link ImportSession}
  */
 public class JobEntry extends Job {
     public static final String NEWLINE = "\n";
@@ -1141,9 +1160,9 @@ public class JobEntry extends Job {
     }
 
     /**
-     * Marks (@code JobEntry) as reviewed.
-     * @param approved whether (@code JobEntry) is going to be added to Carvicim
-     * @param comment feedback for (@code JobEntry) in String representation
+     * Marks {@code JobEntry} as reviewed.
+     * @param approved whether {@code JobEntry} is going to be added to Carvicim
+     * @param comment feedback for {@code JobEntry} in String representation
      */
     public void review(boolean approved, String comment) {
         comments.add(comment);
@@ -1216,7 +1235,7 @@ public class RowData {
     }
 
     /**
-     * Reads all the entries between (@code startIndex) and (@code endIndex) from a row in the excel file
+     * Reads all the entries between {@code startIndex} and {@code endIndex} from a row in the excel file
      */
     public ArrayList<String> readDataFromSheet(Sheet sheet, int rowNumber)
             throws DataIndexOutOfBoundsException {
@@ -1236,7 +1255,7 @@ public class RowData {
 ###### \java\seedu\carvicim\storage\session\SessionData.java
 ``` java
 /**
- * A data structure used to keep track of job entries in an (@code ImportSession)
+ * A data structure used to keep track of job entries in an {@code ImportSession}
  */
 public class SessionData {
     public static final String ERROR_MESSAGE_INVALID_FILEPATH = "Please check the path to your file.";
@@ -1317,7 +1336,7 @@ public class SessionData {
     ===================================================================*/
 
     /**
-     * Creates a file using relative filePath of (@code importFile), then appending a SAVEFILE_SUFFIX
+     * Creates a file using relative filePath of {@code importFile}, then appending a SAVEFILE_SUFFIX
      */
     private File generateSaveFile() {
         requireNonNull(importFile);
@@ -1345,7 +1364,7 @@ public class SessionData {
     ===================================================================*/
 
     /**
-     * Attempts load file specified at (@code filePath) if there is no currently open file and
+     * Attempts load file specified at {@code filePath} if there is no currently open file and
      * specified file exists, is readable and is an excel file
      */
     public void loadFile(String filePath) throws FileAccessException, FileFormatException, InvalidDataException {
@@ -1399,7 +1418,7 @@ public class SessionData {
     }
 
     /**
-     * Attempts to create and set (@code Workbook) for a given (@code File)
+     * Attempts to create and set {@code Workbook} for a given {@code File}
      */
     private void setWorkBook(File file) throws IOException, InvalidFormatException, IllegalArgumentException {
         logger.info("Setting workbook from file: " + file);
@@ -1450,7 +1469,7 @@ public class SessionData {
     }
 
     /**
-     * Saves feedback to (@code file)
+     * Saves feedback to {@code file}
      */
     public String saveDataToFile(File file) throws IOException, UninitializedException {
         requireNonNull(file);
@@ -1488,7 +1507,7 @@ public class SessionData {
     }
 
     /**
-     * Attempts to close (@code workBook) so that the file associated can be modified
+     * Attempts to close {@code workBook} so that the file associated can be modified
      */
     public void closeWorkBook() throws FileAccessException {
         if (workbook == null) {
@@ -1514,7 +1533,7 @@ public class SessionData {
     }
 
     /**
-     * Adds job entries from (@code sheetWithHeaderFields) into (@code SessionData)
+     * Adds job entries from {@code sheetWithHeaderFields} into {@code SessionData}
      */
     public void addSheet(SheetWithHeaderFields sheetWithHeaderFields) {
         Iterator<JobEntry> jobEntryIterator = sheetWithHeaderFields.iterator();
@@ -1544,7 +1563,7 @@ public class SessionData {
     }
 
     /**
-     * Reviews all remaining jobs using (@code reviewJobEntry). Writes to (@code saveFile) when done.
+     * Reviews all remaining jobs using {@code reviewJobEntry}. Writes to {@code saveFile} when done.
      */
     public ArrayList<JobEntry> reviewAllRemainingJobEntries(boolean approved, String comments) throws CommandException {
         logger.info("Reviewing all remaining entries: ");
@@ -1575,8 +1594,8 @@ public class SessionData {
     }
 
     /**
-     * Reviews a (@code JobEntry) specified by (@code listIndex). Writes to (@code saveFile) when done.
-     * @param jobIndex index of (@code JobEntry) in (@code unreviewedJobEntries)
+     * Reviews a {@code JobEntry} specified by {@code listIndex}. Writes to {@code saveFile} when done.
+     * @param jobIndex index of {@code JobEntry} in {@code unreviewedJobEntries}
      * @param approved whether job entry will be added to Carvicim
      * @param comments feedback in string representation
      * @return reviewed jobEntry
@@ -1612,8 +1631,8 @@ public class SessionData {
     }
 
     /**
-     * Reviews a (@code JobEntry) specified by (@code listIndex)
-     * @param listIndex index of (@code JobEntry) in (@code unreviewedJobEntries)
+     * Reviews a {@code JobEntry} specified by {@code listIndex}
+     * @param listIndex index of {@code JobEntry} in {@code unreviewedJobEntries}
      * @param approved whether job entry will be added to Carvicim
      * @param comments feedback in string representation
      * @return reviewed jobEntry
@@ -1647,7 +1666,7 @@ public class SessionData {
     }
 
     /**
-     * Reverses the reviewing process of (@code jobEntry) in the event that it cannot be written to file
+     * Reverses the reviewing process of {@code jobEntry} in the event that it cannot be written to file
      */
     private void unreviewJobEntry(JobEntry jobEntry) {
         sheets.get(jobEntry.getSheetNumber()).unreviewJobEntry(jobEntry.getRowNumber());
@@ -1660,7 +1679,7 @@ public class SessionData {
 ###### \java\seedu\carvicim\storage\session\SheetParser.java
 ``` java
 /**
- * a
+ * Used to parse a Sheet from a an Excel Workbook into {@link SheetWithHeaderFields}
  */
 public class SheetParser {
     public static final String INVALID_FIELD = "INVALID_FIELD";
@@ -1717,7 +1736,7 @@ public class SheetParser {
     }
 
     /**
-     * Reads the (@code Sheet) and converts it into (@code SheetWithHeaderFields)
+     * Reads the {@code Sheet} and converts it into {@code SheetWithHeaderFields}
      */
     public SheetWithHeaderFields parseSheetWithHeaderField() throws FileFormatException, InvalidDataException {
         parseFirstRow();
@@ -1735,7 +1754,7 @@ public class SheetParser {
     }
 
     /**
-     * Creates a new column with header (@code name) (@code offset) columns after last column.
+     * Creates a new column with header {@code name} {@code offset} columns after last column.
      * @param offset
      */
     private void createCommentField(String name, int offset) {
@@ -1744,7 +1763,7 @@ public class SheetParser {
     }
 
     /**
-     * Processes the header fields in the first row into (@code headerFields) and throws (@code FileFormatException)
+     * Processes the header fields in the first row into {@code headerFields} and throws {@code FileFormatException}
      * if there are missing compulsory header fields
      */
     private void parseFirstRow() throws FileFormatException {
@@ -1766,8 +1785,8 @@ public class SheetParser {
     }
 
     /**
-     * Removes header field from (@code missingCompulsoryFields) or (@code missingOptionalFields) and
-     * places it into (@code headerFields)
+     * Removes header field from {@code missingCompulsoryFields} or {@code missingOptionalFields} and
+     * places it into {@code headerFields}
      */
     private void addHeaderField(String currentField, RowData rowData) throws FileFormatException {
         if (missingCompulsoryFields.contains(currentField)) {
@@ -1782,7 +1801,7 @@ public class SheetParser {
     }
 
     /**
-     * Checks if (@code field) is present in (@code fields), ignoring case
+     * Checks if {@code field} is present in {@code fields}, ignoring case
      */
     private boolean isFieldPresent(String field) {
         return missingCompulsoryFields.contains(field) || missingOptionalFields.contains(field);

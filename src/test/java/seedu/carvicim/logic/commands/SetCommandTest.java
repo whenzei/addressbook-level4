@@ -56,7 +56,7 @@ public class SetCommandTest {
 
         setCommandWord(expectedModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageDefaultSuccess(), expectedModel);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class SetCommandTest {
         newWord = getUnusedCommandWord(actualModel);
         setCommandWord(expectedModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageDefaultSuccess(), expectedModel);
     }
 
     @Test
@@ -82,12 +82,12 @@ public class SetCommandTest {
 
         setCommandWord(actualModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, newWord, currentWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageRemoveAliasSuccess(), expectedModel);
     }
 
 
     @Test
-    public void execute_changeSet_success() throws CommandWordException {
+    public void execute_addSetAliasAndRemove_success() throws CommandWordException {
         Model actualModel = new ModelManager(getTypicalCarvicim(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalCarvicim(), new UserPrefs());
         String currentWord = SetCommand.COMMAND_WORD;
@@ -95,11 +95,11 @@ public class SetCommandTest {
 
         setCommandWord(expectedModel, currentWord, newWord);
         SetCommand newCommand = prepareCommand(actualModel, currentWord, newWord);
-        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand, actualModel, newCommand.getMessageDefaultSuccess(), expectedModel);
 
         setCommandWord(expectedModel, newWord, currentWord);
         SetCommand newCommand2 = prepareCommand(actualModel, newWord, currentWord);
-        assertCommandSuccess(newCommand2, actualModel, newCommand2.getMessageSuccess(), expectedModel);
+        assertCommandSuccess(newCommand2, actualModel, newCommand2.getMessageRemoveAliasSuccess(), expectedModel);
     }
 
     @Test
@@ -176,7 +176,7 @@ public class SetCommandTest {
     }
 
     /**
-     * Generates a new {@code SetCommand} which upon execution replaces (@code currentWord) with (@code newWord).
+     * Generates a new {@code SetCommand} which upon execution replaces {@code currentWord} with {@code newWord}.
      */
     private SetCommand prepareCommand(Model model, String currentWord, String newWord) {
         SetCommand command = new SetCommand(currentWord, newWord);

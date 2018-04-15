@@ -590,17 +590,21 @@ image::SetCommandObjectDiagram.png[width="800"]
 [none]
 
 `SetCommand` keeps 2 lists of command words:
-* the default command words
-** stored as a class level reference `COMMANDS`
-* the custom user command words
-** stored as a field `commands` in the object
+
+* The default command words stored as a class level reference `COMMANDS`
+* The custom user command words stored as a field `commands` in the object
 Both are managed by the class `CommandWords`.
 
-`CommandWords` is in the `Logic` component, under `Commands`, as it is required to parse commands in `AddressBookParser`.
+`CommandWords` is in the `Logic` component, under `Commands`,
+as it is required to parse commands in `AddressBookParser`.
 
 `CommandWords` only deal with commands that have their default command word declared in the class level reference.
 
-AddressBookParser makes a reference to CommandWords. However, `CommandWords` resides in `UserPrefs` in the `Model` component (figure 12). This is to facilitate the saving of data. CommandWords also has a method checkIntegrity, which ensures that object command words are 1 to 1 with class command words. This allows forward compatibility, as well as protects against data corruption to some extent.
+CarviciMParser makes a reference to CommandWords.
+However, `CommandWords` resides in `UserPrefs` in the `Model` component (figure 12).
+This is to facilitate the saving of data. CommandWords also has a method `checkIntegrity()`,
+which ensures that object command words are 1 to 1 with class command words.
+This allows forward compatibility, and protects against data corruption to some extent.
 
 ==== Design Considerations
 

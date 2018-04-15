@@ -6,7 +6,7 @@ import seedu.carvicim.model.Carvicim;
 /**
  * Sorts all persons alphabetically by names in the carvicim book to the user.
  */
-public class SortCommand extends Command {
+public class SortCommand extends UndoableCommand {
 
     public static final String COMMAND_WORD = "sort";
 
@@ -19,7 +19,7 @@ public class SortCommand extends Command {
     protected Carvicim carvicim;
 
     @Override
-    public CommandResult execute() {
+    public CommandResult executeUndoableCommand() {
         model.sortPersonList();
         return new CommandResult(MESSAGE_SUCCESS);
     }

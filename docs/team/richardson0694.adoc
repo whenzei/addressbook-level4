@@ -10,26 +10,39 @@ CarviciM is a desktop car servicing application used for job management purpose.
 
 == Summary of contributions
 
-* *Major enhancement*: added *the ability to archive closed job entries* and *the ability to analyse job entries*
-** What it does: allows the user to archive closed job entries within the specified date range and analyse the job entries within the current month.
-** Justification: This feature improves the product significantly because a user can make mistakes in commands and the app should provide a convenient way to rectify them.
-** Highlights: This enhancement affects existing commands and commands to be added in future. It required an in-depth analysis of design alternatives. The implementation too was challenging as it required changes to existing commands.
+* *Major enhancement*: Added *the ability to archive job entries* and *the ability to analyse job entries*
+** Archive Job Entries
+*** What it does: Allows the user to archive closed job entries within the specified date range.
+*** Justification: The number of job entries will keep growing as time goes by, the car servicing manager would have a hard time looking at the large number of job entries.
+However, the manager would not like to delete all the old job entries since these information can be used by the technicians or mechanics to find out the most effective and efficient way to maintain or repair the customer’s vehicle.
+Hence, these job entries should be kept for auditing and referencing purpose by making use of the archiving feature.
+*** Highlights: This enhancement requires an in-depth analysis of design alternatives in order to select the most appropriate way to save the archived jobs.
+In addition, the implementation was challenging as it required changes to be made existing storage system.
+** Analyse Job Entries
+*** What it does: Analyse the job entries within the current month.
+*** Justification: Every employee hopes to receive fair treatment and equal workload. However, the manager may not be able to remember the number of jobs that each employee has on hand currently and assign more jobs to a particular employee.
+With this feature, the manager can ensure that workload is equally distributed among employees by taking the analyse result into consideration.
+*** Highlights: This enhancement required a suitable data structure to keep track of employee's workload.
 
-* *Minor enhancement*: sorting the employee list alphabetically according to their names.
+* *Minor enhancement*: Added *the ability to sort the employee list.*
+** What it does: Allows the user to sort the employee list alphabetically according to their names.
+** Justification: After adding in a new employee, the employee entries could be found at the end of the employee list.
+With this feature, the manager would be able to organise and locate the employee easily.
 
 * *Code contributed*: [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/functional/richardson0694.md[Functional code]] [https://github.com/CS2103JAN2018-W09-B1/main/blob/master/collated/test/richardson0694.md[Test code]]
 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
-** Enhancements to existing features:
-*** Updated the GUI color scheme (Pull requests https://github.com[#33], https://github.com[#34])
-*** Wrote additional tests for existing features to increase coverage from 88% to 92% (Pull requests https://github.com[#36], https://github.com[#38])
+*** Updated releases `v1.4` - `v1.5rc` (2 releases) on GitHub
+*** Closed issues on GitHub
 ** Documentation:
-*** Updated existing images of the Developer Guide: https://github.com[#14]
+*** Updated User Guide with implemented features such as analysing, archiving and sorting.
+*** Included features implementation for analysing, archiving and sorting to Developer Guide.
+*** Added in images for adding and deleting of employee in User Guide: (Pull request https://github.com/CS2103JAN2018-W09-B1/main/pull/190[#190])
+*** Updated existing images of the Developer Guide: (Pull requests https://github.com/CS2103JAN2018-W09-B1/main/pull/182[#182], https://github.com/CS2103JAN2018-W09-B1/main/pull/183[#183], https://github.com/CS2103JAN2018-W09-B1/main/pull/190[#190])
 ** Community:
-*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com/CS2103JAN2018-W15-B2/main/issues/169, https://github.com/CS2103JAN2018-W15-B2/main/issues/178, https://github.com/CS2103JAN2018-W15-B2/main/issues/174)
+*** Reported bugs and suggestions for other teams in the class (examples:  https://github.com/CS2103JAN2018-W15-B2/main/issues/169[#169], https://github.com/CS2103JAN2018-W15-B2/main/issues/174[#174], https://github.com/CS2103JAN2018-W15-B2/main/issues/178[#178])
 
 == Contributions to the User Guide
 

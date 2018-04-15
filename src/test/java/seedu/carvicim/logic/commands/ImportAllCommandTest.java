@@ -104,7 +104,6 @@ public class ImportAllCommandTest extends ImportCommandTestEnv {
         prepareOutputFiles();
         assertTrue(expectedModel.equals(command.model));
         assertOutputResultFilesEqual();
-        commandCleanup(command);
     }
 
     @Test

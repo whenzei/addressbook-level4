@@ -37,7 +37,7 @@ https://bitbucket.org/controlsfx/controlsfx/[ControlsFX],
 https://github.com/FasterXML/jackson[Jackson],
 https://github.com/google/guava[Guava],
 https://github.com/junit-team/junit4[JUnit4],
-https://mvnrepository.com/artifact/org.apache.poi/poi/3.17[POI},
-https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml/3.17{POI-ooxml]
+https://mvnrepository.com/artifact/org.apache.poi/poi/3.17[POI],
+https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml/3.17[POI-ooxml]
 
 == Licence : link:LICENSE[MIT]

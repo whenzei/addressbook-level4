@@ -23,6 +23,9 @@ public interface Logic {
     /** releases resources in undoRedoStack */
     void cleanUndoRedoStack();
 
+    /** returns the command words mapped as text representation */
+    String getCommandWordMapping();
+
     /** Returns an unmodifiable view of the filtered list of persons */
     ObservableList<Employee> getFilteredPersonList();
 

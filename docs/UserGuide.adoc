@@ -77,6 +77,9 @@ A region on the GUI which allows you to type in commands.
 Job List Panel::
 A region on the GUI where you can view the list of jobs.
 
+Job List Indicator::
+A region above the job list panel that indicates if you are viewing unreviewed jobs or saved jobs.
+
 Employee List Panel::
 A region on the GUI where you can view the list of employees.
 
@@ -536,66 +539,91 @@ Auto-generated emails containing the job details of the job at index 1 of the jo
 
 // tag::importexport[]
 === Importing jobs from an excel file
+==== Importing and accepting all job entries in an excel file: `importAll`
+
+To import all jobs into CarviciM directly, use this command as follows:
+Format: `importAll FILEPATH`
+
+Similar to <<import-command, `import`>> command, `importAll` also loads an excel file,
+additionally it accepts all job entries. `importAll` is equivalent to an
+<<import-command, `import`>> and <<acceptAll-command, `acceptAll`>>.
+
+Example:
+
+`importAll excel-file.xlsx` +
+Imports example excel file excel-file.xlsx shown in <<import-command, `import`>>, accepts all job entries and saves the reviewed job entries as an external excel file.
+You should see:
+
+image::importAll-example.png[width="1200"]
 
 [[import-command]]
 ==== Importing a new excel file: `import`
 
-To load your excel file by filename or filepath that contains new job entries, use this command as follows: +
+To discretely import job entries, you must first import a file, then <<accept-reject, `accept` and `reject`>>
+job entries.
+
+To start import a file, use this command as follows: +
 Format: `import FILE_PATH`
+
+[TIP]
+====
+If your imported file does not reflect correctly, there is an old save file from the <<save-command, autosave feature>>. To rectify the
+problem:
+
+1. Close CarviciM.
+2. Look for a file in the same folder with the same filename, with `-comments.xlsx` or
+`-comments.xls` behind.
+3. Delete the file.
+4. Start CarviciM and try again.
+====
 
 [NOTE]
 ====
 * Filepath: A text representation of the location of the file used by the computer.
 * CarviciM tries to read the file by rows:
-** The first row specifies the type of detail in the column.
+** The first row specifies the type of detail in the column. This can be seen in the table below:
 ====
 
 [WARNING]
-The excel file must not be password-protected
+====
+* The excel file must not be password-protected
+* It is preferable to only import files within this application's folder, as other programs
+outside the folder might affect CarviciM's performance
+====
 
-Example:
+Here is an example of an excel sheet that can be imported:
 
-`import excel.xlsx` +
-Imports file excel.xlsx.
-
-==== Importing and accepting all job entries in an excel file: `importAll`
-
-Similar to <<import-command, `import`>> command, `importAll` also loads an excel file,
-additionally it accepts all job entries and saves the reviews of the jobs. `importAll` is
-equivalent to an <<import-command, `import`>>, <<acceptAll-command, `acceptAll`>> and
-<<save-command, `save`>>.
-
-[TIP]
-You can use this command to import all job entries from an excel file to save time.
-
-Example:
-
-`importAll excel.xlsx` +
-Imports file excel.xlsx, accepts all job entries and saves the reviewed job entries as an external excel file.
-
-==== Importing and accepting all job entries in an excel file: `importAll`
-
-Similar to <<import-command, `import`>> command, `importAll` also loads an excel file,
-additionally it accepts all job entries and saves the reviews of the jobs. `importAll` is
-equivalent to an <<import-command, `import`>>, <<acceptAll-command, `acceptAll`>> and
-<<save-command, `save`>>.
+[width="59%",cols="8%,8%,8%,8%,8%,8%,8%,8%,8%,8%,8%",options="header",]
+|=======================================================================
+|client name |client phone |client email |vehicle number |employee name	|employee phone |employee email| status |remarks | empty column|
+|John Doe |91234567 |jd@gmail.com |SXX1234X |Jim |87654321 |jim@gmail.com |Your remark |Ongoing||
+|...||||||||||
+|=======================================================================
 
 [TIP]
-You can use this command to import all job entries from an excel file to save time.
+The columns can be interchanged, with `empty column` at the last column.
 
 Example:
 
-`importAll excel.xlsx` +
-Imports file excel.xlsx, accepts all job entries and saves the reviewed job entries as an external excel file.
+`import excel-file.xlsx` +
+Imports the example file excel-file.xlsx shown above. You should see:
+
+image::import-example.png[width="1200"]
+
 
 ==== Switching views between unreviewed jobs and jobs in CarviciM: `switch`
 
 You can use this command to switch between the list of unreviewed jobs and jobs in CarviciM. +
 Format: `switch`
 
+[NOTE]
+You can see the current job list in the job list indicator.
+
+[[accept-reject]]
 ==== Accepting and rejecting changes
 
 You can use 4 commands when reviewing changes:
+
 * `accept NUMBER`
 * `reject NUMBER`
 * `acceptAll`
@@ -677,8 +705,13 @@ Rejects all remaining imported jobs and attaches "Please check the customer deta
 [[save-command]]
 ==== Sharing your feedback with your employees:
 
-CarviciM autosaves your comments to an excel file with -comments.xls or -comments.xlsx appended,
+To send your feedback to the job list providers, look for the save file generated after importing and reviewing your jobs.
+CarviciM autosaves your comments to an excel file with `-comments.xls` or `-comments.xlsx` appended,
 in the same directory.
+
+[WARNING]
+When copying `-comments.xls` or `-comments.xlsx` files, try to keep the original copy in the folder. It helps to prevent
+reimporting the same jobs from the a file with the same name twice.
 // end::importexport[]
 
 // tag::set[]
@@ -692,8 +725,25 @@ Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 * The OLD_COMMAND_WORD can be either a default command word or one which user has set previously.
 * The NEW_COMMAND_WORD must be 1 word, with no spacing.
 
-* Any default words or words currently set by users are not allowed.
+* Any default words or custom words already in use are not allowed.
 ====
+
+[TIP]
+====
+* To remove the custom word associated with a command, type the custom word as OLD_COMMAND_WORD and
+COMMAND_WORD of the command as `newWord`
++
+e.g.
++
+`set adde a`
++
+To remove `a`, type:
++
+`set a adde`
+====
+
+You don't have to worry if you forgot your custom words! They will displayed in the result display
+whenever you make a mistake!
 
 Examples:
 
@@ -701,13 +751,14 @@ Examples:
 +
 `set adde a` +
 Sets `adde` command word to `a` using default. +
-You will see "adde has been replaced with a!" in the result display.
+You will see "a has been set as an alternative for adde!" in the result display.
 
 * Example 2: +
 +
 `set deletee d` +
-Sets `deletee` command word to `d` using default. +
-You will see "deletee has been replaced with d!" in the result display.
+`set d delete` +
+Sets `d` to `delete` using default. +
+You will see "d has been replaced with delete!" in the result display.
 // end::set[]
 
 // tag::theme[]
@@ -922,8 +973,6 @@ This section contains a summary of all the commands that you can use in CarviciM
 |*Accept All Imported Jobs* |`acceptAll` |
 
 |*Reject All Imported Jobs* |`rejectAll` |
-
-|*Save Comments On Job Imports* |`save` |
 
 3+| *_Other Features_*
 

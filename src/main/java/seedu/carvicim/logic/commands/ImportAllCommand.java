@@ -16,7 +16,7 @@ import seedu.carvicim.storage.session.exceptions.InvalidDataException;
 /**
  * Attempts to import all {@code JobEntry} into Servicing Manager
  */
-public class ImportAllCommand extends UndoableCommand {
+public class ImportAllCommand extends Command {
 
     public static final String COMMAND_WORD = "importAll";
 
@@ -38,7 +38,7 @@ public class ImportAllCommand extends UndoableCommand {
     }
 
     @Override
-    public CommandResult executeUndoableCommand() throws CommandException {
+    public CommandResult execute() throws CommandException {
         ImportSession importSession = ImportSession.getInstance();
         try {
             importSession.initializeSession(filePath);

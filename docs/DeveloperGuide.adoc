@@ -587,67 +587,143 @@ image::RemarkCommand_execute_SeqDiag.png[width="400"]
 // end::remark[]
 
 // tag::set[]
-=== Set command feature
+=== Supporting setting of command word alias feature
 ==== Current Implementation
 
-.Object Diagram of CommandWords at runtime
-image::SetCommandObjectDiagram.png[width="800"]
-[none]
+.Class Diagram with CommandWords
+image::SetCommandClassDiagram.png[width="400"]
 
+The user can set a command word alias using the command `set`, specifying the old command
+word and new command word. This is how `set` command handles user requests using `currentWord`
+and `newWord` respectively.
+
+[source,java]
+----
+    public CommandResult executeUndoableCommand() throws CommandException {
+        requireNonNull(model);
+        try {
+            model.getCommandWords().setCommandWord(currentWord, newWord);
+        } catch (CommandWordException e) {
+            throw new CommandException(e.getMessage());
+        }
+        if (CommandWords.isDefaultCommandWord(currentWord)) {
+            return new CommandResult(getMessageDefaultSuccess());
+        } else if (CommandWords.isDefaultCommandWord(newWord)) {
+            return new CommandResult(getMessageRemoveAliasSuccess());
+        }
+        return new CommandResult(getMessageAliasSuccess());
+    }
+----
+
+The command splits into 3 cases:
+
+. When `currentWord` is a command word and `newWord` is an alias, `newWord` will be set as alias
+for command specified by `currentWord`
+[source,java]
++
+----
+CommandWords.isDefaultCommandWord(currentWord)
+----
+
+. When `newWord` is a command word and `currentWord` is an alias, `currentWord` will be removed
+and the alias for command specified by `newWord` will be reset
+[source,java]
++
+----
+CommandWords.isDefaultCommandWord(newWord)
+----
+. If `currentWord` and `newWord` are both new alias, the old alias will be replaced by the new alias.
+
+[NOTE]
+=====
+The command will fail if one of the following occurs
+
+* `currentWord` and `newWord` is the same
+* `newWord` overwrites another alias or command word
+
+[source,java]
+----
+    private void isCommandWordsValid(String currentWord, String newWord) throws CommandWordException {
+        if (currentWord.equals(newWord)) {
+            throw new CommandWordException(getMessageNoChange());
+        }
+        if (isDefaultCommandWord(newWord)
+                && !commands.get(newWord).equals(currentWord)) {
+            throw new CommandWordException(getMessageOverwriteDefault(newWord));
+        }
+        if (commands.containsValue(newWord)) {
+            throw new CommandWordException(getMessageUsed(newWord));
+        }
+    }
+----
+
+* `currentWord` is not an existing alias or command word. This is checked by iterating through commands.
+
+=====
+
+`set` command makes use of class `CommandWords` to manage the custom command words.
 `SetCommand` keeps 2 lists of command words:
 
 * The default command words stored as a class level reference `COMMANDS`
-* The custom user command words stored as a field `commands` in the object
+* The command word aliases are stored as a field `commands` in the object
+
 Both are managed by the class `CommandWords`.
 
-`CommandWords` is in the `Logic` component, under `Commands`,
-as it is required to parse commands in `AddressBookParser`.
+CarvicimParser makes a reference to `CommandWords` to facilitate retrieval of alias command words.
+However, `CommandWords` resides in `Model` (Figure 12). This is to facilitate the saving of data.
 
-`CommandWords` only deal with commands that have their default command word declared in the class level reference.
+CommandWords also has a method `checkIntegrity()`, which ensures that object command words are 1 to 1 with class command words.
+This allows forward compatibility when new command words are introduced, and old ones removed,
+and protects against data corruption to some extent.
 
-CarviciMParser makes a reference to CommandWords.
-However, `CommandWords` resides in `UserPrefs` in the `Model` component (figure 12).
-This is to facilitate the saving of data. CommandWords also has a method `checkIntegrity()`,
-which ensures that object command words are 1 to 1 with class command words.
-This allows forward compatibility, and protects against data corruption to some extent.
+.Class Diagram with CommandWords
+image::SetCommandSequenceDiagram.png[width="800"]
+
+At runtime, CarvicimParser checks if the command word provided by the user matches any of the alias before proceeding
+parsing a command, as shown in Figure 13.
 
 ==== Design Considerations
-
 ===== Aspect: Where to put CommandWords for storage
 
 * **Current choice:** Place `CommandWords` in `UserPrefs`
 ** Pros: Single Responsibility Principle is maintained as custom command words in `CommandWords` is a user preference.
-** Cons: More coupling is required for the AddressBook to retrieve the custom command words.
-* _Alternative:_ Place `CommandWords` in `AddressBook`
-** Pros: Direct access to custom words in commands.
-** Cons: Single Responsibility Principle will be violated.
+CommandWords is also Serializable, which makes it compatible with `JsonUserPrefsStorage`.
+** Cons: `CommandWords` is now coupled with `UserPrefs`
+* _Alternative:_ Place `CommandWords` into a separate Storage class
+** Pros: Reduced coupling.
+** Cons: More files will be created in the application directory, making it more cluttered and cumbersome to backup.
 
 ===== Aspect: Access to CommandWords
 
-* **Current choice:** Provide direct access to `CommandWords` when more details are needed and keep minimal <<api, API>> on `ModelManager`.
-** Pros: Easy to implement, and is neat.
-** Cons: Accidental modification can lead to bugs.
-* _Alternative:_ `ModelManager` and member variables gets access and provides <<api, API>> to access `CommandWords`.
-** Pros: Write protection.
-** Cons: `CommandWords` is frequently accessed, so many more <<api, APIs>> are required.
+* **Current choice:** Create getters and setters and provide a copy of `CommandWords` when more detail is needed.
+** Pros: Easy to enforce rules on the changing of the alias in `CommandWords`.
+** Cons: Need to modify getters and setters to change the implementation of `CommandWords`.
+* _Alternative:_ Create `CommandWords` like an augmented `HashMap`
+** Pros: Minimal new <<api, APIs>> are required, and flexibility is given to classes accessing `CommandWords`.
+** Cons: Difficult to enforce rules, breaking the rules of mapped words can lead to bugs.
 
 
 ===== Aspect: Storing the list of default command words
 
 * **Current choice:** Store the default list in `CommandWords`.
 ** Pros: Easier to maintain the Open-Closed Principle, also follows the Single Responsibility Principle.
-** Cons: Increased coupling.
-* _Alternative:_ Store the default list in `Commands`.
-** Pros: Reduced coupling.
-** Cons: `Commands` is an abstract class, it is not appropriate to reference class variables.
+** Cons: Command words have to be explicitly declared under class reference to support alias
+* _Alternative:_ Store the default list in `Command`.
+** Pros: `Command` is the super class of all commands, a method to enforce declaration of the command word
+can be done easily.
+** Cons: `Command` is an abstract class, it is not appropriate to reference class variables.
 // end::set[]
 
 // tag::importexport[]
-=== Import/Save feature
+=== Import feature
 ==== Current Implementation
 
-.Object Diagram of `session` component
+.Class Diagram of `session` component
 image::SessionComponentClassDiagram.png[width="800"]
+
+`ImportSession` resides in the `Session` component in the `Storage` component as shown above. The
+`Session` component is responsible for processing excel files, as well as keeping the state of the excel
+files during runtime, in the form of `SessionData`.
 
 `ImportSession` uses a Singleton design pattern. It is responsible for initializing and closing the session.
 `ImportSession` has 4 methods:
@@ -659,17 +735,16 @@ image::SessionComponentClassDiagram.png[width="800"]
  with a timestamp added to the back of the filename.
 
 `ImportSession` is designed to be stateless on its own, with all data stored in `SessionData`. This helps to
-support `UndoableCommand`. Currently, `SessionData` is not persistent in the event of a crash.
-
+support `UndoableCommand`.
 The flow of using `ImportSession` is as follows:
 
 ===== Loading a file into `ImportSession`
 
-* Figure 14 below shows the process of initializing ImportSession. On the `import` command,
+* Figure 15 below shows the process of initializing ImportSession. On the `import` command,
 `getInstance` is used to retrieve the `importSession` instance, before it calls
 `initialize(fileName)`. A new `SheetParser` is created to populate `sessionData` with excel sheet data
 as shown in Figure 11, which comes as:
-1. `SheetWithHeaderField`: augmented `Sheet` that provides API to indicate approval status and
+1. `SheetWithHeaderField`: Augmented `Sheet` that provides API to indicate approval status and
 write comments.
 2. `JobEntry`: Augmented `Job` stores the sheet number and row number for writing into the excel file.
 `JobEntry` also contains the `Job` data which will be imported upon approval.
@@ -679,7 +754,7 @@ image::sessionInitializationSequenceDiagram.png[width="800"]
 
 ===== Reviewing job entries
 
-* Figure 15 below shows the process of reviewing job entries in an import session. On the `review`
+* Figure 16 below shows the process of reviewing job entries in an import session. On the `review`
 command, `sessionData` updates the relevant `jobEntry` and retrieves the sheet and row number,
 which is used to update `sheetWithHeaderFields`. Upon reviewing a job, CarviciM will add the job and
 any employees not present in the application.
@@ -689,47 +764,76 @@ image::sessionReviewSequenceDiagram.png[width="800"]
 
 ===== Saving feedback from an `ImportSession`
 
-`SessionData` autosaves the comments to an excel file with -comments.xls or -comments.xlsx appended,
+`SessionData` autosaves the comments to an excel file with the same file name and `-comments.xls` or `-comments.xlsx` appended,
 in the same directory.
 
 ==== Design Considerations
 ===== Aspect: Supporting UndoableCommand
 
-* **Current choice:** Add the previous instance of `sessionData` when setting data for `Command`, with a
-`SaveFileStack` as shown in Figure 11. Load this `sessionData` on `undo` or `redo` command.
+* **Current choice:** Save a copy of the previous instance of `sessionData` using `createCopy()` whenever an
+`UndoableCommand` is executed, then load the previous instance on undo. Data in the copy will be written to
+a `.temp` file, with a timestamp prepended to its name to make it unique. Most of the `.temp` files will be
+wiped on application exit.
 ** Pros: `sessionData` stores data for `importSession`, making it appropriate to be used as data in `undo`
-and `redo`. Modification is only limited to `UndoableCommand`. Single Responsibility Principle is maintained,
-as the storage of save file locations is limited to `SaveFileStack`.
-** Cons: `sessionData` will have to store the boolean `initialized` in `sessionData` so that it will
-stay up-to-date with the `UndoRedoStack`.
+and `redo`. Modification is only limited to `UndoableCommand`. Code for `undo` can be reused for any commands that
+affect `sessionData` in the future, respecting Open Closed Principle.
+** Cons: IOException still has to be handled in `sessionData` on undo. `undo` and `redo` can fail now because of IOException and they have to be modified. `.temp` files
+can also cause home folder to bloat in size during runtime after many commands are entered.
 
 * _Alternative:_ `importSession` provides API to `undo` and `redo`.
-** Pros: Open Closed Principle is respected, there is no need to modify `UndoableCommand`.
-** Cons: Commands that modify `sessionData` have to be written differently from other commands to support
-`undo` and `redo`. The delimiter rule is also violated as `importSession` is unnecessarily involved.
+** Pros: `ImportSession` can effectively handle `undo` and `redo` on its own without additional dependencies.
+Open Closed Principle is respected, there is no need to modify `UndoableCommand`.
+** Cons: Difficult to coordinate with `UndoRedoStack` as jobs and employees in `model` are also affected. IOExceptions
+thrown also need to be handled, requiring `UndoableCommand` to be modified for handling of Exceptions.
 
-===== Aspect: Supporting mass add methods addJobs/addMissingEmployees
+===== Aspect: Supporting mass add method addJobsAndNewEmployees
 
 * **Current choice:** Add the methods to `Model`
 ** Pros: Cohesion is maximized, these methods can also be reused by other classes.
 ** Cons: Open Closed Principle is violated and adding these methods may result in confusion on the
 behavior of `Model`.
 
-* _Alternative:_ Add the methods to `ImportSession`
-** Pros: The behavior of these methods can be tailored specifically to `ImportSession`.
-** Cons: Unnecessary coupling between `Model` and `ImportSession` when `Command` is already coupled to `Model`.
-The Single Responsibility Principle is also violated.
+* _Alternative:_ Add the methods to an abstract `ReviewCommand` and inherit the methods for `AcceptAll`/`RejectAll` commands.
+** Pros: The behavior of these methods can be tailored specifically to `AcceptAll`/`RejectAll` commands.
+** Cons: Modifying the implementation of `Model` may affect the behavior of `ReviewCommand` without knowing, leading to
+potential regressions.
 
-===== Aspect: Persistent Data
+===== Aspect: Reading of first row headers from excel files
 
-* **Current choice:** Keep all data from `ImportSession` on `sessionData` and use it to initialize on startup.
-** Pros: `ImportSession` gets to stay as a `Singleton`, preventing confusion.
-** Cons: There will be increased coupling between `Session` and `Storage`.
+* **Current choice:** Allow compulsory and optional fields, with variable number of columns and variable order.
+** Pros: Flexible on format of imported excel files. Also allows future expansion of single column fields.
+** Cons: User may not appreciate the flexibility if he or she can enforce the format of the excel files received.
+Flexibility provided is not enough for unknown headers.
 
-* _Alternative:_ Combine `ImportSession` and `SessionData` into 1 single class and store
-it directly.
-** Pros: `ImportSession` can be directly initialized on startup and coupling is reduced.
-** Cons: Confusion may occur due to allowing more than one `ImportSession`.
+* _Alternative:_ Fix the format of the headers.
+** Pros: Confusion can be reduced, importing errors can also be minimized.
+** Cons: Users cannot further customize job entries on import with optional fields, optional field data will be lost.
+
+===== Aspect: Reading of job entries from excel files
+
+* **Current choice:** Find the first complete job entry. Subsequently, whenever the next job entry is read, if there
+are empty fields, take those fields from the previous job entry. Missing fields will be added to remarks and comments.
+Repeat until there are no job entries in the file.
+** Pros: Allows excel sheet providers to save time on filling reused data between adjacent job entries.
+** Cons: Unintentional blanks may result in job entries with wrong data being imported, requiring the user to look
+through the remarks of the imported job entries.
+
+* _Alternative:_ Only import complete job entries
+** Pros: Incomplete job entries will not be errorneously imported into CarviciM.
+** Cons: User will not be able to review incomplete job entries in the CarviciM as only complete jobs are imported.
+
+===== Aspect: Uniqueness of job entries
+
+* **Current choice:** Use `jobNumber` in the application on import. To prevent reimporting the same excel
+file twice, a file with the same name and a `-comments.xls` or `-comments.xlsx` appended, and every subsequent import reads from this file if
+** Pros: Job entry number is controlled by CarviciM and can stay unique. Job entries from excel files can
+also stay unique if there are no duplicates within or across excel files.
+** Cons: User might import the same file if the `-comments.xls` or `-comments.xlsx gets misplaced, and become confused.
+The `jobNumber` associated with the same imported job might also change on every different import.
+
+* _Alternative:_ Use a hash function to decide the `jobNumber` of a job. When there is a collision, add a suffix to make the `jobNumber` unique.
+** Pros: `jobNumber` stays the same on import, independent of when it is imported.
+** Cons: `JobNumber` has to be modified to support this implementation.
 // end::importexport[]
 
 // tag::theme[]
@@ -971,7 +1075,7 @@ New classes has been added to the storage component to allow Carvicim to archive
 .`ArchiveCommand` Storage Component Diagram
 image::ArchiveStorageComponentDiagram.png[width="800"]
 
-As seen from Figure 17, `XmlSerializableArchiveJob` is used to serialize the archive job entries into a xml format based on `XmlAdaptedJob`.
+As seen from Figure 18, `XmlSerializableArchiveJob` is used to serialize the archive job entries into a xml format based on `XmlAdaptedJob`.
 The access of information to the archive job xml file is control by `XmlArchiveJobStorage`.
 The `StorageManager` manages both the storage of Carvicim and archive data.
 
@@ -1091,7 +1195,6 @@ The undo/redo mechanism is facilitated by an `UndoRedoStack`, which resides insi
 
 .Inheritance diagram for commands
 image::LogicCommandClassDiagram.png[width="800"]
-[none]
 
 As you can see from the diagram above, `UndoableCommand` adds an extra layer between the abstract `Command` class and concrete commands that can be undone, such as the `DeleteCommand`. Note that extra tasks need to be done when executing a command in an _undoable_ way, such as saving the state of the address book before execution. `UndoableCommand` contains the high-level algorithm for those extra tasks while the child classes implements the details of how to execute the specific command. Note that this technique of putting the high-level algorithm in the parent class and lower-level steps of the algorithm in child classes is also known as the https://www.tutorialspoint.com/design_pattern/template_pattern.htm[template pattern].
 
@@ -1959,7 +2062,7 @@ Priorities::
 
 |`* *` |user |find employees by their tags |find the employee with the matching skills for the job.
 
-|`* *` |user |accept and reject imported changes |have control when over bulk imports
+|`* *` |user |accept and reject imported changes |have control over bulk imports
 
 |`* *` |user |modify imported job entries |import incomplete or invalid job entries
 
@@ -1983,11 +2086,10 @@ Priorities::
 
 |`* *` |user who likes customization |change the theme of the application |customize the theme to my preference
 
-|`* *` |user who likes customization |change the command words of the application |improve ease of use
+|`* *` |user who likes customization |set alternate command words in the application |improve ease of use
 
 |`*` |user |export completed jobs to other formats |print out all the completed job entries and view it with a better program
 
-|=======================================================================
 
 _{More to be added}_
 

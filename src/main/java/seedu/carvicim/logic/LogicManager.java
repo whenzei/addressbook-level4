@@ -52,6 +52,11 @@ public class LogicManager extends ComponentManager implements Logic {
     }
 
     @Override
+    public String getCommandWordMapping() {
+        return model.getCommandWords().toString();
+    }
+
+    @Override
     public ObservableList<Employee> getFilteredPersonList() {
         return model.getFilteredPersonList();
     }

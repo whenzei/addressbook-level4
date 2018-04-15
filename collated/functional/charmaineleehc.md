@@ -63,7 +63,6 @@ public class GmailAuthenticator {
                         .build();
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }
 
@@ -104,48 +103,74 @@ public class EmailCommand extends Command {
     private final JobNumber jobNumber;
 
     /**
+     * Creates an EmailCommand
      * @param jobNumber of the job details to be sent via email to the employee(s) in charge
      */
     public EmailCommand(JobNumber jobNumber) {
         this.jobNumber = jobNumber;
     }
 
-    @Override
-    public CommandResult execute() throws CommandException {
-        requireNonNull(model);
+    public UniqueEmployeeList getListOfEmployeesOfJob() throws CommandException {
         ObservableList<Job> filteredJobList = model.getFilteredJobList();
 
         if (jobNumber.asInteger() >= filteredJobList.size() || jobNumber.asInteger() < 0) {
             throw new CommandException(Messages.MESSAGE_INVALID_JOB_NUMBER);
         }
 
-        UniqueEmployeeList employeesOfJob = filteredJobList.get(jobNumber.asInteger() - 1).getAssignedEmployees();
+        UniqueEmployeeList listOfEmployeesOfJob = filteredJobList.get(jobNumber.asInteger() - 1).getAssignedEmployees();
+
+        return listOfEmployeesOfJob;
+    }
+
+    /**
+     * Sends an email to each employee in {@code listOfEmployeesOfJob}
+     * @param listOfEmployeesOfJob
+     * @throws MessagingException
+     * @throws IOException
+     */
+    public void sendEmails(UniqueEmployeeList listOfEmployeesOfJob) throws MessagingException, IOException {
+        ObservableList<Job> filteredJobList = model.getFilteredJobList();
+
+        for (Employee employee : listOfEmployeesOfJob) {
+            Job job = filteredJobList.get(jobNumber.asInteger() - 1);
+
+            String emailContent = "Hi " + employee.getName().toString() + ",\n\n"
+                    + "Thank you for all your hard work thus far.\n\n"
+                    + "Here are the job details for the job assigned to you on " + job.getDate().toString() + ":\n"
+                    + "Client: " + job.getClient().getName().toString() + "\n"
+                    + "Client's phone number: " + job.getClient().getPhone().toString() + "\n"
+                    + "Vehicle number: " + job.getVehicleNumber().toString() + "\n"
+                    + "Remarks: " + job.getRemarkList().getRemarks().toString() + "\n\n"
+                    + "Thank you, and happy servicing!\n\n";
+
+            GmailAuthenticator gmailAuthenticator = new GmailAuthenticator();
+            MimeMessage mimeMessage = ModelManager.createEmail(
+                    employee.getEmail().toString(), CARVICIM_EMAIL, EMAIL_SUBJECT, emailContent);
+            ModelManager.sendMessage(gmailAuthenticator.getGmailService(), CARVICIM_EMAIL, mimeMessage);
+        }
+    }
+
+    @Override
+    public CommandResult execute() throws CommandException {
+        requireNonNull(model);
+
+        UniqueEmployeeList listOfEmployeesOfJob = getListOfEmployeesOfJob();
 
         try {
-            for (Employee employee : employeesOfJob) {
-                Job job = filteredJobList.get(jobNumber.asInteger() - 1);
-
-                String emailContent = "Hi " + employee.getName().toString() + ",\n\n"
-                        + "Thank you for all your hard work thus far.\n\n"
-                        + "Here are the job details for the job assigned to you on " + job.getDate().toString() + ":\n"
-                        + "Client: " + job.getClient().getName().toString() + "\n"
-                        + "Client's phone number: " + job.getClient().getPhone().toString() + "\n"
-                        + "Vehicle number: " + job.getVehicleNumber().toString() + "\n"
-                        + "Remarks: " + job.getRemarkList().getRemarks().toString() + "\n\n"
-                        + "Thank you, and happy servicing!\n\n"
-                        + "Cheers,\n" + "CarviciM";
-
-                GmailAuthenticator gmailAuthenticator = new GmailAuthenticator();
-                MimeMessage mimeMessage = ModelManager.createEmail(
-                        employee.getEmail().toString(), CARVICIM_EMAIL, EMAIL_SUBJECT, emailContent);
-                ModelManager.sendMessage(gmailAuthenticator.getGmailService(), CARVICIM_EMAIL, mimeMessage);
-            }
+            sendEmails(listOfEmployeesOfJob);
         } catch (MessagingException | IOException e) {
             System.exit(1);
         }
 
         return new CommandResult(MESSAGE_SUCCESS);
 
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof EmailCommand // instanceof handles nulls
+                && jobNumber.equals(((EmailCommand) other).jobNumber));
     }
 
 }
@@ -185,6 +210,33 @@ public class FindByTagCommand extends Command {
     }
 }
 ```
+###### \java\seedu\carvicim\logic\commands\LoginCommand.java
+``` java
+/**
+ * Directs user to the login page of Gmail for user to log in.
+ */
+public class LoginCommand extends Command {
+
+    public static final String COMMAND_WORD = "login";
+
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Logs in user into Gmail account.\n"
+            + "Example: " + COMMAND_WORD;
+
+    public static final String MESSAGE_SUCCESS = "You have successfully logged into your Gmail account!";
+
+    @Override
+    public CommandResult execute() {
+        try {
+            new GmailAuthenticator();
+        } catch (IOException ioe) {
+            System.exit(1);
+        }
+
+        return new CommandResult(MESSAGE_SUCCESS);
+    }
+
+}
+```
 ###### \java\seedu\carvicim\logic\parser\EmailCommandParser.java
 ``` java
 /**
@@ -207,7 +259,7 @@ public class EmailCommandParser implements Parser<EmailCommand> {
         try {
             JobNumber jobNumber = ParserUtil.parseJobNumber(argMultimap.getValue(PREFIX_JOB_NUMBER)).get();
             return new EmailCommand(jobNumber);
-        } catch (IllegalValueException ive) {
+        } catch (IllegalValueException | NumberFormatException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EmailCommand.MESSAGE_USAGE));
         }
 

@@ -276,6 +276,10 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
         VehicleNumber vehicleNumber = getVehicleNumber(rowNumber);
         Employee employee = getEmployee(rowNumber);
         String importMessage = "";
+        RemarkList remarkList = getRemarks(rowNumber);
+        if (client == null && vehicleNumber == null && employee == null && remarkList.getRemarks().isEmpty()) {
+            return null; //empty row
+        }
         if (client == null || vehicleNumber == null || employee == null) {
             importMessage = getCorruptedFieldsMessage(client, vehicleNumber, employee);
         }
@@ -289,7 +293,6 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
             employee = previousEntry.getAssignedEmployees().iterator().next();
         }
         UniqueEmployeeList employeeList = createSingleEmployeeList(employee);
-        RemarkList remarkList = getRemarks(rowNumber);
         return new JobEntry(client, vehicleNumber, new JobNumber(), new Date(), employeeList,
                 new Status(Status.STATUS_ONGOING), remarkList, sheet.getWorkbook().getSheetIndex(sheet), rowNumber,
                 importMessage);
@@ -330,7 +333,11 @@ public class SheetWithHeaderFields implements Iterable<JobEntry> {
                 }
                 previousEntry = getJobEntryAt(currentRow, previousEntry);
                 currentRow++;
-                return previousEntry;
+                if (hasNext() && previousEntry == null) {
+                    return next(); // skip empty row
+                } else {
+                    return previousEntry;
+                }
             }
         };
     }

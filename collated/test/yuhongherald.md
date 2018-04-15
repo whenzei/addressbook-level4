@@ -309,7 +309,6 @@ public class ImportAllCommandTest extends ImportCommandTestEnv {
         prepareOutputFiles();
         assertTrue(expectedModel.equals(command.model));
         assertOutputResultFilesEqual();
-        commandCleanup(command);
     }
 
     @Test
@@ -713,8 +712,8 @@ public class SetCommandTest {
 
     public static String getUnusedCommandWord(Model actualModel) {
         String newWord = "a";
-        for (int i = 0; i < actualModel.getCommandWords().commands.size(); i++) {
-            if (!actualModel.getCommandWords().commands.containsValue(newWord)) {
+        for (int i = 0; i < actualModel.getCommandWords().getCommands().size(); i++) {
+            if (!actualModel.getCommandWords().getCommands().containsValue(newWord)) {
                 return newWord;
             }
             newWord += "a";
@@ -727,8 +726,8 @@ public class SetCommandTest {
             return  getUnusedCommandWord(actualModel);
         }
         String newWord = "a";
-        for (int i = 0; i < actualModel.getCommandWords().commands.size(); i++) {
-            if (!actualModel.getCommandWords().commands.containsValue(newWord)
+        for (int i = 0; i < actualModel.getCommandWords().getCommands().size(); i++) {
+            if (!actualModel.getCommandWords().getCommands().containsValue(newWord)
                     && !newWord.equals(otherWord)) {
                 return newWord;
             }

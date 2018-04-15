@@ -31,7 +31,7 @@ public class EmailCommandParser implements Parser<EmailCommand> {
         try {
             JobNumber jobNumber = ParserUtil.parseJobNumber(argMultimap.getValue(PREFIX_JOB_NUMBER)).get();
             return new EmailCommand(jobNumber);
-        } catch (IllegalValueException ive) {
+        } catch (IllegalValueException | NumberFormatException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EmailCommand.MESSAGE_USAGE));
         }
 

@@ -40,48 +40,74 @@ public class EmailCommand extends Command {
     private final JobNumber jobNumber;
 
     /**
+     * Creates an EmailCommand
      * @param jobNumber of the job details to be sent via email to the employee(s) in charge
      */
     public EmailCommand(JobNumber jobNumber) {
         this.jobNumber = jobNumber;
     }
 
-    @Override
-    public CommandResult execute() throws CommandException {
-        requireNonNull(model);
+    public UniqueEmployeeList getListOfEmployeesOfJob() throws CommandException {
         ObservableList<Job> filteredJobList = model.getFilteredJobList();
 
         if (jobNumber.asInteger() >= filteredJobList.size() || jobNumber.asInteger() < 0) {
             throw new CommandException(Messages.MESSAGE_INVALID_JOB_NUMBER);
         }
 
-        UniqueEmployeeList employeesOfJob = filteredJobList.get(jobNumber.asInteger() - 1).getAssignedEmployees();
+        UniqueEmployeeList listOfEmployeesOfJob = filteredJobList.get(jobNumber.asInteger() - 1).getAssignedEmployees();
+
+        return listOfEmployeesOfJob;
+    }
+
+    /**
+     * Sends an email to each employee in {@code listOfEmployeesOfJob}
+     * @param listOfEmployeesOfJob
+     * @throws MessagingException
+     * @throws IOException
+     */
+    public void sendEmails(UniqueEmployeeList listOfEmployeesOfJob) throws MessagingException, IOException {
+        ObservableList<Job> filteredJobList = model.getFilteredJobList();
+
+        for (Employee employee : listOfEmployeesOfJob) {
+            Job job = filteredJobList.get(jobNumber.asInteger() - 1);
+
+            String emailContent = "Hi " + employee.getName().toString() + ",\n\n"
+                    + "Thank you for all your hard work thus far.\n\n"
+                    + "Here are the job details for the job assigned to you on " + job.getDate().toString() + ":\n"
+                    + "Client: " + job.getClient().getName().toString() + "\n"
+                    + "Client's phone number: " + job.getClient().getPhone().toString() + "\n"
+                    + "Vehicle number: " + job.getVehicleNumber().toString() + "\n"
+                    + "Remarks: " + job.getRemarkList().getRemarks().toString() + "\n\n"
+                    + "Thank you, and happy servicing!\n\n";
+
+            GmailAuthenticator gmailAuthenticator = new GmailAuthenticator();
+            MimeMessage mimeMessage = ModelManager.createEmail(
+                    employee.getEmail().toString(), CARVICIM_EMAIL, EMAIL_SUBJECT, emailContent);
+            ModelManager.sendMessage(gmailAuthenticator.getGmailService(), CARVICIM_EMAIL, mimeMessage);
+        }
+    }
+
+    @Override
+    public CommandResult execute() throws CommandException {
+        requireNonNull(model);
+
+        UniqueEmployeeList listOfEmployeesOfJob = getListOfEmployeesOfJob();
 
         try {
-            for (Employee employee : employeesOfJob) {
-                Job job = filteredJobList.get(jobNumber.asInteger() - 1);
-
-                String emailContent = "Hi " + employee.getName().toString() + ",\n\n"
-                        + "Thank you for all your hard work thus far.\n\n"
-                        + "Here are the job details for the job assigned to you on " + job.getDate().toString() + ":\n"
-                        + "Client: " + job.getClient().getName().toString() + "\n"
-                        + "Client's phone number: " + job.getClient().getPhone().toString() + "\n"
-                        + "Vehicle number: " + job.getVehicleNumber().toString() + "\n"
-                        + "Remarks: " + job.getRemarkList().getRemarks().toString() + "\n\n"
-                        + "Thank you, and happy servicing!\n\n"
-                        + "Cheers,\n" + "CarviciM";
-
-                GmailAuthenticator gmailAuthenticator = new GmailAuthenticator();
-                MimeMessage mimeMessage = ModelManager.createEmail(
-                        employee.getEmail().toString(), CARVICIM_EMAIL, EMAIL_SUBJECT, emailContent);
-                ModelManager.sendMessage(gmailAuthenticator.getGmailService(), CARVICIM_EMAIL, mimeMessage);
-            }
+            sendEmails(listOfEmployeesOfJob);
         } catch (MessagingException | IOException e) {
             System.exit(1);
         }
 
         return new CommandResult(MESSAGE_SUCCESS);
 
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof EmailCommand // instanceof handles nulls
+                && jobNumber.equals(((EmailCommand) other).jobNumber));
     }
 
 }

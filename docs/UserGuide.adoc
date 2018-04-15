@@ -42,16 +42,16 @@ This icon represents a useful tip
 
 == Setting Up CarviciM
 
-This section will show you how to setup the neccessary environment in order to run CarviciM on your desktop.
+This section will show you how to setup the necessary environment in order to run CarviciM on your desktop.
 
 .  Ensure you have link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[Java] version `1.8.0_60` or later installed in your Computer.
 +
 [NOTE]
-Having any Java 8 version is not enough. +
-This app will not work with earlier versions of Java 8.
+Having any Java 8 version is not enough. This app will not work with earlier versions of Java 8. +
+Don't have Java `1.8.0_60` or above? Download it link:http://www.oracle.com/technetwork/java/javase/downloads/index.html[here]!
 +
-.  You can download the latest `CarviciM.jar` link:{repoURL}/releases[here].
-.  Copy the file to the folder you want to use as the home folder for your CarviciM.
+.  Download the latest `CarviciM.jar` link:{repoURL}/releases[here].
+.  Copy the file to the folder you want to use as the home folder for CarviciM.
 [WARNING]
 Please ensure that there are no other applications using the home folder, it can affect the performance of CarviciM.
 .  Double-click the file to start the app. You should see the Graphical User Interface (GUI) as shown in the image below.
@@ -59,7 +59,7 @@ Please ensure that there are no other applications using the home folder, it can
 image::Ui.png[width="850"]
 +
 
-You are all set to use CarviciM now! You can read the next section to find out more on how to use CarviciM.
+You are all set to use CarviciM now! To find out more about how to use CarviciM, read the next section.
 
 == Quick Start
 
@@ -88,11 +88,11 @@ A region on the GUI which you can see the feedback to a command, entered in the 
 
 === Executing Your First Command In CarviciM
 
-You can execute a command by typing it in the command box and press kbd:[Enter]. +
+Execute a command by typing it in the command box and press kbd:[Enter]. +
 e.g. typing *`help`* into the command box (as shown in the image below), and pressing kbd:[Enter] will open the help window.
 
 image::help-command-example.PNG[width="300"]
-_Figure 4.2.1 : Typing *`help* into the command box_
+_Figure 4.2.1 : Typing *`help`* into the command box_
 
 Here are some example commands you can try:
 
@@ -103,7 +103,7 @@ Here are some example commands you can try:
 
 === Command Format
 
-Before reading more about commands, you should take note of the command format used in the user guide:
+Before reading more about commands, you should take note of the command format used throughout this user guide:
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user e.g. in `adde n/NAME`, `NAME` is a parameter which can be used as `adde n/John Doe`.
 * Items in square brackets are optional e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/mechanic` or as `n/John Doe`.
@@ -111,7 +111,7 @@ Before reading more about commands, you should take note of the command format u
 * Items with `+` after them can be used multiple times but has to be used **at least once** e.g. `w/ASSIGNED_EMPLOYEE_INDEX+` can be used as `w/4`, `w/5` etc.
 * Parameters can be in any order e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-For details of each command, you can refer to <<Features>>.
+For details of each command, you can refer to <<Features>> below.
 
 [[Features]]
 == Features
@@ -120,13 +120,13 @@ This section will explain to you how you can use the features of CarviciM.
 
 === Viewing help : `help`
 
-To find out more on using CarviciM, you can use this command to bring out the help menu. +
+To find out more on using CarviciM, you can use this command to open the help menu. +
 Format: `help`
 
 // tag::addjob[]
 === Adding a job entry: `addj`
 
-To add a new job entry and assign employees to the job, you can use this command. +
+To add a new job entry and assign employees to the job, use this command as follows: +
 Format: `addj n/NAME p/PHONE_NUMBER e/EMAIL v/VEHICLE_NUMBER w/ASSIGNED_EMPLOYEE_INDEX+`
 
 [NOTE]
@@ -156,7 +156,7 @@ _Figure 5.2.3 : Job list panel after addition of job entry_
 // tag::closejob[]
 === Closing a job entry: `closej`
 
-To indicate that a job is completed in CarviciM, you can use this command. +
+To indicate that a job is completed in CarviciM, use this command as follows: +
 Format: `closej j/JOB_NUMBER`
 
 Example:
@@ -180,7 +180,7 @@ _Figure 5.3.3 : Job list panel after job is closed_
 // tag::remark[]
 === Adding remark to a job: `remark`
 
-To add remark or special note to an ongoing job entry, you can use this command. +
+To add remark or special note to an ongoing job entry, use this command as follows: +
 Format: `remark j/JOB_NUMBER r/YOUR_REMARK`
 
 Example:
@@ -196,7 +196,7 @@ _Figure 5.4.1 : Result display showing feedback for remark added_
 
 === Reassigning employees of a job: `reassign` #[Coming in V2.0]#
 
-To reassign employees belonging to a job due to manpower constraints , you can use this command. +
+To reassign employees belonging to a job due to manpower constraints , use this command as follows: +
 Format: `reassign j/JOB_NUMBER [-/INDEX_OF_EMPLOYEE_TO_RETIRE] [+/INDEX_OF_EMPLOYEE_TO_ASSIGN]`
 
 [NOTE]
@@ -226,7 +226,7 @@ Format: `listoj`
 
 === Locating jobs by keyword: `findj`
 
-To find jobs of specific details, you can use this command. +
+To find jobs of specific details, use this command as follows: +
 Format: `finde KEYWORD [MORE_KEYWORDS]`
 
 [NOTE]
@@ -252,7 +252,7 @@ You will see all jobs with `Apr` or `Feb` as their job detail (not case-sensitiv
 
 === Selecting job entry by list number: `selectj`
 
-To select a specific job entry from the job list panel, you can use this command. +
+To select a specific job entry from the job list panel, use this command as follows: +
 Format: `selectj j/JOB_NUMBER`
 
 [NOTE]
@@ -276,7 +276,7 @@ _Figure 5.9.1 : Job display panel showing a summary of the selected job_
 // tag::archive[]
 === Archiving job entries: `archive`
 
-To archive closed job entries within a specified range in CarviciM, you can use this command. +
+To archive closed job entries within a specified range in CarviciM, use this command as follows: +
 Format: `archive sd/START_DATE ed/END_DATE`
 
 [NOTE]
@@ -304,7 +304,7 @@ _Figure 5.10.2 : New archivejob xml file created in the data folder_
 // tag::analyse[]
 === Analysing job entries: `analyse`
 
-To analyse job entries within the current month in CarviciM, you can use this command. +
+To analyse job entries within the current month in CarviciM, use this command as follows: +
 Format: `analyse`
 
 Example:
@@ -320,7 +320,7 @@ _Figure 5.11.1 : Result display showing a summary of the job entries_
 
 === Adding an employee: `adde`
 
-To add a new employee entry into CarviciM, you can use this command. +
+To add a new employee entry into CarviciM, use this command as follows: +
 Format: `adde n/NAME p/PHONE_NUMBER e/EMAIL`
 
 Example:
@@ -332,12 +332,12 @@ You will see the newly added details of the employee in the employee list panel.
 
 === Listing all employee entries : `liste`
 
-To view a list of employee details in CarviciM, you can use this command. +
+To view a list of employee details in CarviciM, use this command as follows: +
 Format: `liste`
 
 === Deleting an employee entry : `deletee`
 
-To remove the details of an employee from CarviciM, you can use this command. +
+To remove the details of an employee from CarviciM, use this command as follows: +
 Format: `deletee INDEX`
 
 [NOTE]
@@ -368,7 +368,7 @@ You will see an updated employee list panel which has the 1st employee entry rem
 // tag::sort[]
 === Sorting all employee entries : `sort`
 
-To sort the list of employee entries alphabetically for easy viewing, you can use this command. +
+To sort the list of employee entries alphabetically for easy viewing, use this command as follows: +
 Format: `sort`
 
 Example:
@@ -386,7 +386,7 @@ _Figure 5.15.2 : Employee List Panel showing a list of sorted employee entries_
 
 === Selecting employee entry by list number: `selecte`
 
-To select a specific employee entry from the employee list panel and display the assigned jobs, you can use this command. +
+To select a specific employee entry from the employee list panel and display the assigned jobs, use this command as follows: +
 Format: `selecte INDEX`
 
 [NOTE]
@@ -414,7 +414,7 @@ You will see the results of the `finde` command which shows all employee entries
 
 === Locating employee entries by name: `finde`
 
-To search for employee entries whose names contain any of the given keywords, you can use this command. +
+To search for employee entries whose names contain any of the given keywords, use this command as follows: +
 Format: `finde KEYWORD [MORE_KEYWORDS]`
 
 [NOTE]
@@ -438,13 +438,83 @@ You will see all employee entries with `john` as their name (not case-sensitive)
 `finde Betsy Tim John` +
 You will see all employee entries with `Betsy`, `Tim`, or `John` (not case-sensitive), shown in the employees list panel.
 
+=== Locating employee entries by tags: `findt`
+
+To search for employee entries by tags, use this command as follows: +
+Format: `findt KEYWORD [MORE_KEYWORDS]`
+
+[NOTE]
+====
+* The search is case insensitive. e.g `Technician` will match `technician`.
+* Only full words will be matched e.g. `mech` will not match `mechanic`.
+* Employee entries matching at least one tag will be returned (i.e. `OR` search). e.g. `technician mechanic` will provide you with a list of employees who are either technicians, mechanics or both.
+====
+
+Examples:
+
+* Example 1: +
++
+`findt technician` +
+You will see all employee entries with the tag `technican` (not case-sensitive), shown in the employee list panel.
+
+* Example 2: +
++
+`findt technician mechanic` +
+You will see all employee entries with the tags `technican` and/or `mechanic`(not case-sensitive), shown in the employees list panel.
+
+=== Login to Gmail : `login`
+
+[NOTE]
+====
+Before using this command, ensure that you are connected to the internet.
+====
+
+You will need to login to Gmail before you can use the `email` feature to send out emails to your employees (see Section 5.19 below). To login to Gmail, use the `login` command as follows: +
+Format: `login`
+
+You will be redirected to the Gmail login page on your default internet browser, where you can then proceed to login.
+
+[NOTE]
+====
+When you are redirected to the Gmail login page, CarviciM may sometimes appear as if it is not responding. Don't panic! Once you have successfully logged in to Gmail, CarviciM will be up and running again, from exactly where you left off.
+====
+
+When prompted to give your permission to allow CarviciM to access your Gmail account, click on `ALLOW`.
+
+[NOTE]
+====
+Please do NOT click on `CANCEL`. Be assured that CarviciM will only use your account to send out emails to your employees.
+====
+
+For your convenience, your authorization information will be stored on your computer's file system, even after closing and reopening CarviciM. You will, therefore, only need to `login` once.
+
+=== Email assigned employees belonging to a job : `email`
+
+[NOTE]
+====
+Before using this command, ensure that you are connected to the internet.
+====
+
+To send auto-generated emails containing the job details from your Gmail account to all assigned employees of the job, use this command as follows: +
+Format: `email j/JOB_NUMBER`
+
+[NOTE]
+====
+You will need to `login` first before you can send out emails. If you have yet to `login`, the `email` command will first redirect you to the Gmail login page on your default internet browser before sending the emails. Please see Section 5.18 above on how to `login`.
+====
+
+Example:
+
+`email j/1` +
+Auto-generated emails containing the job details of the job at index 1 of the job list panel will be sent from your Gmail account to all employees assigned to the job.
+
 // tag::importexport[]
 === Importing jobs from an excel file
 
 [[import-command]]
 ==== Importing a new excel file: `import`
 
-To load your excel file by filename or filepath that contains new job entries, you can use this command. +
+To load your excel file by filename or filepath that contains new job entries, use this command as follows: +
 Format: `import FILE_PATH`
 
 [NOTE]
@@ -507,7 +577,7 @@ You can use 4 commands when reviewing changes:
 
 ===== Accepting 1 job: `accept`
 
-To accept a job with job index `NUMBER` in the imported list, you can use this command.
+To accept a job with job index `NUMBER` in the imported list, use this command as follows:
 Format: `accept NUMBER`
 
 Example:
@@ -518,7 +588,7 @@ Accepts the job entry with job index number 1 and removes it from imported list.
 [[acceptAll-command]]
 ===== Accepting all remaining imported jobs: `acceptAll`
 
-To accept all remaining jobs, you can use this command.
+To accept all remaining jobs, use this command as follows:
 Format: `acceptAll`
 
 Example:
@@ -528,7 +598,7 @@ Accepts all remaining job entries and clears the imported list.
 
 ===== Rejecting 1 job: `reject`
 
-To reject a job with job index `NUMBER` in the imported list, you can use this command.
+To reject a job with job index `NUMBER` in the imported list, use this command as follows:
 Format: `reject NUMBER`
 
 Example:
@@ -538,7 +608,7 @@ Rejects job entry with job index number 1 and removes it from imported list. It 
 
 ===== Rejecting all remaining imported jobs: `rejectAll`
 
-To reject all remaining jobs in the imported list, you can use this command.
+To reject all remaining jobs in the imported list, use this command as follows:
 Format: `rejectAll`
 
 Example:
@@ -588,7 +658,7 @@ in the same directory.
 // tag::set[]
 === Changing a command word : `set`
 
-To set an easy to use word in place of a default command word, you can use this command. +
+To set an easy to use word in place of a default command word, use this command as follows: +
 Format: `set OLD_COMMAND_WORD NEW_COMMAND_WORD`
 
 [NOTE]
@@ -616,7 +686,7 @@ You will see "deletee has been replaced with d!" in the result display.
 // tag::theme[]
 === Setting a theme : `theme`
 
-To set the theme of the application for a change of working environment, you can use this command. +
+To set the theme of the application for a change of working environment, use this command as follows: +
 Format: `theme INDEX`
 
 [NOTE]
@@ -699,7 +769,7 @@ The `undo` command fails as there are no undoable commands.
 
 === Redoing the previously undone command : `redo`
 
-To reverse an unwanted undo command that was executed, you can use this command. +
+To reverse an unwanted undo command that was executed, use this command as follows: +
 Format: `redo`
 
 Examples:
@@ -749,20 +819,13 @@ Format: `clear`
 
 === Exiting the program : `exit`
 
-To exit the program, you can use this command. +
+To exit the program, use this command as follows: +
 Format: `exit`
 
 === Saving the data
 
-CarviciM data are saved in the hard disk automatically after any command that changes the data. +
+Your data will be saved saved in your hard disk automatically after any command that changes the data. +
 There is no need to save manually.
-
-For your convenience, authorization information will be stored on your computer's file system, even after closing and reopening CarviciM, so you will never need to log in again.
-
-=== Email assigned employees belonging to a job : `email`
-
-To send a notice email to all assigned employees of a job, you can use this command. +
-Format: `email JOB_NUMBER`
 
 == FAQ
 

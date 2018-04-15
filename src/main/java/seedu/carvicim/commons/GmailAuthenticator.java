@@ -81,7 +81,6 @@ public class GmailAuthenticator {
                         .build();
         Credential credential = new AuthorizationCodeInstalledApp(
                 flow, new LocalServerReceiver()).authorize("user");
-        System.out.println("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }
 

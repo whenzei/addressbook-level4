@@ -37,7 +37,7 @@ This portfolio summarize my contributions for the development of CarviciM. It sh
 == Contributions to the User Guide
 
 |===
-|_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
+|_Given below are the sections that I have contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
 include::../UserGuide.adoc[tag=addjob]
@@ -46,10 +46,12 @@ include::../UserGuide.adoc[tag=closejob]
 
 include::../UserGuide.adoc[tag=remark]
 
+include::../UserGuide.adoc[tag=theme]
+
 == Contributions to the Developer Guide
 
 |===
-|_Given below are sections I contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
+|_Given below are sections that I have contributed to the Developer Guide. They showcase my ability to write technical documentation and the technical depth of my contributions to the project._
 |===
 
 include::../DeveloperGuide.adoc[tag=addjob]
@@ -57,3 +59,5 @@ include::../DeveloperGuide.adoc[tag=addjob]
 include::../DeveloperGuide.adoc[tag=closejob]
 
 include::../DeveloperGuide.adoc[tag=remark]
+
+include::../DeveloperGuide.adoc[tag=theme]

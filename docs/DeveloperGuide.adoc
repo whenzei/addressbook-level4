@@ -289,9 +289,9 @@ image::ModelClassDiagram.png[width="800"]
 
 New classes has been added in the Storage component, `XmlAdaptedJob` and `XmlAdaptedRemark`, to support the saving of job entries into the data file (as shown in the diagram below).
 
-.Partial Class Diagram of Storage Component
 image::StorageComponent_Xml_Job_Xml_Remark.PNG[width="800"]
 [none]
+
 
 The job adding mechanism is facilitated by a `AddJobCommand` which is an `UndoableCommand`. `AddJobCommandParser` is responsible for parsing the input arguments. It utilizes `ParserUtil` for the validation of `NAME`, `PHONE`, `EMAIL`, `VEHICLE_NUMBER` and `ASSIGNED_EMPLOYEE_INDEX` and creates `AddJobCommand` object which prepares the `Job` object.
 

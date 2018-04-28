@@ -32,21 +32,28 @@ public class EmailCommand extends Command {
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_JOB_NUMBER + "12 ";
 
-    public static final String MESSAGE_SUCCESS = "The email has been successfully sent to your employee!";
+    public static final String MESSAGE_SUCCESS = "The emails have been successfully sent to your employees!";
 
-    private static final String CARVICIM_EMAIL = "me";
+    private static final String EMAIL_SENDER = "me";
     private static final String EMAIL_SUBJECT = "Job details";
 
     private final JobNumber jobNumber;
 
     /**
      * Creates an EmailCommand
+     *
      * @param jobNumber of the job details to be sent via email to the employee(s) in charge
      */
     public EmailCommand(JobNumber jobNumber) {
         this.jobNumber = jobNumber;
     }
 
+    /**
+     * Returns the list of employees of the job
+     *
+     * @return UniqueEmployeeList of employees that are assigned to {@code jobNumber}
+     * @throws CommandException if {@code jobNumber} is out of range.
+     */
     public UniqueEmployeeList getListOfEmployeesOfJob() throws CommandException {
         ObservableList<Job> filteredJobList = model.getFilteredJobList();
 
@@ -61,7 +68,8 @@ public class EmailCommand extends Command {
 
     /**
      * Sends an email to each employee in {@code listOfEmployeesOfJob}
-     * @param listOfEmployeesOfJob
+     *
+     * @param listOfEmployeesOfJob to send emails to
      * @throws MessagingException
      * @throws IOException
      */
@@ -82,8 +90,8 @@ public class EmailCommand extends Command {
 
             GmailAuthenticator gmailAuthenticator = new GmailAuthenticator();
             MimeMessage mimeMessage = ModelManager.createEmail(
-                    employee.getEmail().toString(), CARVICIM_EMAIL, EMAIL_SUBJECT, emailContent);
-            ModelManager.sendMessage(gmailAuthenticator.getGmailService(), CARVICIM_EMAIL, mimeMessage);
+                    employee.getEmail().toString(), EMAIL_SENDER, EMAIL_SUBJECT, emailContent);
+            ModelManager.sendMessage(gmailAuthenticator.getGmailService(), EMAIL_SENDER, mimeMessage);
         }
     }
 

@@ -287,7 +287,7 @@ This section describes some noteworthy details on how certain features are imple
 === Add job feature
 ==== Current Implementation
 
-To implement the job management feature, new classes have been added to the `Model` component. `Job` is part of the `Model` component which is made up of `Person`, `JobNumber, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` as shown below.
+To implement the job management feature, new classes are added to the `Model` component. `Job` is part of the `Model` component which is made up of `Person`, `JobNumber`, `VehicleNumber`, `Status`, `Date`, `UniqueEmployeeList` and `RemarkList` as shown below.
 
 .Class Diagram of Model component
 image::ModelClassDiagram.png[width="800"]
@@ -2091,7 +2091,7 @@ Priorities::
 
 |`*` |user |export completed jobs to other formats |print out all the completed job entries and view it with a better program
 
-
+|=======================================================================
 _{More to be added}_
 
 [appendix]

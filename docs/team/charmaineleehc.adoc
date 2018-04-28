@@ -29,18 +29,15 @@ CarviciM is for car servicing managers to manage the sheer amount car servicing 
 * *Other contributions*:
 
 ** Project management:
-*** Managed releases `v1.3` - `v1.5rc` (3 releases) on GitHub
-*** Used GitHub Issues tracker to keep track of issues that arise throughout the development process
-** Enhancements to existing features:
-***
+*** Managed release `v1.5rc` on GitHub
+*** Used GitHub issues tracker to keep track of issues that arise throughout the development process
 ** Documentation:
-*** Updated User Guide with the features implemented: https://github.com[#14]
-*** Updated Developer Guide with the features implemented
-*** Made changes to both User and Developer Guide to make them more reader-friendly, such as formatting and improving the language,
+*** Updated User Guide with the features implemented (see below, under Contributions to the User Guide).
+*** Updated Developer Guide with the features implemented (see below, under Contributions to the Developer Guide).
+*** Made changes to other parts of both User and Developer Guide to make them more reader-friendly, such as formatting and improving the language used.
 ** Community:
 *** Reported bugs and suggestions for other teams in the class (https://github.com/CS2103JAN2018-W13-B4/main/issues/213[example])
 
-_{you can add/remove categories in the list above}_
 
 == Contributions to the User Guide
 
@@ -49,9 +46,11 @@ _{you can add/remove categories in the list above}_
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-include::../UserGuide.adoc[tag=undoredo]
+include::../UserGuide.adoc[tag=login]
 
-include::../UserGuide.adoc[tag=dataencryption]
+include::../UserGuide.adoc[tag=sendemails]
+
+include::../UserGuide.adoc[tag=findbytag]
 
 == Contributions to the Developer Guide
 
@@ -62,3 +61,5 @@ include::../UserGuide.adoc[tag=dataencryption]
 include::../DeveloperGuide.adoc[tag=logintogmail]
 
 include::../DeveloperGuide.adoc[tag=sendemails]
+
+include::../DeveloperGuide.adoc[tag=findbytag]
